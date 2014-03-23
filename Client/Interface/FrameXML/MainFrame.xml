@@ -4,21 +4,17 @@
 
 	<Frame name="MainFrame" toplevel="true" hidden="false" setAllPoints="true" enableMouse="true"
 		enableKeyboard="true">
-	
-		<!-- Full screen -->
-		<Size><RelDimension x="1" y="1"/></Size>
-		<Anchors>
-			<Anchor point="CENTER"/>
-		</Anchors>
 		
 		<Frames>
-			<Frame name="MainFrame_Back" parent="MainFrame" toplevel="true">
+			<Frame name="MainFrame_Back" parent="MainFrame">
 			    <Anchors>
-					<Anchor point="CENTER">
-						<AbsDimension x="0" y="-70" />
+					<Anchor point="TOPLEFT">
+						<AbsDimension x="50" y="-200" />
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT">
+						<AbsDimension x="-50" y="50" />
 					</Anchor>
 				</Anchors>
-				<Size><RelDimension x="0.83" y="0.36"/></Size>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 				   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 					<EdgeSize val="16"/>
@@ -26,13 +22,16 @@
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>
 			</Frame>
-			<Frame name="MainFrame_Header" parent="MainFrame" toplevel="true">
+			<Frame name="MainFrame_Header" parent="MainFrame">
 				<Anchors>
-					<Anchor point="TOP" relativeTo="MainFrame_Back">
+					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
+						<AbsDimension x="0" y="150" />
+					</Anchor>
+					<Anchor point="TOPRIGHT" relativeTo="MainFrame_Back">
 						<AbsDimension x="0" y="150" />
 					</Anchor>
 				</Anchors>
-				<Size><RelDimension x="0.83" y="0.1"/></Size>
+				<Size y="150"/>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 				   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
 					<EdgeSize val="16"/>
