@@ -1,4 +1,6 @@
 
+local debugMode = true
+
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]]);
 model:SetCamera(0);
@@ -23,5 +25,11 @@ model:SetLight(1,0,0,-0.5,-0.5,0.7,1.0,1.0,1.0,0.8,1.0,1.0,0.8);
 function mainFrameLoaded()
 	model:SetModel("Interface\\Glues\\Models\\UI_Orc\\UI_Orc.m2");
 	MainFrame_Back:SetFrameLevel(1)
-	UIParent:Hide()
+	MainFrame_Header:SetFrameLevel(1)
+end
+
+function mainFrameUpdate()
+	if not debugMode then
+		UIParent:Hide()
+	end
 end

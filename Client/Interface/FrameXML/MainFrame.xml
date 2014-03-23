@@ -26,13 +26,30 @@
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>
 			</Frame>
+			<Frame name="MainFrame_Header" parent="MainFrame" toplevel="true">
+				<Anchors>
+					<Anchor point="TOP" relativeTo="MainFrame_Back">
+						<AbsDimension x="0" y="150" />
+					</Anchor>
+				</Anchors>
+				<Size><RelDimension x="0.83" y="0.1"/></Size>
+			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
+				   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+					<EdgeSize val="16"/>
+					<TileSize val="32"/>
+					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+				</Backdrop>				
+			</Frame>
 		</Frames>
 		
 		<Scripts>
 			<!-- Set background model when loading up -->
 			<OnLoad>
-				mainFrameLoaded();
+				mainFrameLoaded()
 			</OnLoad>
+			<OnUpdate>
+				mainFrameUpdate()
+			</OnUpdate>
 		</Scripts>	
 	</Frame>
 
