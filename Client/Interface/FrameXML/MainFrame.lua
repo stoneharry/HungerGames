@@ -3,8 +3,8 @@
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]]);
 model:SetCamera(0);
 model:SetPoint("CENTER",0,0);
-model:SetFrameStrata("HIGH");
-model:SetFrameLevel(3);
+--model:SetFrameStrata("HIGH");
+model:SetFrameLevel(0);
 -- This gets the width/height of the screen
 local res = GetCVar("gxResolution")
 local vars = 1
@@ -22,4 +22,6 @@ model:SetLight(1,0,0,-0.5,-0.5,0.7,1.0,1.0,1.0,0.8,1.0,1.0,0.8);
 -- Set background model
 function mainFrameLoaded()
 	model:SetModel("Interface\\Glues\\Models\\UI_Orc\\UI_Orc.m2");
+	MainFrame_Back:SetFrameLevel(1)
+	UIParent:Hide()
 end
