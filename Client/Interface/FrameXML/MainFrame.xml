@@ -5,14 +5,23 @@
 	<Frame name="MainFrame" toplevel="true" hidden="false" setAllPoints="true" enableMouse="true"
 		enableKeyboard="true">
 		
+<!-- Layers:
+BACKGROUND - Level 0. Place the background of your frame here.
+BORDER - Level 1. Place the border art of your frame here .
+ARTWORK - Level 2. Place the artwork of your frame here.
+OVERLAY - Level 3. Place your text, objects, and buttons in this level
+HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
+-->
+		<!-- Start frames -->
 		<Frames>
+			<!-- Main background -->
 			<Frame name="MainFrame_Back" parent="MainFrame">
 			    <Anchors>
 					<Anchor point="TOPLEFT">
-						<AbsDimension x="50" y="-200" />
+						<AbsDimension x="80" y="-200" />
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
-						<AbsDimension x="-50" y="50" />
+						<AbsDimension x="-80" y="50" />
 					</Anchor>
 				</Anchors>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
@@ -21,7 +30,61 @@
 					<TileSize val="32"/>
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture name="Head01" file="Interface\Portal\BattlenetChatGlue\CenterPanel01">
+							<Size>
+								<AbsDimension x="384" y="96"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="-2"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+						<Texture name="Head02" file="Interface\Portal\BattlenetChatGlue\CenterPanel02">
+							<Size>
+								<AbsDimension x="384" y="96"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="384" y="-2"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+						<Texture name="Head03" file="Interface\Portal\BattlenetChatGlue\CenterPanel03">
+							<Size>
+								<AbsDimension x="384" y="96"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="768" y="-2"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+						<Texture name="Head04" file="Interface\Portal\BattlenetChatGlue\CenterPanel04">
+							<Size>
+								<AbsDimension x="48" y="96"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="1152" y="-2"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
 			</Frame>
+			
+			<!-- The Header -->
 			<Frame name="MainFrame_Header" parent="MainFrame">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
@@ -39,10 +102,12 @@
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>				
 			</Frame>
+			
+			<!-- End frames. -->
 		</Frames>
 		
 		<Scripts>
-			<!-- Set background model when loading up -->
+			<!-- Set background model when loading up & update fram levesl -->
 			<OnLoad>
 				mainFrameLoaded()
 			</OnLoad>
