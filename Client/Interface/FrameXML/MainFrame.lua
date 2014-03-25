@@ -1,11 +1,12 @@
 
 local debugMode = true
 
+-- SCREEN_HEIGHT and SCREEN_WIDTH are global variables made in this script
+
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]]);
 model:SetCamera(0);
 model:SetPoint("CENTER",0,0);
---model:SetFrameStrata("HIGH");
 model:SetFrameLevel(0);
 -- This gets the width/height of the screen
 local res = GetCVar("gxResolution")
@@ -13,11 +14,11 @@ local vars = 1
 for value in string.gmatch(res, '([^x]+)') do
 	if vars == 1 then
 		model:SetWidth(value)
-		SCREEN_WIDTH = value
+		SCREEN_WIDTH = tonumber(value)
 		vars = nil
 	else
 		model:SetHeight(value)
-		SCREEN_HEIGHT = value
+		SCREEN_HEIGHT = tonumber(value)
 	end
 end
 res = nil
@@ -31,16 +32,6 @@ function mainFrameLoaded()
 	MainFrame_Header:SetFrameLevel(1)
 	
 	--[[
-	local SCREEN_HEIGHT
-	local res = GetCVar("gxResolution")
-	local vars = 0
-	for value in string.gmatch(res, '([^x]+)') do
-		vars = vars + 1
-		if vars == 2 then
-			SCREEN_HEIGHT = tonumber(value)
-		end
-	end
-	
 	local scale = 1
 	if SCREEN_HEIGHT ~= 1080 then
 		Head01:SetScale(SCREEN_HEIGHT / 1080)
@@ -48,6 +39,32 @@ function mainFrameLoaded()
 		Head03:SetScale(SCREEN_HEIGHT / 1080)
 	end
 	]]
+	
+	-- Buttons are easier to do in Lua it seems
+	local button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 325, -20)
+	button:SetWidth(240)
+	button:SetHeight(60)
+	button:SetText("Play Game")
+	button:SetFrameLevel(2)
+	
+	button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 640, -20)
+	button:SetWidth(55)
+	button:SetHeight(60)
+	button:SetFrameLevel(2)
+	
+	button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 725, -20)
+	button:SetWidth(55)
+	button:SetHeight(60)
+	button:SetFrameLevel(2)
+	
+	button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 810, -20)
+	button:SetWidth(55)
+	button:SetHeight(60)
+	button:SetFrameLevel(2)
 end
 
 function mainFrameUpdate()
