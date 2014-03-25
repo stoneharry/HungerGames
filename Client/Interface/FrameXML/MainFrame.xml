@@ -25,9 +25,9 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 					</Anchor>
 				</Anchors>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
-				   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-					<EdgeSize val="16"/>
-					<TileSize val="32"/>
+				   edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
+					<EdgeSize val="64"/>
+					<TileSize val="128"/>
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>
 				<Layers>
@@ -88,19 +88,35 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 			<Frame name="MainFrame_Header" parent="MainFrame">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
-						<AbsDimension x="0" y="150" />
+						<AbsDimension x="0" y="140" />
 					</Anchor>
 					<Anchor point="TOPRIGHT" relativeTo="MainFrame_Back">
-						<AbsDimension x="0" y="150" />
+						<AbsDimension x="0" y="140" />
 					</Anchor>
 				</Anchors>
 				<Size y="150"/>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
-				   edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-					<EdgeSize val="16"/>
-					<TileSize val="32"/>
+				   edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
+					<EdgeSize val="64"/>
+					<TileSize val="128"/>
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-				</Backdrop>				
+				</Backdrop>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\Portal\Header\1">
+							<Size>
+								<AbsDimension x="1175" y="121"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="17" y="-15"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
 			</Frame>
 			
 			<!-- End frames. -->
