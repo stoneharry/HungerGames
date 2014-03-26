@@ -228,6 +228,8 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>
 			</Frame>
+			
+			<!-- Chat frame border -->
 			<Frame name="MainFrame_Chat" parent="MainFrame">
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
@@ -241,6 +243,27 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 
 				</Layers>
 			    <Backdrop edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
+					<EdgeSize val="64"/>
+					<TileSize val="128"/>
+					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+				</Backdrop>
+			</Frame>
+			
+			<!-- Online player list border -->
+			<Frame name="MainFrame_OnlinePlayerList" parent="MainFrame">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
+						<AbsDimension x="725" y="-100" />
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT" relativeTo="MainFrame_Back">
+						<AbsDimension x="0" y="180" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+
+				</Layers>
+			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
+					edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
 					<TileSize val="128"/>
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>

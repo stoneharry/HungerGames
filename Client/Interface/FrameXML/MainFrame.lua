@@ -74,7 +74,6 @@ function mainFrameLoaded()
 	for i = -1, -8, -1 do
 		select(i, MainFrame_Back:GetRegions()):SetDrawLayer("OVERLAY")
 		select(i, MainFrame_Header:GetRegions()):SetDrawLayer("OVERLAY")
-		--select(i, MainFrame_Chat:GetRegions()):SetDrawLayer("BACKGROUND")
 	end
 	
 	-- Buttons are easier to do in Lua it seems
@@ -98,8 +97,9 @@ function mainFrameLoaded()
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 30, -117)
-	button:SetText("Do Something")
+	button:SetText("Change Lobby")
 	button:SetFrameLevel(4)
+	button:Disable()
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
 	button:SetPoint("BOTTOMRIGHT", MainFrame_Back, "BOTTOMRIGHT", -28, 120)
@@ -131,6 +131,7 @@ function mainFrameUpdate()
 	--  needs to be a delay between on load and setting this.
 	--  Also this conveniently prevents resizing.
 	ChatFrame1:ClearAllPoints()
+	ChatFrame1:SetFading(nil)
 	ChatFrame1:SetPoint("BOTTOMLEFT", MainFrame_Back, "BOTTOMLEFT", 60, 50)
 	ChatFrame1:SetFrameLevel(4)
 	ChatFrame1:SetFrameStrata("HIGH")
