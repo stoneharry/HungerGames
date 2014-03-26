@@ -31,32 +31,35 @@ function mainFrameLoaded()
 	MainFrame_Back:SetFrameLevel(1)
 	MainFrame_Header:SetFrameLevel(1)
 	
-	--[[
-	local scale = 1
-	if SCREEN_HEIGHT ~= 1080 then
-		Head01:SetScale(SCREEN_HEIGHT / 1080)
-		Head02:SetScale(SCREEN_HEIGHT / 1080)
-		Head03:SetScale(SCREEN_HEIGHT / 1080)
+	-- Make the edges a higher layer
+	for i = -1, -8, -1 do
+		select(i, MainFrame_Back:GetRegions()):SetDrawLayer("OVERLAY")
+		select(i, MainFrame_Header:GetRegions()):SetDrawLayer("OVERLAY")
 	end
-	]]
 	
 	-- Buttons are easier to do in Lua it seems
 	local button = CreateFrame("Button", nil, MainFrame_Back, "BigButtonTemplate")
-	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 332, -20)
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 337, -20)
 	button:SetText("Play Game")
-	button:SetFrameLevel(2)
+	button:SetFrameLevel(3)
+	--button:SetBackdropColor(1, 0, 0 --[[, alpha]])
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 641, -23)
-	button:SetFrameLevel(2)
+	button:SetFrameLevel(3)
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 727, -23)
-	button:SetFrameLevel(2)
+	button:SetFrameLevel(3)
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 813, -23)
-	button:SetFrameLevel(2)
+	button:SetFrameLevel(3)
+	
+	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 30, -117)
+	button:SetText("Do Something")
+	button:SetFrameLevel(4)
 end
 
 function mainFrameUpdate()

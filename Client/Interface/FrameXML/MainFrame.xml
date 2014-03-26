@@ -40,7 +40,26 @@
 		<DisabledFont style="GameFontDisableHuge"/>
 		<HighlightTexture inherits="UIPanelButtonHighlightTexture"/>
 	</Button>
-
+	<!-- Left middle button template -->
+	<Button name="LeftMiddleButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="184" y="36"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentMainTexture" file="Interface\Portal\Widgets\wcbutton-big"/>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<!-- To do, shit in here. -->
+		</Scripts>
+		<ButtonText name="$parentText"/>
+		<NormalFont style="GameFontNormal"/>
+		<HighlightFont style="GameFontHighlight"/>
+		<DisabledFont style="GameFontDisable"/>
+		<HighlightTexture inherits="UIPanelButtonHighlightTexture"/>
+	</Button>
+	
 	<Frame name="MainFrame" toplevel="true" hidden="false" setAllPoints="true" enableMouse="true"
 		enableKeyboard="true">
 		
@@ -63,12 +82,6 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<AbsDimension x="-80" y="50" />
 					</Anchor>
 				</Anchors>
-			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
-				   edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
-					<EdgeSize val="64"/>
-					<TileSize val="128"/>
-					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
-				</Backdrop>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture name="Head01" file="Interface\Portal\BattlenetChatGlue\CenterPanel01">
@@ -78,7 +91,7 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 							<Anchors>
 								<Anchor point="TOPLEFT">
 									<Offset>
-										<AbsDimension x="0" y="-2"/>
+										<AbsDimension x="5" y="-2"/>
 									</Offset>
 								</Anchor>
 							</Anchors>
@@ -119,27 +132,66 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 								</Anchor>
 							</Anchors>
 						</Texture>
+						<!-- Bit below the buttons -->
+						<Texture file="Interface\Portal\SpriteLayers\1">
+							<Size>
+								<AbsDimension x="300" y="96"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="16" y="-96"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+						<Texture file="Interface\Portal\SpriteLayers\2">
+							<Size>
+								<AbsDimension x="400" y="96"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="316" y="-96"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+					<Layer level="OVERLAY">
+						<Texture file="Interface\Portal\SpriteLayers\buttonborder">
+							<Size>
+								<AbsDimension x="270" y="85"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="-20" y="-90"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
 					</Layer>
 				</Layers>
-			</Frame>
-			
-			<!-- The Header -->
-			<Frame name="MainFrame_Header" parent="MainFrame">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
-						<AbsDimension x="0" y="140" />
-					</Anchor>
-					<Anchor point="TOPRIGHT" relativeTo="MainFrame_Back">
-						<AbsDimension x="0" y="140" />
-					</Anchor>
-				</Anchors>
-				<Size y="150"/>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 				   edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
 					<TileSize val="128"/>
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
 				</Backdrop>
+			</Frame>
+			
+			<!-- The Header -->
+			<Frame name="MainFrame_Header" parent="MainFrame">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
+						<AbsDimension x="0" y="148" />
+					</Anchor>
+					<Anchor point="TOPRIGHT" relativeTo="MainFrame_Back">
+						<AbsDimension x="0" y="148" />
+					</Anchor>
+				</Anchors>
+				<Size y="150"/>
 				<Layers>
 					<Layer level="ARTWORK">
 						<Texture file="Interface\Portal\Header\1">
@@ -156,6 +208,12 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						</Texture>
 					</Layer>
 				</Layers>
+			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
+				   edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
+					<EdgeSize val="64"/>
+					<TileSize val="128"/>
+					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+				</Backdrop>
 			</Frame>
 			
 			<!-- End frames. -->
