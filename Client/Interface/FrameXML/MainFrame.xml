@@ -1,6 +1,45 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
 ..\FrameXML\UI.xsd">
 	<Script file="MainFrame.lua"/>
+	
+	<!-- Big button template -->
+	<Button name="BigButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="225" y="60"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentMainTexture" file="Interface\Portal\Widgets\wcbutton-big"/>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<!-- To do, shit in here. -->
+		</Scripts>
+		<ButtonText name="$parentText"/>
+		<NormalFont style="GameFontNormalHuge"/>
+		<HighlightFont style="GameFontHighlightHuge"/>
+		<DisabledFont style="GameFontDisableHuge"/>
+		<HighlightTexture inherits="UIPanelButtonHighlightTexture"/>
+	</Button>
+	<!-- Small button template -->
+	<Button name="SmallButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="55" y="55"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentMainTexture" file="Interface\Portal\Widgets\wcbutton-small"/>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<!-- To do, shit in here. -->
+		</Scripts>
+		<ButtonText name="$parentText"/>
+		<NormalFont style="GameFontNormalHuge"/>
+		<HighlightFont style="GameFontHighlightHuge"/>
+		<DisabledFont style="GameFontDisableHuge"/>
+		<HighlightTexture inherits="UIPanelButtonHighlightTexture"/>
+	</Button>
 
 	<Frame name="MainFrame" toplevel="true" hidden="false" setAllPoints="true" enableMouse="true"
 		enableKeyboard="true">

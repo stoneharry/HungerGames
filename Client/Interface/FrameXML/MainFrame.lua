@@ -41,29 +41,21 @@ function mainFrameLoaded()
 	]]
 	
 	-- Buttons are easier to do in Lua it seems
-	local button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
-	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 325, -20)
-	button:SetWidth(240)
-	button:SetHeight(60)
+	local button = CreateFrame("Button", nil, MainFrame_Back, "BigButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 332, -20)
 	button:SetText("Play Game")
 	button:SetFrameLevel(2)
 	
-	button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
-	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 640, -20)
-	button:SetWidth(55)
-	button:SetHeight(60)
+	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 641, -23)
 	button:SetFrameLevel(2)
 	
-	button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
-	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 725, -20)
-	button:SetWidth(55)
-	button:SetHeight(60)
+	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 727, -23)
 	button:SetFrameLevel(2)
 	
-	button = CreateFrame("Button", nil, MainFrame_Back, "UIPanelButtonTemplate")
-	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 810, -20)
-	button:SetWidth(55)
-	button:SetHeight(60)
+	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
+	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 813, -23)
 	button:SetFrameLevel(2)
 end
 
