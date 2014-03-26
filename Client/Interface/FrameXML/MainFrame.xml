@@ -60,7 +60,7 @@
 		<HighlightTexture inherits="UIPanelButtonHighlightTexture"/>
 	</Button>
 	
-	<Frame name="MainFrame" toplevel="true" hidden="false" setAllPoints="true" enableMouse="true"
+	<Frame name="MainFrame" hidden="false" setAllPoints="true"
 		enableKeyboard="true">
 		
 <!-- Layers:
@@ -135,12 +135,12 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<!-- Bit below the buttons -->
 						<Texture file="Interface\Portal\SpriteLayers\1">
 							<Size>
-								<AbsDimension x="300" y="96"/>
+								<AbsDimension x="320" y="96"/>
 							</Size>
 							<Anchors>
 								<Anchor point="TOPLEFT">
 									<Offset>
-										<AbsDimension x="16" y="-96"/>
+										<AbsDimension x="1" y="-96"/>
 									</Offset>
 								</Anchor>
 							</Anchors>
@@ -153,6 +153,19 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 								<Anchor point="TOPLEFT">
 									<Offset>
 										<AbsDimension x="316" y="-96"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+						<!-- Bottom right -->
+						<Texture file="Interface\Portal\Widgets\ExitAndStuffPart">
+							<Size>
+								<AbsDimension x="296" y="168"/>
+							</Size>
+							<Anchors>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="-10" y="10"/>
 									</Offset>
 								</Anchor>
 							</Anchors>
@@ -210,6 +223,24 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 				</Layers>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 				   edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
+					<EdgeSize val="64"/>
+					<TileSize val="128"/>
+					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
+				</Backdrop>
+			</Frame>
+			<Frame name="MainFrame_Chat" parent="MainFrame">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="MainFrame_Back">
+						<AbsDimension x="0" y="0" />
+					</Anchor>
+					<Anchor point="BOTTOMRIGHT" relativeTo="MainFrame_Back">
+						<AbsDimension x="-490" y="0" />
+					</Anchor>
+				</Anchors>
+				<Layers>
+
+				</Layers>
+			    <Backdrop edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
 					<TileSize val="128"/>
 					<BackgroundInsets left="5" right="5" top="5" bottom="5"/>
