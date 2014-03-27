@@ -81,6 +81,7 @@ function mainFrameLoaded()
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 337, -20)
 	button:SetText("Play Game")
 	button:SetFrameLevel(3)
+	button:SetScript("OnClick", PlayGame)
 	--button:SetBackdropColor(1, 0, 0 --[[, alpha]])
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
@@ -120,6 +121,14 @@ function mainFrameLoaded()
 	fontString:SetTextColor(1, 1, 1)
 	fontString:SetText(WELCOME_MESSAGE_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 255, -124)
+end
+
+function PlayGame()
+	MainFrame_Back:Hide()
+	MainFrame_OnlinePlayerList:Hide()
+	MainFrame_Chat:Hide()
+	MainFrame_OnlinePlayerList_2:Show()
+	MainFrame_Chat_2:Show()
 end
 
 function mainFrameUpdate()
