@@ -2,6 +2,14 @@
 ..\FrameXML\UI.xsd">
 	<Script file="MainFrame.lua"/>
 	
+	<!-- Scroll bar elements -->
+	<Button name = "ScrollBarEntryTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="150" y="16" />
+		</Size>
+		<NormalFont style="GameFontHighlightLeft"/>
+	</Button>
+	
 	<!-- Big button template -->
 	<Button name="BigButtonTemplate" virtual="true">
 		<Size>
@@ -239,9 +247,6 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<AbsDimension x="-490" y="0" />
 					</Anchor>
 				</Anchors>
-				<Layers>
-
-				</Layers>
 			    <Backdrop edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
 					<TileSize val="128"/>
@@ -259,9 +264,56 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<AbsDimension x="0" y="180" />
 					</Anchor>
 				</Anchors>
-				<Layers>
-
-				</Layers>
+				<Frames>
+					<Button name="ScrollBarEntry1" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="MainScrollBar" relativePoint="TOPLEFT">
+							<Offset>
+								<AbsDimension x="8" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry2" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry1" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry3" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry2" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry4" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry3" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry5" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry4" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<!-- Scroll bars away! -->
+					<ScrollFrame name="MainScrollBar" inherits="FauxScrollFrameTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT">
+								<AbsDimension x="42" y="-20" />
+							</Anchor>
+							<Anchor point="BOTTOMRIGHT">
+								<AbsDimension x="-42" y="15" />
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnVerticalScroll>
+								FauxScrollFrame_OnVerticalScroll(self, offset, 16, SB_Main_ScrollBar_Update)
+							</OnVerticalScroll>
+							<OnShow>
+								SB_Main_ScrollBar_Update()
+							</OnShow>
+						</Scripts>
+					</ScrollFrame>
+				</Frames>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 					edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
@@ -280,9 +332,6 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<AbsDimension x="-490" y="0" />
 					</Anchor>
 				</Anchors>
-				<Layers>
-
-				</Layers>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 					edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
@@ -336,5 +385,4 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 			<OnUpdate function="mainFrameUpdate"/>
 		</Scripts>	
 	</Frame>
-
 </Ui>

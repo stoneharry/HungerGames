@@ -10,6 +10,10 @@ model:SetPoint("BOTTOMRIGHT", 0, 0)
 model:SetFrameLevel(0);
 model:SetLight(1,0,0,-0.5,-0.5,0.7,1.0,1.0,1.0,0.8,1.0,1.0,0.8);
 
+-- Get who results every 30 seconds
+local dur = 29
+local ONLINE_PLAYERS = {}
+
 -- This gets the width/height of the screen
 --[[
 local res = GetCVar("gxResolution")
@@ -119,6 +123,10 @@ function mainFrameLoaded()
 	fontString:SetTextColor(1, 1, 1)
 	fontString:SetText(WELCOME_MESSAGE_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 255, -124)
+	
+	for i=1,5 do
+		_G["ScrollBarEntry"..i]:SetFrameLevel(4)
+	end
 end
 
 function PlayGame()
@@ -129,57 +137,39 @@ function PlayGame()
 	MainFrame_Chat_2:Show()
 end
 
-function IncDuration(self, elapsed)
-	dur = dur + elapsed;
-	if dur > 0.01 then
-		local me = UnitName("player")
+-- SCROOLLLL BARRSSSS
 
-		if curWho < maxWho then
-
-			TargetUnit(who[curWho])
-			if UnitName("target") then
-				if UnitName("target") ~=  me then
-					CastSpellByName("Crown Parcel Service Uniform")
-				end
+function SB_Main_ScrollBar_Update()
+	-- 50 is max entries, 5 is number of lines, 16 is pixel height of each line
+	FauxScrollFrame_Update(MainScrollBar, 50, 5, 16);
+	
+	local line; -- 1 through 5 of our window to scroll
+	local lineplusoffset; -- an index into our data calculated from the scroll offset
+	for line=1,5 do
+		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar);
+		if lineplusoffset <= 50 then
+			if ONLINE_PLAYERS[lineplusoffset] then
+				getglobal("ScrollBarEntry"..line):SetText(ONLINE_PLAYERS[lineplusoffset].." - "..lineplusoffset);
+				getglobal("ScrollBarEntry"..line):Show();
+			else
+				getglobal("ScrollBarEntry"..line):Hide();
 			end
-			curWho = curWho + 1
-		
 		else
-			
-			who_target = who_target + 1
-			if who_target > #classes_who then
-				who_target = 1
-			end
-			who_target_two = who_target + 1
-			if who_target_two > #classes_who then
-				who_target_two = 1
-			end
-			who={}
-			SendWho("z-Tanaris "..classes_who[who_target].." "..classes_who[who_target_two])
-			for i=1,GetNumWhoResults() do
-				n=GetWhoInfo(i)
-				who[i]=n
-			end
-			curWho=1
-			maxWho=#who
-			
+			getglobal("ScrollBarEntry"..line):Hide();
 		end
-
-		dur = 0
 	end
 end
-
--- Get who results every 30 seconds
-local dur = 29
 
 function mainFrameUpdate(self, elapsed)
 	dur = dur + elapsed
 	if dur > 30 then
 		dur = 0
 		SendWho("")
+		ONLINE_PLAYERS = {}
 		for i=1,GetNumWhoResults() do
 			-- Might need all of this information later
 			local name, guild, level, race, class, zone, classFileName = GetWhoInfo(i)
+			ONLINE_PLAYERS[i] = name
 		end
 	end
 	-- This is hacky as hell, but hey ho. It's set on update as there
