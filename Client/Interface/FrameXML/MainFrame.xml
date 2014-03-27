@@ -294,6 +294,231 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry4" relativePoint="BOTTOMLEFT"/>
 						</Anchors>
 					</Button>
+					<Button name="ScrollBarEntry6" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry5" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry7" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry6" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry8" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry7" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry9" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry8" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry10" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry9" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry11" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry10" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry12" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry11" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry13" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry12" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry14" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry13" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry15" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry14" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry16" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry15" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry17" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry16" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry18" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry17" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry19" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry18" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry20" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry19" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry21" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry20" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry22" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry21" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry23" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry22" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry24" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry23" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry25" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry24" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry26" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry25" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry27" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry26" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry28" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry27" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry29" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry28" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry30" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry29" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry31" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry30" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry32" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry31" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry33" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry32" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry34" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry33" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry35" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry34" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry36" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry35" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry37" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry36" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry38" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry37" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry39" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry38" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry40" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry39" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry41" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry40" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry42" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry41" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry43" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry42" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry44" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry43" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry45" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry44" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry46" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry45" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry47" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry46" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry48" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry47" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry49" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry48" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
+					<Button name="ScrollBarEntry50" inherits="ScrollBarEntryTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="ScrollBarEntry49" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</Button>
 					<!-- Scroll bars away! -->
 					<ScrollFrame name="MainScrollBar" inherits="FauxScrollFrameTemplate">
 						<Anchors>

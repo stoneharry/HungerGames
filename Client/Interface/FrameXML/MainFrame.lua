@@ -1,5 +1,9 @@
 
 local WELCOME_MESSAGE_STR = "Welcome to Stoneharry's project!"
+local numScrollBarButtons = 50
+-- Get who results every 30 seconds
+local dur = 29
+local ONLINE_PLAYERS = {}
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]]);
@@ -9,10 +13,6 @@ model:SetPoint("TOPLEFT", 0, 0)
 model:SetPoint("BOTTOMRIGHT", 0, 0)
 model:SetFrameLevel(0);
 model:SetLight(1,0,0,-0.5,-0.5,0.7,1.0,1.0,1.0,0.8,1.0,1.0,0.8);
-
--- Get who results every 30 seconds
-local dur = 29
-local ONLINE_PLAYERS = {}
 
 -- This gets the width/height of the screen
 --[[
@@ -124,9 +124,9 @@ function mainFrameLoaded()
 	fontString:SetText(WELCOME_MESSAGE_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 255, -124)
 	
-	for i=1,5 do
+	--[[for i=1,5 do
 		_G["ScrollBarEntry"..i]:SetFrameLevel(4)
-	end
+	end]]
 end
 
 function PlayGame()
@@ -145,11 +145,11 @@ function SB_Main_ScrollBar_Update()
 	
 	local line; -- 1 through 5 of our window to scroll
 	local lineplusoffset; -- an index into our data calculated from the scroll offset
-	for line=1,5 do
+	for line=1,12 do
 		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar);
 		if lineplusoffset <= 50 then
 			if ONLINE_PLAYERS[lineplusoffset] then
-				getglobal("ScrollBarEntry"..line):SetText(ONLINE_PLAYERS[lineplusoffset].." - "..lineplusoffset);
+				getglobal("ScrollBarEntry"..line):SetText(lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1]);
 				getglobal("ScrollBarEntry"..line):Show();
 			else
 				getglobal("ScrollBarEntry"..line):Hide();
@@ -166,11 +166,15 @@ function mainFrameUpdate(self, elapsed)
 		dur = 0
 		SendWho("")
 		ONLINE_PLAYERS = {}
-		for i=1,GetNumWhoResults() do
-			-- Might need all of this information later
-			local name, guild, level, race, class, zone, classFileName = GetWhoInfo(i)
-			ONLINE_PLAYERS[i] = name
+		for i=1, GetNumWhoResults() do
+			-- name, guild, level, race, class, zone, classFileName
+			local name, _, _, _, _, zone, _ = GetWhoInfo(i)
+			ONLINE_PLAYERS[i] = {name, zone}
 		end
+		-- hackfix location
+		ScrollBarEntry1:SetPoint("TOPLEFT", MainScrollBar, "TOPLEFT", 8, 0)
+		-- update view
+		SB_Main_ScrollBar_Update()
 	end
 	-- This is hacky as hell, but hey ho. It's set on update as there
 	--  needs to be a delay between on load and setting this.
