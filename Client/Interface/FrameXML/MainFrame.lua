@@ -1,6 +1,4 @@
 
-local debugMode = true
-
 local WELCOME_MESSAGE_STR = "Welcome to Stoneharry's project!"
 
 -- Set up background model
@@ -131,11 +129,59 @@ function PlayGame()
 	MainFrame_Chat_2:Show()
 end
 
-function mainFrameUpdate()
-	if not debugMode then
-		UIParent:Hide()
-	end
+function IncDuration(self, elapsed)
+	dur = dur + elapsed;
+	if dur > 0.01 then
+		local me = UnitName("player")
 
+		if curWho < maxWho then
+
+			TargetUnit(who[curWho])
+			if UnitName("target") then
+				if UnitName("target") ~=  me then
+					CastSpellByName("Crown Parcel Service Uniform")
+				end
+			end
+			curWho = curWho + 1
+		
+		else
+			
+			who_target = who_target + 1
+			if who_target > #classes_who then
+				who_target = 1
+			end
+			who_target_two = who_target + 1
+			if who_target_two > #classes_who then
+				who_target_two = 1
+			end
+			who={}
+			SendWho("z-Tanaris "..classes_who[who_target].." "..classes_who[who_target_two])
+			for i=1,GetNumWhoResults() do
+				n=GetWhoInfo(i)
+				who[i]=n
+			end
+			curWho=1
+			maxWho=#who
+			
+		end
+
+		dur = 0
+	end
+end
+
+-- Get who results every 30 seconds
+local dur = 29
+
+function mainFrameUpdate(self, elapsed)
+	dur = dur + elapsed
+	if dur > 30 then
+		dur = 0
+		SendWho("")
+		for i=1,GetNumWhoResults() do
+			-- Might need all of this information later
+			local name, guild, level, race, class, zone, classFileName = GetWhoInfo(i)
+		end
+	end
 	-- This is hacky as hell, but hey ho. It's set on update as there
 	--  needs to be a delay between on load and setting this.
 	--  Also this conveniently prevents resizing.
@@ -146,4 +192,6 @@ function mainFrameUpdate()
 	ChatFrame1:SetFrameStrata("HIGH")
 	ChatFrame1:SetWidth(700)
 	ChatFrame1:SetHeight(300)
+	-- Keep that friends frame hidden
+	_G["FriendsFrame"]:Hide()
 end

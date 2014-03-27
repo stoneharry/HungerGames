@@ -333,9 +333,7 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 			<OnLoad>
 				mainFrameLoaded()
 			</OnLoad>
-			<OnUpdate>
-				mainFrameUpdate()
-			</OnUpdate>
+			<OnUpdate function="mainFrameUpdate"/>
 		</Scripts>	
 	</Frame>
 
