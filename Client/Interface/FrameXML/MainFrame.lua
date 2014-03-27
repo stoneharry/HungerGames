@@ -1,4 +1,5 @@
 
+local BATTLEGROUND_MAP_STR = "Dun Morogh"
 local WELCOME_MESSAGE_STR = "Welcome to Stoneharry's project!"
 local numScrollBarButtons = 50
 -- Get who results every 30 seconds
@@ -149,13 +150,21 @@ function SB_Main_ScrollBar_Update()
 		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar);
 		if lineplusoffset <= 50 then
 			if ONLINE_PLAYERS[lineplusoffset] then
-				getglobal("ScrollBarEntry"..line):SetText(lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1]);
+				getglobal("ScrollBarEntry"..line):SetText("     "..lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1]);
 				getglobal("ScrollBarEntry"..line):Show();
+				getglobal("ScrollBarEntry"..line.."Icon"):Show();
+				if (ONLINE_PLAYERS[lineplusoffset][2] == BATTLEGROUND_MAP_STR) then
+					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture("Interface\\Portal\\Icons\\2")
+				else
+					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture("Interface\\Portal\\Icons\\1")
+				end
 			else
 				getglobal("ScrollBarEntry"..line):Hide();
+				getglobal("ScrollBarEntry"..line.."Icon"):Hide();
 			end
 		else
 			getglobal("ScrollBarEntry"..line):Hide();
+			getglobal("ScrollBarEntry"..line.."Icon"):Hide();
 		end
 	end
 end
