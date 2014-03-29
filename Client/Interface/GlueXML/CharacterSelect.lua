@@ -37,6 +37,14 @@ function CharacterSelect_OnLoad(self)
 	CharacterSelectCharacterFrame:SetBackdropBorderColor(backdropColor[1], backdropColor[2], backdropColor[3]);
 	CharacterSelectCharacterFrame:SetBackdropColor(backdropColor[4], backdropColor[5], backdropColor[6], 0.85);
 	
+	local numAddons = GetNumAddOns()
+	local character = GlueDropDownMenu_GetSelectedValue(AddonCharacterDropDown);
+	for i=1, numAddons do
+		DisableAddOn(nil, i);
+		DisableAddOn(character, i);
+	end
+	SaveAddOns();
+	AddonList_Update();
 end
 
 function CharacterSelect_OnShow()
@@ -433,9 +441,13 @@ function CharacterSelect_SelectCharacter(id, noCreate)
 		SelectCharacter(id);
 		
 		local numAddons = GetNumAddOns()
+		local character = GlueDropDownMenu_GetSelectedValue(AddonCharacterDropDown);
 		for i=1, numAddons do
 			DisableAddOn(nil, i);
+			DisableAddOn(character, i);
 		end
+		SaveAddOns();
+		AddonList_Update();
 	end
 end
 
