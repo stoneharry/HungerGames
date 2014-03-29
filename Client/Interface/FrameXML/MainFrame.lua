@@ -1,6 +1,6 @@
 
-local BATTLEGROUND_MAP_STR = "Dun Morogh"
-local WELCOME_MESSAGE_STR = "Welcome to Stoneharry's project!"
+local BATTLEGROUND_MAP_STR = "TESTING" -- DO NOT CHANGE
+local WELCOME_MESSAGE_STR = "Welcome to Hunger Games WoW! Version 1.0"
 local numScrollBarButtons = 50
 -- Get who results every 30 seconds
 local dur = 27
