@@ -54,6 +54,9 @@
 			<Layer level="BACKGROUND">
 				<Texture name="$parentMainTexture" file="Interface\Portal\Widgets\wcbutton-small"/>
 			</Layer>
+			<Layer level="ARTWORK">
+				<Texture name="$parentIcon"/>
+			</Layer>
 		</Layers>
 		<Scripts>
 			<!-- To do, shit in here. -->

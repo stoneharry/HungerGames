@@ -3,7 +3,7 @@ local BATTLEGROUND_MAP_STR = "Dun Morogh"
 local WELCOME_MESSAGE_STR = "Welcome to Stoneharry's project!"
 local numScrollBarButtons = 50
 -- Get who results every 30 seconds
-local dur = 29
+local dur = 27
 local ONLINE_PLAYERS = {}
 
 -- Set up background model
@@ -63,7 +63,7 @@ end
 
 function mainFrameLoaded()
 	-- Set background model
-	model:SetModel("Interface\\Glues\\Models\\UI_Orc\\UI_Orc.m2");
+	model:SetModel([[Interface\Glues\Models\UI_Orc\UI_Orc.m2]]);
 	-- Set frame levels
 	MainFrame_Back:SetFrameLevel(1)
 	MainFrame_Header:SetFrameLevel(1)
@@ -87,17 +87,21 @@ function mainFrameLoaded()
 	button:SetScript("OnClick", PlayGame)
 	--button:SetBackdropColor(1, 0, 0 --[[, alpha]])
 	
-	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
+	button = CreateFrame("Button", "SmallButtonOnTopRight1", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 641, -23)
 	button:SetFrameLevel(3)
+	_G["SmallButtonOnTopRight1Icon"]:SetTexture([[Interface\Portal\SmallButtonIcons\1]])
 	
-	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
+	button = CreateFrame("Button", "SmallButtonOnTopRight2", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 727, -23)
 	button:SetFrameLevel(3)
+	_G["SmallButtonOnTopRight2Icon"]:SetTexture("Interface\\Portal\\SmallButtonIcons\\2")
+	button:SetScript("OnClick", function() ShowUIPanel(AchievementFrame) end)
 	
-	button = CreateFrame("Button", nil, MainFrame_Back, "SmallButtonTemplate")
+	button = CreateFrame("Button", "SmallButtonOnTopRight3", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 813, -23)
 	button:SetFrameLevel(3)
+	_G["SmallButtonOnTopRight3Icon"]:SetTexture("Interface\\Portal\\SmallButtonIcons\\3")
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 30, -117)
@@ -125,9 +129,6 @@ function mainFrameLoaded()
 	fontString:SetText(WELCOME_MESSAGE_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 255, -124)
 	
-	--[[for i=1,5 do
-		_G["ScrollBarEntry"..i]:SetFrameLevel(4)
-	end]]
 end
 
 function PlayGame()
@@ -154,9 +155,9 @@ function SB_Main_ScrollBar_Update()
 				getglobal("ScrollBarEntry"..line):Show();
 				getglobal("ScrollBarEntry"..line.."Icon"):Show();
 				if (ONLINE_PLAYERS[lineplusoffset][2] == BATTLEGROUND_MAP_STR) then
-					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture("Interface\\Portal\\Icons\\2")
+					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture([[Interface\Portal\Icons\2]])
 				else
-					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture("Interface\\Portal\\Icons\\1")
+					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture([[Interface\Portal\Icons\1]])
 				end
 			else
 				getglobal("ScrollBarEntry"..line):Hide();
