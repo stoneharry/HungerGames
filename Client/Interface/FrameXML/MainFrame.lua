@@ -1,23 +1,22 @@
 
 local BATTLEGROUND_MAP_STR = "Warsong Gulch" -- DO NOT CHANGE
-local WELCOME_MESSAGE_STR = "Welcome to Hunger Games WoW! Version 1.0"
+local WELCOME_MESSAGE_STR = "Version 1.0"
 local CLICK_GAME_TO_JOIN_STR = "Click a game to join it."
 local WAITING_FOR_PLRS_STR = "Waiting for all players to be ready..."
 
 local MENU_SELECTED = 0
 local numScrollBarButtons = 50
--- Get who results every 30 seconds
 local dur = 27
 local ONLINE_PLAYERS = {}
 
 -- Set up background model
-local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]]);
-model:SetCamera(0);
+local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
+model:SetCamera(0)
 --model:SetFrameStrata("BACKGROUND")
 model:SetPoint("TOPLEFT", 0, 0)
 model:SetPoint("BOTTOMRIGHT", 0, 0)
-model:SetFrameLevel(0);
-model:SetLight(1,0,0,-0.5,-0.5,0.7,1.0,1.0,1.0,0.8,1.0,1.0,0.8);
+model:SetFrameLevel(0)
+model:SetLight(1,0,0,-0.5,-0.5,0.7,1.0,1.0,1.0,0.8,1.0,1.0,0.8)
 
 -- This gets the width/height of the screen
 --[[
@@ -67,13 +66,11 @@ end
 
 function mainFrameLoaded()
 	-- Set background model
-	model:SetModel([[Interface\Glues\Models\UI_Orc\UI_Orc.m2]]);
+	model:SetModel([[Interface\Glues\Models\UI_Orc\UI_Orc.m2]])
 	-- Set frame levels
 	MainFrame_Back:SetFrameLevel(1)
 	MainFrame_Header:SetFrameLevel(1)
-	
-	--MainFrame_Back:SetFrameStrata("BACKGROUND")
-	
+
 	-- Hide main interface
 	toggleInterface(true)
 	
@@ -89,7 +86,6 @@ function mainFrameLoaded()
 	button:SetText("Play Game")
 	button:SetFrameLevel(3)
 	button:SetScript("OnClick", PlayGame)
-	--button:SetBackdropColor(1, 0, 0 --[[, alpha]])
 	
 	button = CreateFrame("Button", "SmallButtonOnTopRight1", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 641, -23)
@@ -99,13 +95,13 @@ function mainFrameLoaded()
 	button = CreateFrame("Button", "SmallButtonOnTopRight2", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 727, -23)
 	button:SetFrameLevel(3)
-	_G["SmallButtonOnTopRight2Icon"]:SetTexture("Interface\\Portal\\SmallButtonIcons\\2")
+	_G["SmallButtonOnTopRight2Icon"]:SetTexture([[Interface\\Portal\\SmallButtonIcons\\2]])
 	button:SetScript("OnClick", function() ToggleAchievementFrame(false) end)
 	
 	button = CreateFrame("Button", "SmallButtonOnTopRight3", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 813, -23)
 	button:SetFrameLevel(3)
-	_G["SmallButtonOnTopRight3Icon"]:SetTexture("Interface\\Portal\\SmallButtonIcons\\3")
+	_G["SmallButtonOnTopRight3Icon"]:SetTexture([[Interface\\Portal\\SmallButtonIcons\\3]])
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 30, -117)
@@ -246,29 +242,29 @@ end
 
 function SB_Main_ScrollBar_Update()
 	-- 50 is max entries, 5 is number of lines, 16 is pixel height of each line
-	FauxScrollFrame_Update(MainScrollBar, 50, 5, 16);
+	FauxScrollFrame_Update(MainScrollBar, 50, 5, 16)
 	
-	local line; -- 1 through 5 of our window to scroll
-	local lineplusoffset; -- an index into our data calculated from the scroll offset
+	local line
+	local lineplusoffset
 	for line=1,12 do
-		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar);
+		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar)
 		if lineplusoffset <= 50 then
 			if ONLINE_PLAYERS[lineplusoffset] then
-				getglobal("ScrollBarEntry"..line):SetText("     "..lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1]);
-				getglobal("ScrollBarEntry"..line):Show();
-				getglobal("ScrollBarEntry"..line.."Icon"):Show();
+				_G["ScrollBarEntry"..line]:SetText("     "..lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1])
+				_G["ScrollBarEntry"..line]:Show()
+				_G["ScrollBarEntry"..line.."Icon"]:Show()
 				if (ONLINE_PLAYERS[lineplusoffset][2] == BATTLEGROUND_MAP_STR) then
-					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture([[Interface\Portal\Icons\2]])
+					_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\2]])
 				else
-					getglobal("ScrollBarEntry"..line.."Icon"):SetTexture([[Interface\Portal\Icons\1]])
+					_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\1]])
 				end
 			else
-				getglobal("ScrollBarEntry"..line):Hide();
-				getglobal("ScrollBarEntry"..line.."Icon"):Hide();
+				_G["ScrollBarEntry"..line]:Hide()
+				_G["ScrollBarEntry"..line.."Icon"]:Hide()
 			end
 		else
-			getglobal("ScrollBarEntry"..line):Hide();
-			getglobal("ScrollBarEntry"..line.."Icon"):Hide();
+			_G["ScrollBarEntry"..line]:Hide()
+			_G["ScrollBarEntry"..line.."Icon"]:Hide()
 		end
 	end
 end
@@ -288,6 +284,8 @@ function mainFrameUpdate(self, elapsed)
 		elseif MENU_SELECTED == 1 then
 			-- Retrieve list of games running
 			SendAddonMessage("MAINMENU", "GetTheGamesAvailable", "WHISPER", UnitName("player"))
+		elseif MENU_SELECTED == 2 then
+			-- Retrieve list of people in lobby
 		end
 		-- hackfix location
 		ScrollBarEntry1:SetPoint("TOPLEFT", MainScrollBar, "TOPLEFT", 8, 0)
