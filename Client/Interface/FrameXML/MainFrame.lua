@@ -1,8 +1,10 @@
 
-local MENU_SELECTED = 0
-
 local BATTLEGROUND_MAP_STR = "Warsong Gulch" -- DO NOT CHANGE
 local WELCOME_MESSAGE_STR = "Welcome to Hunger Games WoW! Version 1.0"
+local CLICK_GAME_TO_JOIN_STR = "Click a game to join it."
+local WAITING_FOR_PLRS_STR = "Waiting for all players to be ready..."
+
+local MENU_SELECTED = 0
 local numScrollBarButtons = 50
 -- Get who results every 30 seconds
 local dur = 27
@@ -138,7 +140,7 @@ function mainFrameLoaded()
 	fontString = MainFrame_OnlinePlayerList_2:CreateFontString("HowToJoinGameStr", "OVERLAY")
 	fontString:SetFontObject("GameFontNormalHuge")
 	fontString:SetTextColor(1, 1, 1)
-	fontString:SetText("Click a game to join it.")
+	fontString:SetText(CLICK_GAME_TO_JOIN_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_OnlinePlayerList_2, "TOPLEFT", 30, -50)
 	
 	fontString = MainFrame_Chat_2:CreateFontString("GameNameStr", "OVERLAY")
@@ -171,14 +173,18 @@ function mainFrameLoaded()
 	-- Sets the insets from the edit box's edges which determine its interactive text area
 	fontString:SetTextInsets(14, -14, 0, 4)
 	
-	button = CreateFrame("Button", nil, MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
+	button = CreateFrame("Button", "CreateGameBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
 	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -118, -65)
 	button:SetText("Create Game")
 	button:SetWidth(200)
 	button:SetFrameLevel(4)
-	button:SetScript("OnClick", function() message("NOT IMPLEMENTED YET") end)
+	button:SetScript("OnClick",
+		function()
+			SendAddonMessage("CREATEGAME", _G["GameNameInput"]:GetText(), "WHISPER", UnitName("player"))
+			OpenGameLobby()
+		end)
 	
-	button = CreateFrame("Button", nil, MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
+	button = CreateFrame("Button", "GoBackBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
 	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -123, -155)
 	button:SetText("Go Back")
 	button:SetWidth(190)
@@ -191,7 +197,19 @@ function PlayGame()
 	MainFrame_Chat:Hide()
 	MainFrame_OnlinePlayerList_2:Show()
 	MainFrame_Chat_2:Show()
-	
+	MainFrame_OnlinePlayerList:Show()
+	local str = _G["HowToJoinGameStr"]
+	if str then
+		str:SetText(CLICK_GAME_TO_JOIN_STR)
+	end
+	str = _G["CreateGameBtn"]
+	if str then
+		str:Show()
+	end	
+	str = _G["GoBackBtn"]
+	if str then
+		str:Show()
+	end	
 	-- Update menu selected
 	MENU_SELECTED = 1
 	dur = 31
@@ -206,6 +224,15 @@ function GoBackToMainMenu()
 	-- Update menu selected
 	MENU_SELECTED = 0
 	dur = 31
+end
+
+function OpenGameLobby()
+	MENU_SELECTED = 2
+	dur = 31
+	_G["HowToJoinGameStr"]:SetText(WAITING_FOR_PLRS_STR)
+	_G["CreateGameBtn"]:Hide()
+	_G["GoBackBtn"]:Hide()
+	MainFrame_Chat_2:Hide()
 end
 
 function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
