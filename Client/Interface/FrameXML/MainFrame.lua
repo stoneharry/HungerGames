@@ -1,4 +1,6 @@
 
+local MENU_SELECTED = 0
+
 local BATTLEGROUND_MAP_STR = "Warsong Gulch" -- DO NOT CHANGE
 local WELCOME_MESSAGE_STR = "Welcome to Hunger Games WoW! Version 1.0"
 local numScrollBarButtons = 50
@@ -129,14 +131,88 @@ function mainFrameLoaded()
 	fontString:SetText(WELCOME_MESSAGE_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 255, -124)
 	
+		-- Listen for addon messages
+	MainFrame_Chat_2:RegisterEvent("CHAT_MSG_ADDON")
+	MainFrame_Chat_2:SetScript("OnEvent", eventHandlerMainFrame)
+	
+	fontString = MainFrame_OnlinePlayerList_2:CreateFontString("HowToJoinGameStr", "OVERLAY")
+	fontString:SetFontObject("GameFontNormalHuge")
+	fontString:SetTextColor(1, 1, 1)
+	fontString:SetText("Click a game to join it.")
+	fontString:SetPoint("TOPLEFT", MainFrame_OnlinePlayerList_2, "TOPLEFT", 30, -50)
+	
+	fontString = MainFrame_Chat_2:CreateFontString("GameNameStr", "OVERLAY")
+	fontString:SetFontObject("GameFontNormalHuge")
+	fontString:SetTextColor(1, 1, 1)
+	fontString:SetText("Game Name:")
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 30, -50)
+	
+	local editBoxBackdrop = {
+	  bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
+	  edgeFile = [[Interface\Glues\Common\Glue-Tooltip-Border]],
+	  tile = true,
+	  tileSize = 16,
+	  edgeSize = 16,
+	  insets = {
+		left = 10,
+		right = 5,
+		top = 4,
+		bottom = 9
+	  }
+	}
+	fontString = CreateFrame("EditBox", "GameNameInput", MainFrame_Chat_2)
+	fontString:SetWidth(250)
+	fontString:SetHeight(37)
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 160, -47)
+	fontString:SetFontObject("NumberFontNormalYellow")
+	fontString:SetMaxLetters(40)
+	fontString:SetBackdrop(editBoxBackdrop)
+	fontString:SetBackdropBorderColor(0.8, 0.8, 0.8)
+	-- Sets the insets from the edit box's edges which determine its interactive text area
+	fontString:SetTextInsets(14, -14, 0, 4)
+	
+	button = CreateFrame("Button", nil, MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
+	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -118, -65)
+	button:SetText("Create Game")
+	button:SetWidth(200)
+	button:SetFrameLevel(4)
+	button:SetScript("OnClick", function() message("NOT IMPLEMENTED YET") end)
+	
+	button = CreateFrame("Button", nil, MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
+	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -123, -155)
+	button:SetText("Go Back")
+	button:SetWidth(190)
+	button:SetFrameLevel(4)
+	button:SetScript("OnClick", GoBackToMainMenu)
 end
 
 function PlayGame()
 	MainFrame_Back:Hide()
-	MainFrame_OnlinePlayerList:Hide()
 	MainFrame_Chat:Hide()
 	MainFrame_OnlinePlayerList_2:Show()
 	MainFrame_Chat_2:Show()
+	
+	-- Update menu selected
+	MENU_SELECTED = 1
+	dur = 31
+end
+
+function GoBackToMainMenu()
+	MainFrame_Back:Show()
+	MainFrame_Chat:Show()
+	MainFrame_OnlinePlayerList_2:Hide()
+	MainFrame_Chat_2:Hide()
+	
+	-- Update menu selected
+	MENU_SELECTED = 0
+	dur = 31
+end
+
+function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
+    if (event == "CHAT_MSG_ADDON" and Sender == UnitName("player")) then
+        -- Handle addon messages
+		--message("GOT: "..MSG)
+    end
 end
 
 -- SCROOLLLL BARRSSSS
@@ -174,12 +250,17 @@ function mainFrameUpdate(self, elapsed)
 	dur = dur + elapsed
 	if dur > 30 then
 		dur = 0
-		SendWho("")
 		ONLINE_PLAYERS = {}
-		for i=1, GetNumWhoResults() do
-			-- name, guild, level, race, class, zone, classFileName
-			local name, _, _, _, _, zone, _ = GetWhoInfo(i)
-			ONLINE_PLAYERS[i] = {name, zone}
+		if MENU_SELECTED == 0 then
+			SendWho("")
+			for i=1, GetNumWhoResults() do
+				-- name, guild, level, race, class, zone, classFileName
+				local name, _, _, _, _, zone, _ = GetWhoInfo(i)
+				ONLINE_PLAYERS[i] = {name, zone}
+			end
+		elseif MENU_SELECTED == 1 then
+			-- Retrieve list of games running
+			SendAddonMessage("MAINMENU", "GetTheGamesAvailable", "WHISPER", UnitName("player"))
 		end
 		-- hackfix location
 		ScrollBarEntry1:SetPoint("TOPLEFT", MainScrollBar, "TOPLEFT", 8, 0)
