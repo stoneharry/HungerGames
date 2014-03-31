@@ -107,8 +107,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             case CHAT_MSG_GUILD:
             case CHAT_MSG_BATTLEGROUND:
             case CHAT_MSG_WHISPER:
-                if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
-                {
+				// Eh, why are we only firing if a custom addon is flagged?
+				// Makes it hard to script when you hardcode things like this...
+                //if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
+                //{
                     std::string msg = "";
                     recvData >> msg;
 
@@ -116,7 +118,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                         return;
 
                     sScriptMgr->OnPlayerChat(sender, uint32(CHAT_MSG_ADDON), lang, msg);
-                }
+                //}
 
                 // Disabled addon channel?
                 if (!sWorld->getBoolConfig(CONFIG_ADDON_CHANNEL))
