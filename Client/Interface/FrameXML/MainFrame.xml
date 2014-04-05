@@ -286,7 +286,7 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 				<Frames>
 					<Button name="ScrollBarEntry1" inherits="ScrollBarEntryTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="MainScrollBar" relativePoint="TOPLEFT">
+							<Anchor point="TOPLEFT" relativePoint="TOPLEFT">
 							<Offset>
 								<AbsDimension x="8" y="0"/>
 							</Offset>

@@ -95,13 +95,13 @@ function mainFrameLoaded()
 	button = CreateFrame("Button", "SmallButtonOnTopRight2", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 727, -23)
 	button:SetFrameLevel(3)
-	_G["SmallButtonOnTopRight2Icon"]:SetTexture([[Interface\\Portal\\SmallButtonIcons\\2]])
+	_G["SmallButtonOnTopRight2Icon"]:SetTexture([[Interface\Portal\SmallButtonIcons\2]])
 	button:SetScript("OnClick", function() ToggleAchievementFrame(false) end)
 	
 	button = CreateFrame("Button", "SmallButtonOnTopRight3", MainFrame_Back, "SmallButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 813, -23)
 	button:SetFrameLevel(3)
-	_G["SmallButtonOnTopRight3Icon"]:SetTexture([[Interface\\Portal\\SmallButtonIcons\\3]])
+	_G["SmallButtonOnTopRight3Icon"]:SetTexture([[Interface\Portal\SmallButtonIcons\3]])
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 30, -117)
@@ -168,12 +168,21 @@ function mainFrameLoaded()
 	fontString:SetBackdropBorderColor(0.8, 0.8, 0.8)
 	-- Sets the insets from the edit box's edges which determine its interactive text area
 	fontString:SetTextInsets(14, -14, 0, 4)
+	fontString:SetScript("OnTextChanged",
+		function(self, userInput)
+			if string.len(self:GetText()) <= 3 then
+				CreateGameBtn:Disable();
+			else
+				CreateGameBtn:Enable();
+			end
+		end)
 	
 	button = CreateFrame("Button", "CreateGameBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
 	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -118, -65)
 	button:SetText("Create Game")
 	button:SetWidth(200)
 	button:SetFrameLevel(4)
+	button:Disable()
 	button:SetScript("OnClick",
 		function()
 			SendAddonMessage("CREATEGAME", _G["GameNameInput"]:GetText(), "WHISPER", UnitName("player"))
@@ -233,9 +242,48 @@ end
 
 function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
     if (event == "CHAT_MSG_ADDON" and Sender == UnitName("player")) then
+		if (MSG == "MAINMENU" or msg == "CREATEGAME") then
+			return
+		end
         -- Handle addon messages
-		--message("GOT: "..MSG)
+		-- Handle game list
+		if string.starts(MSG, "GAMES-") then
+			
+			local tokens = scen_split(MSG)
+			local pos = 1
+			for i=2, #tokens, 2 do
+				ONLINE_PLAYERS[pos] = {tokens[i + 1], tokens[i]}
+				pos = pos + 1
+			end
+			
+			-- update view
+			SB_Main_ScrollBar_Update()
+		end
     end
+end
+
+function string.starts(String,Start)
+   return string.sub(String,1,string.len(Start))==Start
+end
+
+function scen_split(str)
+	local b = {}
+	local c = 1
+	local d = {}
+	string.gsub(str, "[%w%s-]", function(a)
+		if (a == "-") then
+			c = c + 1
+		else
+			if (not b[c]) then
+				b[c] = {}
+			end
+			table.insert(b[c], a)
+		end
+	end)
+	for k, v in pairs (b) do
+		table.insert(d, table.concat(v))
+	end
+	return d
 end
 
 -- SCROOLLLL BARRSSSS
@@ -253,10 +301,20 @@ function SB_Main_ScrollBar_Update()
 				_G["ScrollBarEntry"..line]:SetText("     "..lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1])
 				_G["ScrollBarEntry"..line]:Show()
 				_G["ScrollBarEntry"..line.."Icon"]:Show()
-				if (ONLINE_PLAYERS[lineplusoffset][2] == BATTLEGROUND_MAP_STR) then
-					_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\2]])
-				else
-					_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\1]])
+				-- Main menu
+				if MENU_SELECTED == 0 then
+					if (ONLINE_PLAYERS[lineplusoffset][2] == BATTLEGROUND_MAP_STR) then
+						_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\2]])
+					else
+						_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\1]])
+					end
+				-- Play Game menu
+				elseif MENU_SELECTED == 1 then
+					if (ONLINE_PLAYERS[lineplusoffset][2] == "1") then
+						_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\1]])
+					else
+						_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\2]])
+					end
 				end
 			else
 				_G["ScrollBarEntry"..line]:Hide()
