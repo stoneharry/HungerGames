@@ -227,6 +227,10 @@ class WorldSession
         void LoadPermissions();
         void InvalidateRBACData(); // Used to force LoadPermissions at next HasPermission check
 
+		// For handling addon messages
+		void OnPlayerAddonMessage(Player* plr, std::string& msg);
+		static void SendAddonMessage(Player* player, const char* msg);
+
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }
         Player* GetPlayer() const { return _player; }

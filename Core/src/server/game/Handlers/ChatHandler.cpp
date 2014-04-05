@@ -96,10 +96,10 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             return;
         }
     }
-
     if (lang == LANG_ADDON)
     {
         // LANG_ADDON is only valid for the following message types
+		std::string msg = "";
         switch (type)
         {
             case CHAT_MSG_PARTY:
@@ -107,16 +107,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             case CHAT_MSG_GUILD:
             case CHAT_MSG_BATTLEGROUND:
             case CHAT_MSG_WHISPER:
-                if (sWorld->getBoolConfig(CONFIG_CHATLOG_ADDON))
-                {
-                    std::string msg = "";
-                    recvData >> msg;
-
-                    if (msg.empty())
-                        return;
-
-                    sScriptMgr->OnPlayerChat(sender, uint32(CHAT_MSG_ADDON), lang, msg);
-                }
+				// Do not handle stuff here
 
                 // Disabled addon channel?
                 if (!sWorld->getBoolConfig(CONFIG_ADDON_CHANNEL))
@@ -307,6 +298,9 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
                 sender->AddWhisperWhiteList(receiver->GetGUID());
 
             GetPlayer()->Whisper(msg, lang, receiver->GetGUID());
+
+			if (lang == LANG_ADDON)
+				OnPlayerAddonMessage(sender, msg);
         } break;
         case CHAT_MSG_PARTY:
         case CHAT_MSG_PARTY_LEADER:
@@ -497,6 +491,62 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
             TC_LOG_ERROR("network", "CHAT: unknown message type %u, lang: %u", type, lang);
             break;
     }
+}
+
+void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
+{
+	// Do not handle stupidly short addon messages
+	unsigned int length = msg.length();
+	if (length < 5)
+		return;
+	// Split message by \t
+	std::string first = "";
+	unsigned int i = 0;
+	for (; i < msg.length(); ++i)
+	{
+		char c = msg[i];
+		if (c == '\t')
+			break;
+		first.push_back(c);
+	}
+	std::string second = msg.substr(++i).c_str();
+	// Handle message
+	if (first.compare("MAINMENU") == 0)
+	{
+		// Handle second GetTheGamesAvailable
+		if (second.compare("GetTheGamesAvailable") == 0)
+		{
+			// Hardcoded at the moment. Send: GAMES-icon-gamename...
+			SendAddonMessage(sender, "GAMES-1-Game 1-1-Game 2-2-Game 3");
+		}
+	}
+	else if (first.compare("CREATEGAME") == 0)
+	{
+		// Handle second contains game name
+		// second = game name
+		if (second.length() < 3)
+		{
+			sender->GetSession()->SendNotification("Game name is too short.");
+			return;
+		}
+	}
+}
+
+void WorldSession::SendAddonMessage(Player* player, const char* msg)
+{
+	// Needs a custom built packet since TC doesnt send guid
+	WorldPacket* data = new WorldPacket();
+	uint32 messageLength = (uint32)strlen(msg) + 1;
+	data->Initialize(SMSG_MESSAGECHAT, 100);
+	*data << (uint8)CHAT_MSG_SYSTEM;
+	*data << LANG_ADDON;
+	*data << player->GetGUID();
+	*data << uint32(0);
+	*data << player->GetGUID();
+	*data << messageLength;
+	*data << msg;
+	*data << uint8(0);
+	player->GetSession()->SendPacket(data);
 }
 
 void WorldSession::HandleEmoteOpcode(WorldPacket& recvData)
