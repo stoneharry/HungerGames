@@ -498,7 +498,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 {
 	// Do not handle stupidly short addon messages
 	unsigned int length = msg.length();
-	if (length < 5)
+	if (length < 5 || length > 256)
 		return;
 	// Split message by \t
 	std::string first = "";
@@ -543,7 +543,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			return;
 		}
 		// Filter characters that could cause bugs
-		for (int i = 0; i < second.length; ++i)
+		for (unsigned int i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
 		// Time to create a BG queue
@@ -551,10 +551,35 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		HG_Game* temp = new HG_Game(second, sender);
 		HG_Game_List.push_back(temp);
 	}
+	else if (first.compare("PLRSLB") == 0)
+	{
+		// Filter characters that could cause bugs
+		for (unsigned int i = 0; i < second.length(); ++i)
+			if (second[i] == '-')
+				second[i] = '_';
+		// Retrieve which game is being requested for
+		HG_Game * temp = NULL;
+		for (HG_Game* game : HG_Game_List)
+		{
+			if (!game->killMe)
+			{
+				if (game->gameName.compare(second) == 0)
+				{
+					temp = game;
+					break;
+				}
+			}
+		}
+		// Send to player
+		if (temp != NULL)
+			SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
+	}
 }
 
 void WorldSession::SendAddonMessage(Player* player, const char* msg)
 {
+	TC_LOG_INFO("server.running", "Sending: %s", msg);
+
 	// Needs a custom built packet since TC doesnt send guid
 	WorldPacket* data = new WorldPacket();
 	uint32 messageLength = (uint32)strlen(msg) + 1;

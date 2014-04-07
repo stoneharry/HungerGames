@@ -14,6 +14,8 @@ class HG_Game {
 		std::string gameName;
 		bool inGame;
 		bool killMe;
+
+		std::string getPlayerNameListStr();
 	
 	private:
 		Player* playersInGame[10];

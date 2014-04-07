@@ -262,8 +262,8 @@ function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
 			SB_Main_ScrollBar_Update()
 		elseif string.starts(MSG, "PLAYERS-") then
 			local tokens = scen_split(MSG)
-			for i=1, #tokens do
-				ONLINE_PLAYERS[i] = {"1", tokens[i]}
+			for i=2, #tokens do
+				ONLINE_PLAYERS[i - 1] = {tokens[i], "1"}
 			end
 			
 			-- update view
@@ -360,7 +360,7 @@ function mainFrameUpdate(self, elapsed)
 			if not PLAYER_IN_GAME_STR then
 				print("ERROR: Game name is null and trying to retrieve the players in this games lobby.")
 			else
-				SendAddonMessage("GetPlayersInLobby", PLAYER_IN_GAME_STR, "WHISPER", UnitName("player"))
+				SendAddonMessage("PLRSLB", PLAYER_IN_GAME_STR, "WHISPER", UnitName("player"))
 			end
 		end
 		-- hackfix location
