@@ -39,6 +39,7 @@
 #include "Util.h"
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
+#include "HG_Game.h"
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 {
@@ -516,8 +517,20 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		// Handle second GetTheGamesAvailable
 		if (second.compare("GetTheGamesAvailable") == 0)
 		{
-			// Hardcoded at the moment. Send: GAMES-icon-gamename...
-			SendAddonMessage(sender, "GAMES-1-Game 1-1-Game 2-2-Game 3");
+			// Send: GAMES-icon-gamename...
+			std::stringstream str;
+
+			str << "GAMES";
+			for (HG_Game* game : HG_Game_List)
+			{
+				if (!game->killMe)
+				{
+					str << (game->inGame ? "-2-" : "-1-");
+					str << game->gameName;
+				}
+			}
+
+			SendAddonMessage(sender, str.str().c_str());
 		}
 	}
 	else if (first.compare("CREATEGAME") == 0)
@@ -529,6 +542,10 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			sender->GetSession()->SendNotification("Game name is too short.");
 			return;
 		}
+		// Time to create a BG queue
+		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS
+		HG_Game* temp = new HG_Game(second);
+		HG_Game_List.push_back(temp);
 	}
 }
 
