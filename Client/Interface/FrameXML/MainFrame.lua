@@ -4,6 +4,7 @@ local WELCOME_MESSAGE_STR = "Version 1.0"
 local CLICK_GAME_TO_JOIN_STR = "Click a game to join it."
 local WAITING_FOR_PLRS_STR = "Waiting for all players to be ready..."
 
+local PLAYER_IN_GAME_STR = nil
 local MENU_SELECTED = 0
 local numScrollBarButtons = 50
 local dur = 27
@@ -186,7 +187,7 @@ function mainFrameLoaded()
 	button:SetScript("OnClick",
 		function()
 			SendAddonMessage("CREATEGAME", _G["GameNameInput"]:GetText(), "WHISPER", UnitName("player"))
-			OpenGameLobby()
+			OpenGameLobby(_G["GameNameInput"]:GetText())
 		end)
 	
 	button = CreateFrame("Button", "GoBackBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
@@ -231,7 +232,8 @@ function GoBackToMainMenu()
 	dur = 31
 end
 
-function OpenGameLobby()
+function OpenGameLobby(gameName)
+	PLAYER_IN_GAME_STR = gameName
 	MENU_SELECTED = 2
 	dur = 31
 	_G["HowToJoinGameStr"]:SetText(WAITING_FOR_PLRS_STR)
@@ -258,6 +260,14 @@ function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
 			
 			-- update view
 			SB_Main_ScrollBar_Update()
+		elseif string.starts(MSG, "PLAYERS-") then
+			local tokens = scen_split(MSG)
+			for i=1, #tokens do
+				ONLINE_PLAYERS[i] = {"1", tokens[i]}
+			end
+			
+			-- update view
+			SB_Main_ScrollBar_Update()		
 		end
     end
 end
@@ -315,6 +325,9 @@ function SB_Main_ScrollBar_Update()
 					else
 						_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\2]])
 					end
+				-- Players in game lobby
+				elseif MENU_SELECTED == 2 then
+					_G["ScrollBarEntry"..line.."Icon"]:SetTexture([[Interface\Portal\Icons\1]])			
 				end
 			else
 				_G["ScrollBarEntry"..line]:Hide()
@@ -344,6 +357,11 @@ function mainFrameUpdate(self, elapsed)
 			SendAddonMessage("MAINMENU", "GetTheGamesAvailable", "WHISPER", UnitName("player"))
 		elseif MENU_SELECTED == 2 then
 			-- Retrieve list of people in lobby
+			if not PLAYER_IN_GAME_STR then
+				print("ERROR: Game name is null and trying to retrieve the players in this games lobby.")
+			else
+				SendAddonMessage("GetPlayersInLobby", PLAYER_IN_GAME_STR, "WHISPER", UnitName("player"))
+			end
 		end
 		-- hackfix location
 		ScrollBarEntry1:SetPoint("TOPLEFT", MainScrollBar, "TOPLEFT", 8, 0)

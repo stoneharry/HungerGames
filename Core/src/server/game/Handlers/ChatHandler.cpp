@@ -548,7 +548,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 				second[i] = '_';
 		// Time to create a BG queue
 		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS
-		HG_Game* temp = new HG_Game(second);
+		HG_Game* temp = new HG_Game(second, sender);
 		HG_Game_List.push_back(temp);
 	}
 }

@@ -4,15 +4,19 @@
 
 #include <vector>
 #include <string>
+#include "Player.h"
 
 class HG_Game {
 	public:
-		HG_Game(std::string gameName);
+		HG_Game(std::string gameName, Player* plr);
 		~HG_Game();
 		unsigned int GUID;
 		std::string gameName;
 		bool inGame;
 		bool killMe;
+	
+	private:
+		Player* playersInGame[10];
 };
 
 // These scope accross the entire project, bad Harry.
