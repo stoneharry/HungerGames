@@ -40,6 +40,20 @@ bool HG_Game::RemovePlayer(Player * plr)
 			if (playersInGame[i]->GetName().compare(name) == 0)
 			{
 				playersInGame[i] = NULL;
+				// Hmmm... The game might be empty now.
+				bool empty = true;
+				for (int j = 0; j < 10; ++j)
+				{
+					if (playersInGame[j] != NULL)
+					{
+						empty = false;
+						break;
+					}
+				}
+				if (empty)
+				{
+					killMe = true;
+				}
 				return true;
 			}
 		}

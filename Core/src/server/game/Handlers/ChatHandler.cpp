@@ -564,8 +564,21 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		}
 		// Time to create a BG queue
 		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS <---- MEMMOORRRYYYYYYYYYYY LEAKSSSSSSSSSSSSSSSSSSSSSSSS
-		HG_Game* temp = new HG_Game(second, sender);
-		HG_Game_List.push_back(temp);
+		// Okay it has SOME garbage collection, but it is still bad
+		unsigned int length = HG_Game_List.size();
+		bool added = false;
+		for (unsigned int i = 0; i < length; ++i)
+		{
+			if (HG_Game_List[i]->killMe)
+			{
+				added = true;
+				delete HG_Game_List[i];
+				HG_Game_List[i] = new HG_Game(second, sender);
+				break;
+			}
+		}
+		if (!added)
+			HG_Game_List.push_back(new HG_Game(second, sender));
 	}
 	else if (first.compare("PLRSLB") == 0)
 	{

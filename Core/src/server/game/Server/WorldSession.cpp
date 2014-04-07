@@ -548,7 +548,8 @@ void WorldSession::LogoutPlayer(bool save)
 		{
 			if (game->RemovePlayer(_player))
 			{
-				break;
+				// What if the player is in more than one game? Shouldn't happen but... heh, let's be safe
+				//break;
 			}
 		}
 
