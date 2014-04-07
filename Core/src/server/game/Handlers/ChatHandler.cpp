@@ -511,6 +511,10 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		first.push_back(c);
 	}
 	std::string second = msg.substr(++i).c_str();
+
+	// Debug
+	TC_LOG_INFO("server.debug", "[DEBUG] From %s: %s, %s", sender->GetName().c_str(), first.c_str(), second.c_str());
+
 	// Handle message
 	if (first.compare("MAINMENU") == 0)
 	{
@@ -559,7 +563,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			}
 		}
 		// Time to create a BG queue
-		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS
+		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS <---- MEMMOORRRYYYYYYYYYYY LEAKSSSSSSSSSSSSSSSSSSSSSSSS
 		HG_Game* temp = new HG_Game(second, sender);
 		HG_Game_List.push_back(temp);
 	}
@@ -586,10 +590,32 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		if (temp != NULL)
 			SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
 	}
+	else if (first.compare("JoinGame") == 0)
+	{
+		// Filter characters that could cause bugs
+		for (unsigned int i = 0; i < second.length(); ++i)
+		if (second[i] == '-')
+			second[i] = '_';
+		// Retrieve which game is being requested for
+		for (HG_Game* game : HG_Game_List)
+		{
+			if (!game->killMe)
+			{
+				if (game->gameName.compare(second) == 0)
+				{
+					game->AddPlayer(sender);
+					break;
+				}
+			}
+		}
+	}
 }
 
 void WorldSession::SendAddonMessage(Player* player, const char* msg)
 {
+	// Debug
+	TC_LOG_INFO("server.debug", "[DEBUG] Sending : %s", msg);
+
 	// Needs a custom built packet since TC doesnt send guid
 	WorldPacket* data = new WorldPacket();
 	uint32 messageLength = (uint32)strlen(msg) + 1;

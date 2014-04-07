@@ -16,6 +16,7 @@ class HG_Game {
 		bool killMe;
 
 		std::string getPlayerNameListStr();
+		void AddPlayer(Player * plr);
 	
 	private:
 		Player* playersInGame[10];

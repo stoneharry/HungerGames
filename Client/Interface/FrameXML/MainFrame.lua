@@ -9,6 +9,7 @@ local MENU_SELECTED = 0
 local numScrollBarButtons = 50
 local dur = 27
 local ONLINE_PLAYERS = {}
+local UPDATE_INTERVALS = {30, 5, 5}
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
@@ -196,6 +197,21 @@ function mainFrameLoaded()
 	button:SetWidth(190)
 	button:SetFrameLevel(4)
 	button:SetScript("OnClick", GoBackToMainMenu)
+	
+	local HandleScollBarEntryClick = 	function(self)
+											if MENU_SELECTED == 1 then
+												-- substring 9, 10 if whitespace
+												local lobbyName = string.sub(self:GetText(), 9)
+												if string.starts(lobbyName, " ") then
+													lobbyName = string.sub(lobbyName, 1)
+												end
+												SendAddonMessage("JoinGame", lobbyName, "WHISPER", UnitName("player"))
+												OpenGameLobby(lobbyName)
+											end
+										end
+	for i=1,50 do
+		_G["ScrollBarEntry"..tostring(i)]:SetScript("OnClick", HandleScollBarEntryClick)
+	end
 end
 
 function PlayGame()
@@ -342,7 +358,7 @@ end
 
 function mainFrameUpdate(self, elapsed)
 	dur = dur + elapsed
-	if dur > 30 then
+	if dur > UPDATE_INTERVALS[MENU_SELECTED + 1] then
 		dur = 0
 		ONLINE_PLAYERS = {}
 		if MENU_SELECTED == 0 then

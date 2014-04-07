@@ -17,12 +17,29 @@ HG_Game::~HG_Game()
 {
 }
 
+void HG_Game::AddPlayer(Player * plr)
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		if (playersInGame[i] == NULL)
+		{
+			playersInGame[i] = plr;
+			return;
+		}
+	}
+	plr->GetSession()->SendNotification("The game is full, cannot join!");
+}
+
 std::string HG_Game::getPlayerNameListStr()
 {
 	std::stringstream str;
 	str << "PLAYERS";
 	for (int i = 0; i < 10; ++i)
+	{
 		if (playersInGame[i] != NULL)
+		{
 			str << "-" << playersInGame[i]->GetName();
+		}
+	}
 	return str.str();
 }
