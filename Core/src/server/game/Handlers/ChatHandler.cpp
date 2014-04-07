@@ -546,6 +546,18 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (unsigned int i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
+		// Check game name doesn't already exist
+		for (HG_Game* game : HG_Game_List)
+		{
+			if (!game->killMe)
+			{
+				if (game->gameName.compare(second) == 0)
+				{
+					sender->GetSession()->SendNotification("That game name already exists!");
+					return;
+				}
+			}
+		}
 		// Time to create a BG queue
 		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS
 		HG_Game* temp = new HG_Game(second, sender);
@@ -578,8 +590,6 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 
 void WorldSession::SendAddonMessage(Player* player, const char* msg)
 {
-	TC_LOG_INFO("server.running", "Sending: %s", msg);
-
 	// Needs a custom built packet since TC doesnt send guid
 	WorldPacket* data = new WorldPacket();
 	uint32 messageLength = (uint32)strlen(msg) + 1;
