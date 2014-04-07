@@ -46,6 +46,7 @@
 #include "Transport.h"
 #include "WardenWin.h"
 #include "WardenMac.h"
+#include "HG_Game.h"
 
 namespace {
 
@@ -540,6 +541,16 @@ void WorldSession::LogoutPlayer(bool save)
 
         //! Call script hook before deletion
         sScriptMgr->OnPlayerLogout(_player);
+
+		// Get them out of the HG queues if they are in there
+		// Oh god, this is an expensive call. Someone make me program better.
+		for (HG_Game* game : HG_Game_List)
+		{
+			if (game->RemovePlayer(_player))
+			{
+				break;
+			}
+		}
 
         //! Remove the player from the world
         // the player may not be in the world when logging out

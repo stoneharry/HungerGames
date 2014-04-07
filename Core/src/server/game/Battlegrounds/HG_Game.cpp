@@ -30,6 +30,23 @@ void HG_Game::AddPlayer(Player * plr)
 	plr->GetSession()->SendNotification("The game is full, cannot join!");
 }
 
+bool HG_Game::RemovePlayer(Player * plr)
+{
+	std::string name = plr->GetName();
+	for (int i = 0; i < 10; ++i)
+	{
+		if (playersInGame[i] != NULL)
+		{
+			if (playersInGame[i]->GetName().compare(name) == 0)
+			{
+				playersInGame[i] = NULL;
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 std::string HG_Game::getPlayerNameListStr()
 {
 	std::stringstream str;

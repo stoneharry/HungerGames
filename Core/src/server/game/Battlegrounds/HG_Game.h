@@ -17,6 +17,7 @@ class HG_Game {
 
 		std::string getPlayerNameListStr();
 		void AddPlayer(Player * plr);
+		bool RemovePlayer(Player * plr);
 	
 	private:
 		Player* playersInGame[10];
