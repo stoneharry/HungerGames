@@ -200,6 +200,9 @@ function mainFrameLoaded()
 	
 	local HandleScollBarEntryClick = 	function(self)
 											if MENU_SELECTED == 1 then
+												if not self:GetText() then
+													return
+												end
 												-- substring 9, 10 if whitespace
 												local lobbyName = string.sub(self:GetText(), 9)
 												if string.starts(lobbyName, " ") then
