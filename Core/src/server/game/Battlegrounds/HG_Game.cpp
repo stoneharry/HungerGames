@@ -41,19 +41,15 @@ bool HG_Game::RemovePlayer(Player * plr)
 			{
 				playersInGame[i] = NULL;
 				// Hmmm... The game might be empty now.
-				bool empty = true;
+				killMe = true;
 				for (int j = 0; j < 10; ++j)
 				{
 					if (playersInGame[j] != NULL)
 					{
-						empty = false;
-						break;
+						killMe = false;
+						return true;
 					}
-				}
-				if (empty)
-				{
-					killMe = true;
-				}
+				}	
 				return true;
 			}
 		}
