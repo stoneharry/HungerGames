@@ -542,6 +542,10 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			sender->GetSession()->SendNotification("Game name is too short.");
 			return;
 		}
+		// Filter characters that could cause bugs
+		for (int i = 0; i < second.length; ++i)
+			if (second[i] == '-')
+				second[i] = '_';
 		// Time to create a BG queue
 		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS
 		HG_Game* temp = new HG_Game(second);
