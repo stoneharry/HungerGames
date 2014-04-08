@@ -4,14 +4,17 @@
 
 #include <vector>
 #include <string>
+#include "Battleground.h"
 #include "Player.h"
 
-class HG_Game {
+class HG_Game : public Battleground
+{
 	public:
-		HG_Game(std::string gameName, Player* plr);
+		HG_Game();
 		~HG_Game();
 		unsigned int GUID;
 		std::string gameName;
+		uint64 hostGUID;
 		bool inGame;
 		bool killMe;
 
