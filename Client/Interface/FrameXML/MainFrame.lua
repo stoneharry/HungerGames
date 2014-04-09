@@ -8,8 +8,10 @@ local PLAYER_IN_GAME_STR = nil
 local MENU_SELECTED = 0
 local numScrollBarButtons = 50
 local dur = 27
+local mus_dur = 0
 local ONLINE_PLAYERS = {}
 local UPDATE_INTERVALS = {30, 5, 5}
+local playing = nil
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
@@ -218,6 +220,7 @@ function mainFrameLoaded()
 end
 
 function PlayGame()
+	PlaySound("igMainMenuOption");
 	MainFrame_Back:Hide()
 	MainFrame_Chat:Hide()
 	MainFrame_OnlinePlayerList_2:Show()
@@ -241,6 +244,7 @@ function PlayGame()
 end
 
 function GoBackToMainMenu()
+	PlaySound("igMainMenuOption");
 	MainFrame_Back:Show()
 	MainFrame_Chat:Show()
 	MainFrame_OnlinePlayerList_2:Hide()
@@ -252,6 +256,7 @@ function GoBackToMainMenu()
 end
 
 function OpenGameLobby(gameName)
+	PlaySound("igMainMenuOption");
 	PLAYER_IN_GAME_STR = gameName
 	MENU_SELECTED = 2
 	dur = 31
@@ -361,6 +366,27 @@ end
 
 function mainFrameUpdate(self, elapsed)
 	dur = dur + elapsed
+	mus_dur = mus_dur + elapsed
+	if not playing then
+		if mus_dur > 1.5 then
+			PlayMusic([[Interface\FrameXML\1.mp3]])
+			playing = 1
+			mus_dur = 0
+		end
+	end
+	if playing == 1 then
+		if mus_dur > 69 then
+			mus_dur = 0
+			playing = 2
+			PlayMusic([[Interface\FrameXML\2.mp3]])
+		end
+	elseif playing == 2 then
+		if mus_dur > 81 then
+			mus_dur = 0
+			playing = 1
+			PlayMusic([[Interface\FrameXML\1.mp3]])
+		end
+	end
 	if dur > UPDATE_INTERVALS[MENU_SELECTED + 1] then
 		dur = 0
 		ONLINE_PLAYERS = {}
