@@ -95,7 +95,7 @@
 			<Frame name="AccountLoginUI" setAllPoints="true">
 				<Layers>
 					<Layer level="ARTWORK">
-						<FontString inherits="GlueFontNormalSmall" text="BLIZZ_DISCLAIMER">
+						<FontString inherits="GlueFontNormalSmall" text="">
 							<Anchors>
 								<Anchor point="BOTTOM">
 									<Offset>
