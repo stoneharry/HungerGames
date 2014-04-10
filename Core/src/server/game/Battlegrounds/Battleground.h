@@ -538,6 +538,8 @@ class Battleground
         uint32 GetTeamScore(uint32 TeamID) const;
 
         virtual uint32 GetPrematureWinner();
+		std::string GetGameName() { return GameName; }
+		bool SetGameName(std::string name);
 
     protected:
         // this method is called, when BG cannot spawn its own spirit guide, or something is wrong, It correctly ends Battleground
@@ -577,7 +579,7 @@ class Battleground
 
         BGHonorMode m_HonorMode;
         int32 m_TeamScores[BG_TEAMS_COUNT];
-
+		std::string GameName;
     private:
         // Battleground
         BattlegroundTypeId m_TypeID;

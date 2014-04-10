@@ -1967,3 +1967,11 @@ bool Battleground::CheckAchievementCriteriaMeet(uint32 criteriaId, Player const*
     TC_LOG_ERROR("bg.battleground", "Battleground::CheckAchievementCriteriaMeet: No implementation for criteria %u", criteriaId);
     return false;
 }
+
+bool Battleground::SetGameName(std::string name)
+{
+	if (GetStatus() >= STATUS_IN_PROGRESS)
+		return false;
+	//Todo: Filter non latin characters, disallow excessive caps ect.
+	GameName = name;
+}
