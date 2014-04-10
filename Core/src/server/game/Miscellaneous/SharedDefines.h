@@ -3324,10 +3324,11 @@ enum BattlegroundTypeId
     BATTLEGROUND_DS             = 10, // Dalaran Sewers
     BATTLEGROUND_RV             = 11, // Ring of Valor
     BATTLEGROUND_IC             = 30, // Isle of Conquest
-    BATTLEGROUND_RB             = 32  // Random Battleground
+    BATTLEGROUND_RB             = 32,  // Random Battleground
+	BATTLEGROUND_HG_1           = 33
 };
 
-#define MAX_BATTLEGROUND_TYPE_ID 33
+#define MAX_BATTLEGROUND_TYPE_ID 34
 
 enum MailResponseType
 {
@@ -3461,6 +3462,7 @@ enum BattlegroundQueueTypeId
     BATTLEGROUND_QUEUE_2v2      = 8,
     BATTLEGROUND_QUEUE_3v3      = 9,
     BATTLEGROUND_QUEUE_5v5      = 10,
+	BATTLEGROUND_QUEUE_HG_1     = 11,
     MAX_BATTLEGROUND_QUEUE_TYPES
 };
 
