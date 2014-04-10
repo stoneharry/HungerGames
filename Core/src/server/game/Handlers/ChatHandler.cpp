@@ -40,6 +40,7 @@
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 #include "HG_Game.h"
+#include "BattlegroundMgr.h"
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 {
@@ -524,15 +525,13 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			// Send: GAMES-icon-gamename...
 			std::stringstream str;
 
+			//sBattlegroundMgr->
+
+			//// TODO: Get list of running battlegrounds
 			str << "GAMES";
-			for (HG_Game* game : HG_Game_List)
-			{
-				if (!game->killMe)
-				{
-					str << (game->inGame ? "-2-" : "-1-");
-					str << game->gameName;
-				}
-			}
+
+			//		str << (game->inGame ? "-2-" : "-1-");
+			//		str << game->gameName;
 
 			SendAddonMessage(sender, str.str().c_str());
 		}
@@ -550,35 +549,15 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (unsigned int i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
-		// Check game name doesn't already exist
-		for (HG_Game* game : HG_Game_List)
-		{
-			if (!game->killMe)
-			{
-				if (game->gameName.compare(second) == 0)
-				{
-					sender->GetSession()->SendNotification("That game name already exists!");
-					return;
-				}
-			}
-		}
-		// Time to create a BG queue
-		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS <---- MEMMOORRRYYYYYYYYYYY LEAKSSSSSSSSSSSSSSSSSSSSSSSS
-		// Okay it has SOME garbage collection, but it is still bad
-		unsigned int length = HG_Game_List.size();
-		bool added = false;
-		for (unsigned int i = 0; i < length; ++i)
-		{
-			if (HG_Game_List[i]->killMe)
-			{
-				added = true;
-				delete HG_Game_List[i];
-				HG_Game_List[i] = new HG_Game(/*second*/);
-				break;
-			}
-		}
-		if (!added)
-			HG_Game_List.push_back(new HG_Game(/*second*/));
+		//// TO DO: Check game name doesn't already exist
+		
+
+		// Add BG
+		HG_Game* temp = new HG_Game();
+		temp->AddPlayer(sender);
+		temp->SetGameName(second, sender->GetGUID());
+		//temp->SetHost(sender->GetGUID()); // GUID is passed in on line above
+		sBattlegroundMgr->AddBattleground(temp);
 	}
 	else if (first.compare("PLRSLB") == 0)
 	{
@@ -587,8 +566,8 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			if (second[i] == '-')
 				second[i] = '_';
 		// Retrieve which game is being requested for
-		HG_Game * temp = NULL;
-		for (HG_Game* game : HG_Game_List)
+		HG_Game* temp = NULL;
+		/*for (HG_Game* game : HG_Game_List)
 		{
 			if (!game->killMe)
 			{
@@ -598,7 +577,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 					break;
 				}
 			}
-		}
+		}*/
 		// Send to player
 		if (temp != NULL)
 			SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
@@ -610,7 +589,8 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		if (second[i] == '-')
 			second[i] = '_';
 		// Retrieve which game is being requested for
-		for (HG_Game* game : HG_Game_List)
+		// Add player to game here TODO
+		/*for (HG_Game* game : HG_Game_List)
 		{
 			if (!game->killMe)
 			{
@@ -620,7 +600,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 					break;
 				}
 			}
-		}
+		}*/
 	}
 }
 

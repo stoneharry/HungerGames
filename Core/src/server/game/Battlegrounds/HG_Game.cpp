@@ -3,10 +3,7 @@
 
 HG_Game::HG_Game()
 {
-	GUID = ++CUR_GUID;
-	inGame = false;
-	killMe = false;
-
+	IsInGame = false;
 	//playersInGame[0] = plr;
 	for (int i = 1; i < 10; ++i)
 		playersInGame[i] = NULL;

@@ -12,11 +12,8 @@ class HG_Game : public Battleground
 	public:
 		HG_Game();
 		~HG_Game();
-		unsigned int GUID;
 		std::string gameName;
 		uint64 hostGUID;
-		bool inGame;
-		bool killMe;
 
 		bool SetupBattleground();
 		std::string getPlayerNameListStr();
@@ -25,10 +22,7 @@ class HG_Game : public Battleground
 	
 	private:
 		Player* playersInGame[10];
+		bool IsInGame;
 };
-
-// These scope accross the entire project, bad Harry.
-static std::vector<HG_Game*> HG_Game_List;
-static unsigned int CUR_GUID = 0;
 
 #endif

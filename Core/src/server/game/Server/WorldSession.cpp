@@ -542,12 +542,6 @@ void WorldSession::LogoutPlayer(bool save)
         //! Call script hook before deletion
         sScriptMgr->OnPlayerLogout(_player);
 
-		// Get them out of the HG queues if they are in there
-		for (HG_Game* game : HG_Game_List)
-		{
-			game->RemovePlayer(_player, NULL, NULL);
-		}
-
         //! Remove the player from the world
         // the player may not be in the world when logging out
         // e.g if he got disconnected during a transfer to another map
