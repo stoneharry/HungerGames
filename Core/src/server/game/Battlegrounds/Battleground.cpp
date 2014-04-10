@@ -1968,8 +1968,10 @@ bool Battleground::CheckAchievementCriteriaMeet(uint32 criteriaId, Player const*
     return false;
 }
 
-bool Battleground::SetGameName(std::string name)
+bool Battleground::SetGameName(std::string name, uint64 playerGUID)
 {
+	if (playerGUID != 0 && IsHost(playerGUID))
+		return false;
 	if (GetStatus() >= STATUS_IN_PROGRESS)
 		return false;
 	//Todo: Filter non latin characters, disallow excessive caps ect.
