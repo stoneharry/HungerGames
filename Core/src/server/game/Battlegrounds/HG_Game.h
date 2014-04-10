@@ -18,9 +18,10 @@ class HG_Game : public Battleground
 		bool inGame;
 		bool killMe;
 
+		bool SetupBattleground();
 		std::string getPlayerNameListStr();
 		void AddPlayer(Player * plr);
-		bool RemovePlayer(Player * plr);
+		void RemovePlayer(Player* player, uint64 guid, uint32 /*team*/);
 	
 	private:
 		Player* playersInGame[10];

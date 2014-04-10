@@ -543,14 +543,9 @@ void WorldSession::LogoutPlayer(bool save)
         sScriptMgr->OnPlayerLogout(_player);
 
 		// Get them out of the HG queues if they are in there
-		// Oh god, this is an expensive call. Someone make me program better.
 		for (HG_Game* game : HG_Game_List)
 		{
-			if (game->RemovePlayer(_player))
-			{
-				// What if the player is in more than one game? Shouldn't happen but... heh, let's be safe
-				//break;
-			}
+			game->RemovePlayer(_player, NULL, NULL);
 		}
 
         //! Remove the player from the world

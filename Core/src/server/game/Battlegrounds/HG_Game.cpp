@@ -16,44 +16,19 @@ HG_Game::~HG_Game()
 {
 }
 
-void HG_Game::AddPlayer(Player * plr)
+bool HG_Game::SetupBattleground()
 {
-	for (int i = 0; i < 10; ++i)
-	{
-		if (playersInGame[i] == NULL)
-		{
-			playersInGame[i] = plr;
-			return;
-		}
-	}
-	plr->GetSession()->SendNotification("The game is full, cannot join!");
+	return true;
 }
 
-bool HG_Game::RemovePlayer(Player * plr)
+void HG_Game::AddPlayer(Player* player)
 {
-	std::string name = plr->GetName();
-	for (int i = 0; i < 10; ++i)
-	{
-		if (playersInGame[i] != NULL)
-		{
-			if (playersInGame[i]->GetName().compare(name) == 0)
-			{
-				playersInGame[i] = NULL;
-				// Hmmm... The game might be empty now.
-				killMe = true;
-				for (int j = 0; j < 10; ++j)
-				{
-					if (playersInGame[j] != NULL)
-					{
-						killMe = false;
-						return true;
-					}
-				}	
-				return true;
-			}
-		}
-	}
-	return false;
+	Battleground::AddPlayer(player);
+}
+
+void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 /*team*/)
+{
+	
 }
 
 std::string HG_Game::getPlayerNameListStr()

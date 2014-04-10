@@ -573,12 +573,12 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			{
 				added = true;
 				delete HG_Game_List[i];
-				HG_Game_List[i] = new HG_Game(second, sender);
+				HG_Game_List[i] = new HG_Game(/*second*/);
 				break;
 			}
 		}
 		if (!added)
-			HG_Game_List.push_back(new HG_Game(second, sender));
+			HG_Game_List.push_back(new HG_Game(/*second*/));
 	}
 	else if (first.compare("PLRSLB") == 0)
 	{
