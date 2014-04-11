@@ -15,17 +15,19 @@ HG_Game::~HG_Game()
 
 bool HG_Game::SetupBattleground()
 {
+	// spawn creatures and stuff here
 	return true;
 }
 
 void HG_Game::AddPlayer(Player* player)
 {
-	Battleground::AddPlayer(player);
+	// Don't want to call below yet really
+	//Battleground::AddPlayer(player);
 }
 
-void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 /*team*/)
+void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 team)
 {
-	
+	Battleground::RemovePlayer(player, guid, team);
 }
 
 std::string HG_Game::getPlayerNameListStr()

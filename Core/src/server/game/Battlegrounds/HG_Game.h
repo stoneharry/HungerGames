@@ -20,6 +20,8 @@ class HG_Game : public Battleground
 		void AddPlayer(Player * plr);
 		void RemovePlayer(Player* player, uint64 guid, uint32 /*team*/);
 	
+		const bool HasGameStarted() { return IsInGame; }
+
 	private:
 		Player* playersInGame[10];
 		bool IsInGame;

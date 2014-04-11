@@ -135,14 +135,15 @@ class BattlegroundMgr
             return BATTLEGROUND_TYPE_NONE;
         }
 
+		// Public because... hackfixes. No seriously, this is really bad to have public.
+		typedef std::map<BattlegroundTypeId, BattlegroundData> BattlegroundDataContainer;
+		BattlegroundDataContainer bgDataStore;
+
     private:
         bool CreateBattleground(CreateBattlegroundData& data);
         uint32 CreateClientVisibleInstanceId(BattlegroundTypeId bgTypeId, BattlegroundBracketId bracket_id);
         static bool IsArenaType(BattlegroundTypeId bgTypeId);
         BattlegroundTypeId GetRandomBG(BattlegroundTypeId id);
-
-        typedef std::map<BattlegroundTypeId, BattlegroundData> BattlegroundDataContainer;
-        BattlegroundDataContainer bgDataStore;
 
         BattlegroundQueue m_BattlegroundQueues[MAX_BATTLEGROUND_QUEUE_TYPES];
 

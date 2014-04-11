@@ -1976,4 +1976,5 @@ bool Battleground::SetGameName(std::string name, uint64 playerGUID)
 		return false;
 	//Todo: Filter non latin characters, disallow excessive caps ect.
 	GameName = name;
+	return true;
 }

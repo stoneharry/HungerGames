@@ -525,21 +525,22 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			// Send: GAMES-icon-gamename...
 			std::stringstream str;
 
-			//sBattlegroundMgr->
-
-			//// TODO: Get list of running battlegrounds
 			str << "GAMES";
 
-			//		str << (game->inGame ? "-2-" : "-1-");
-			//		str << game->gameName;
+			for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
+			{
+				HG_Game* temp = (HG_Game*)pair.second;
+				str << (temp->HasGameStarted() ? "-2-" : "-1-");
+				str << temp->GetGameName();
+			}
 
 			SendAddonMessage(sender, str.str().c_str());
 		}
 	}
 	else if (first.compare("CREATEGAME") == 0)
 	{
-		// Handle second contains game name
 		// second = game name
+		// Handle second contains game name
 		if (second.length() < 3)
 		{
 			sender->GetSession()->SendNotification("Game name is too short.");
@@ -556,7 +557,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		HG_Game* temp = new HG_Game();
 		temp->AddPlayer(sender);
 		temp->SetGameName(second, sender->GetGUID());
-		//temp->SetHost(sender->GetGUID()); // GUID is passed in on line above
+		temp->SetHost(sender->GetGUID());
 		sBattlegroundMgr->AddBattleground(temp);
 	}
 	else if (first.compare("PLRSLB") == 0)
@@ -565,22 +566,16 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (unsigned int i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
-		// Retrieve which game is being requested for
-		HG_Game* temp = NULL;
-		/*for (HG_Game* game : HG_Game_List)
+
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
-			if (!game->killMe)
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (temp->gameName.compare(second) == 0)
 			{
-				if (game->gameName.compare(second) == 0)
-				{
-					temp = game;
-					break;
-				}
+				SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
+				return;
 			}
-		}*/
-		// Send to player
-		if (temp != NULL)
-			SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
+		}	
 	}
 	else if (first.compare("JoinGame") == 0)
 	{
@@ -589,18 +584,16 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		if (second[i] == '-')
 			second[i] = '_';
 		// Retrieve which game is being requested for
-		// Add player to game here TODO
-		/*for (HG_Game* game : HG_Game_List)
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
-			if (!game->killMe)
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (temp->gameName.compare(second) == 0)
 			{
-				if (game->gameName.compare(second) == 0)
-				{
-					game->AddPlayer(sender);
-					break;
-				}
+				temp->AddPlayer(sender);
+				return;
 			}
-		}*/
+		}
+		sender->GetSession()->SendNotification("Something went wrong trying to join this game!");
 	}
 }
 
