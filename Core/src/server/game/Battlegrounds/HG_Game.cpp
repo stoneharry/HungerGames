@@ -3,6 +3,7 @@
 
 HG_Game::HG_Game()
 {
+	GUID = HG_GUID_COUNTER++;
 	IsInGame = false;
 	for (int i = 0; i < 10; ++i)
 		playersInGame[i] = NULL;
@@ -31,6 +32,7 @@ void HG_Game::AddPlayer(Player* player)
 	}
 }
 
+// This is not currently calld when a player logs out and needs to be
 void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 team)
 {
 	Battleground::RemovePlayer(player, guid, team);

@@ -7,6 +7,8 @@
 #include "Battleground.h"
 #include "Player.h"
 
+static uint32 HG_GUID_COUNTER = 0;
+
 class HG_Game : public Battleground
 {
 	public:
@@ -21,10 +23,12 @@ class HG_Game : public Battleground
 		bool HasPlayer(uint64 guid);
 
 		const bool HasGameStarted() { return IsInGame; }
+		const uint32 GetGUID() { return GUID; }
 
 	private:
 		Player* playersInGame[10];
 		bool IsInGame;
+		uint32 GUID;
 };
 
 #endif

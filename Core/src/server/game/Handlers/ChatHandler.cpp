@@ -550,15 +550,23 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (unsigned int i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
-		//// TO DO: Check game name doesn't already exist
-		
-
+		// Check game name doesn't already exist
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
+		{
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (!temp->HasPlayer(sender->GetGUID()))
+			{
+				sender->LeaveBattleground(true);
+				break;
+			}
+		}
 		// Add BG
 		HG_Game* temp = new HG_Game();
 		temp->AddPlayer(sender);
 		temp->SetGameName(second, sender->GetGUID());
 		temp->SetHost(sender->GetGUID());
 		temp->SetTypeID(BATTLEGROUND_HG_1);
+		temp->SetInstanceID(temp->GetGUID());
 		sBattlegroundMgr->AddBattleground(temp);
 	}
 	else if (first.compare("PLRSLB") == 0)
