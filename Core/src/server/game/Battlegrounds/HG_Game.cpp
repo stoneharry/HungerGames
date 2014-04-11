@@ -4,8 +4,7 @@
 HG_Game::HG_Game()
 {
 	IsInGame = false;
-	//playersInGame[0] = plr;
-	for (int i = 1; i < 10; ++i)
+	for (int i = 0; i < 10; ++i)
 		playersInGame[i] = NULL;
 }
 
@@ -21,13 +20,38 @@ bool HG_Game::SetupBattleground()
 
 void HG_Game::AddPlayer(Player* player)
 {
-	// Don't want to call below yet really
-	//Battleground::AddPlayer(player);
+	Battleground::AddPlayer(player);
+	for (int i = 0; i < 10; ++i)
+	{
+		if (playersInGame[i] == NULL)
+		{
+			playersInGame[i] = player;
+			return;
+		}
+	}
 }
 
 void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 team)
 {
 	Battleground::RemovePlayer(player, guid, team);
+	for (int i = 0; i < 10; ++i)
+	{
+		if (playersInGame[i] != NULL && playersInGame[i]->GetGUID() == guid)
+		{
+			playersInGame[i] = NULL;
+			return;
+		}
+	}
+}
+
+bool HG_Game::HasPlayer(uint64 GUID)
+{
+	for (int i = 0; i < 10; ++i)
+	{
+		if (playersInGame[i] != NULL && playersInGame[i]->GetGUID() == GUID)
+			return true;
+	}
+	return false;
 }
 
 std::string HG_Game::getPlayerNameListStr()

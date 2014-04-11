@@ -12,14 +12,14 @@ class HG_Game : public Battleground
 	public:
 		HG_Game();
 		~HG_Game();
-		std::string gameName;
 		uint64 hostGUID;
 
 		bool SetupBattleground();
 		std::string getPlayerNameListStr();
 		void AddPlayer(Player * plr);
 		void RemovePlayer(Player* player, uint64 guid, uint32 /*team*/);
-	
+		bool HasPlayer(uint64 guid);
+
 		const bool HasGameStarted() { return IsInGame; }
 
 	private:

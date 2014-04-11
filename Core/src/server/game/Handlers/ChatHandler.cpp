@@ -543,7 +543,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		// Handle second contains game name
 		if (second.length() < 3)
 		{
-			sender->GetSession()->SendNotification("Game name is too short.");
+			sWorld->SendServerMessage(SERVER_MSG_STRING, "Game name is too short!", sender);
 			return;
 		}
 		// Filter characters that could cause bugs
@@ -558,6 +558,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		temp->AddPlayer(sender);
 		temp->SetGameName(second, sender->GetGUID());
 		temp->SetHost(sender->GetGUID());
+		temp->SetTypeID(BATTLEGROUND_HG_1);
 		sBattlegroundMgr->AddBattleground(temp);
 	}
 	else if (first.compare("PLRSLB") == 0)
@@ -570,7 +571,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
 			HG_Game* temp = (HG_Game*)pair.second;
-			if (temp->gameName.compare(second) == 0)
+			if (temp->GetGameName().compare(second) == 0)
 			{
 				SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
 				return;
@@ -587,13 +588,16 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
 			HG_Game* temp = (HG_Game*)pair.second;
-			if (temp->gameName.compare(second) == 0)
+			if (temp->GetGameName().compare(second) == 0)
 			{
-				temp->AddPlayer(sender);
+				if (!temp->HasPlayer(sender->GetGUID()))
+					temp->AddPlayer(sender);
+				else
+					sWorld->SendServerMessage(SERVER_MSG_STRING, "Cheat detected, failed to add to game.", sender);
 				return;
 			}
 		}
-		sender->GetSession()->SendNotification("Something went wrong trying to join this game!");
+		sWorld->SendServerMessage(SERVER_MSG_STRING, "Something went wrong trying to join this game!", sender);
 	}
 }
 
