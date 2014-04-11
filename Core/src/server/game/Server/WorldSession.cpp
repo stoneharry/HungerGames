@@ -442,6 +442,16 @@ void WorldSession::LogoutPlayer(bool save)
 
     if (_player)
     {
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
+		{
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (!temp->HasPlayer(_player->GetGUID()))
+			{
+				temp->RemovePlayer(_player, _player->GetGUID(), -1);
+				break;
+			}
+		}
+
         if (uint64 lguid = _player->GetLootGUID())
             DoLootRelease(lguid);
 
