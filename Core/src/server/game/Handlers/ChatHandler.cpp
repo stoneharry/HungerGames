@@ -527,10 +527,11 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			str << "GAMES";
 			for (HG_Game* game : HG_Game_List)
 			{
-				if (!game->killMe)
+				BattlegroundStatus status = game->GetStatus();
+				if (status != STATUS_WAIT_LEAVE)
 				{
-					str << (game->inGame ? "-2-" : "-1-");
-					str << game->gameName;
+					str << (status >= STATUS_WAIT_JOIN ? "-2-" : "-1-");
+					str << game->GetName();
 				}
 			}
 
@@ -543,7 +544,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		// second = game name
 		if (second.length() < 3)
 		{
-			sender->GetSession()->SendNotification("Game name is too short.");
+			SendNotification("Game name is too short.");
 			return;
 		}
 		// Filter characters that could cause bugs
@@ -557,7 +558,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			{
 				if (game->gameName.compare(second) == 0)
 				{
-					sender->GetSession()->SendNotification("That game name already exists!");
+					SendNotification("That game name already exists!");
 					return;
 				}
 			}
