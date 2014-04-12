@@ -375,7 +375,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="AccountLoginTOSButton" hidden="true" inherits="GlueButtonSmallTemplateBlue" text="TOS_FRAME_TITLE">
+					<Button name="AccountLoginTOSButton" hidden="true" inherits="GlueButtonSmallTemplate" text="TOS_FRAME_TITLE">
 						<Anchors>
 							<Anchor point="BOTTOM" relativeTo="AccountLoginExitButton" relativePoint="TOP">
 								<Offset>
@@ -405,7 +405,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="AccountLoginCreditsButton" hidden="true" inherits="GlueButtonSmallTemplateBlue" text="CREDITS">
+					<Button name="AccountLoginCreditsButton" hidden="true" inherits="GlueButtonSmallTemplate" text="CREDITS">
 						<Anchors>
 							<Anchor point="BOTTOM" relativeTo="AccountLoginTOSButton" relativePoint="TOP">
 								<Offset>
@@ -419,7 +419,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="AccountLoginCinematicsButton" hidden="true" inherits="GlueButtonSmallTemplateBlue" text="CINEMATICS">
+					<Button name="AccountLoginCinematicsButton" hidden="true" inherits="GlueButtonSmallTemplate" text="CINEMATICS">
 						<Anchors>
 							<Anchor point="BOTTOM" relativeTo="AccountLoginCreditsButton" relativePoint="TOP">
 								<Offset>
@@ -449,7 +449,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="AccountLoginCommunityButton" hidden="true" inherits="GlueButtonSmallTemplateBlue" text="COMMUNITY_SITE">
+					<Button name="AccountLoginCommunityButton" hidden="true" inherits="GlueButtonSmallTemplate" text="COMMUNITY_SITE">
 						<Anchors>
 							<Anchor point="BOTTOMLEFT">
 								<Offset>
@@ -463,7 +463,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="AccountLoginManageAccountButton" hidden="true" inherits="GlueButtonSmallTemplateBlue" text="MANAGE_ACCOUNT">
+					<Button name="AccountLoginManageAccountButton" hidden="true" inherits="GlueButtonSmallTemplate" text="MANAGE_ACCOUNT">
 						<Anchors>
 							<Anchor point="BOTTOM" relativeTo="AccountLoginCommunityButton" relativePoint="TOP">
 								<Offset>
@@ -477,7 +477,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="AccountLoginUpgradeAccountButton" inherits="GlueButtonTemplateBlue" text="UPGRADE_ACCOUNT" hidden="true">
+					<Button name="AccountLoginUpgradeAccountButton" inherits="GlueButtonTemplate" text="UPGRADE_ACCOUNT" hidden="true">
 						<Size x="320" y="60"/>
 						<Anchors>
 							<Anchor point="TOP" x="0" y="-10"/>
@@ -1003,7 +1003,7 @@
 									</Layer>
 								</Layers>
 								<Frames>
-									<Button name="ChangedOptionsDialogOkayButton" inherits="GlueButtonTemplateBlue" text="OKAY">
+									<Button name="ChangedOptionsDialogOkayButton" inherits="GlueButtonTemplate" text="OKAY">
 										<Anchors>
 											<Anchor point="BOTTOM" relativePoint="BOTTOM">
 												<Offset>
@@ -1133,7 +1133,7 @@
 											<AbsInset left="15" bottom="5"/>
 										</TextInsets>
 									</EditBox>
-									<Button name="$parentOkayButton" inherits="GlueButtonTemplateBlue" text="OKAY">
+									<Button name="$parentOkayButton" inherits="GlueButtonTemplate" text="OKAY">
 										<Anchors>
 											<Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT">
 												<Offset>
@@ -1147,7 +1147,7 @@
 											</OnClick>
 										</Scripts>
 									</Button>
-									<Button name="$parentCancelButton" inherits="GlueButtonTemplateBlue" text="CANCEL">
+									<Button name="$parentCancelButton" inherits="GlueButtonTemplate" text="CANCEL">
 										<Anchors>
 											<Anchor point="LEFT" relativeTo="$parentOkayButton" relativePoint="RIGHT">
 												<Offset>
@@ -1335,7 +1335,7 @@
 											</ScrollFrame>
 										</Frames>
 									</Frame>
-									<Button name="$parentAcceptButton" inherits="GlueButtonTemplateBlue" text="ACCEPT">
+									<Button name="$parentAcceptButton" inherits="GlueButtonTemplate" text="ACCEPT">
 										<Size>
 											<AbsDimension x="125" y="37"/>
 										</Size>
@@ -1353,7 +1353,7 @@
 											</OnClick>
 										</Scripts>
 									</Button>
-									<Button name="$parentCancelButton" inherits="GlueButtonTemplateBlue" text="CANCEL">
+									<Button name="$parentCancelButton" inherits="GlueButtonTemplate" text="CANCEL">
 										<Size>
 											<AbsDimension x="125" y="37"/>
 										</Size>
@@ -1997,7 +1997,7 @@
 							</SimpleHTML>
 						</ScrollChild>
 					</ScrollFrame>
-					<Button name="TOSDecline" inherits="GlueButtonTemplateBlue" text="DECLINE">
+					<Button name="TOSDecline" inherits="GlueButtonTemplate" text="DECLINE">
 						<Size>
 							<AbsDimension x="128" y="34"/>
 						</Size>
@@ -2014,7 +2014,7 @@
 							</OnClick>
 						</Scripts>
 					</Button>
-					<Button name="TOSAccept" inherits="GlueButtonTemplateBlue" text="TOS_ACCEPT">
+					<Button name="TOSAccept" inherits="GlueButtonTemplate" text="TOS_ACCEPT">
 						<Size>
 							<AbsDimension x="128" y="34"/>
 						</Size>
@@ -2493,7 +2493,7 @@
 					</Layer>
 				</Layers>
 				<Frames>
-					<Button name="CinematicsButton1" inherits="GlueButtonTemplateBlue" text="WORLD_OF_WARCRAFT" hidden="true" id="1">
+					<Button name="CinematicsButton1" inherits="GlueButtonTemplate" text="WORLD_OF_WARCRAFT" hidden="true" id="1">
 						<Size>
 							<AbsDimension x="240" y="45"/>
 						</Size>
@@ -2508,7 +2508,7 @@
 							<OnClick function="Cinematics_PlayMovie"/>
 						</Scripts>
 					</Button>
-					<Button name="CinematicsButton2" inherits="GlueButtonTemplateBlue" text="BURNING_CRUSADE" hidden="true" id="2">
+					<Button name="CinematicsButton2" inherits="GlueButtonTemplate" text="BURNING_CRUSADE" hidden="true" id="2">
 						<Size>
 							<AbsDimension x="240" y="45"/>
 						</Size>
@@ -2523,7 +2523,7 @@
 							<OnClick function="Cinematics_PlayMovie"/>
 						</Scripts>						
 					</Button>
-					<Button name="CinematicsButton3" inherits="GlueButtonTemplateBlue" text="WRATH_OF_THE_LICH_KING" hidden="true" id="3">
+					<Button name="CinematicsButton3" inherits="GlueButtonTemplate" text="WRATH_OF_THE_LICH_KING" hidden="true" id="3">
 						<Size>
 							<AbsDimension x="240" y="45"/>
 						</Size>

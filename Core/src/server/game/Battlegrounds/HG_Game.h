@@ -7,28 +7,28 @@
 #include "Battleground.h"
 #include "Player.h"
 
+static uint32 HG_GUID_COUNTER = 0;
+
 class HG_Game : public Battleground
 {
 	public:
 		HG_Game();
 		~HG_Game();
-		unsigned int GUID;
-		std::string gameName;
 		uint64 hostGUID;
-		bool inGame;
-		bool killMe;
 
 		bool SetupBattleground();
 		std::string getPlayerNameListStr();
 		void AddPlayer(Player * plr);
 		void RemovePlayer(Player* player, uint64 guid, uint32 /*team*/);
-	
+		bool HasPlayer(uint64 guid);
+
+		const bool HasGameStarted() { return IsInGame; }
+		const uint32 GetGUID() { return GUID; }
+
 	private:
 		Player* playersInGame[10];
+		bool IsInGame;
+		uint32 GUID;
 };
-
-// These scope accross the entire project, bad Harry.
-static std::vector<HG_Game*> HG_Game_List;
-static unsigned int CUR_GUID = 0;
 
 #endif

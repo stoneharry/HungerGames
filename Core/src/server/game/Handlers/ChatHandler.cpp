@@ -40,6 +40,7 @@
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
 #include "HG_Game.h"
+#include "BattlegroundMgr.h"
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 {
@@ -525,13 +526,14 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			std::stringstream str;
 
 			str << "GAMES";
-			for (HG_Game* game : HG_Game_List)
+
+			for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 			{
-				BattlegroundStatus status = game->GetStatus();
+				BattlegroundStatus status = pair.second->GetStatus();
 				if (status != STATUS_WAIT_LEAVE)
 				{
 					str << (status >= STATUS_WAIT_JOIN ? "-2-" : "-1-");
-					str << game->GetName();
+					str << pair.second->GetName();
 				}
 			}
 
@@ -540,11 +542,11 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	}
 	else if (first.compare("CREATEGAME") == 0)
 	{
-		// Handle second contains game name
 		// second = game name
+		// Handle second contains game name
 		if (second.length() < 3)
 		{
-			SendNotification("Game name is too short.");
+			sWorld->SendServerMessage(SERVER_MSG_STRING, "Game name is too short!", sender);
 			return;
 		}
 		// Filter characters that could cause bugs
@@ -552,34 +554,23 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			if (second[i] == '-')
 				second[i] = '_';
 		// Check game name doesn't already exist
-		for (HG_Game* game : HG_Game_List)
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
-			if (!game->killMe)
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (!temp->HasPlayer(sender->GetGUID()))
 			{
-				if (game->gameName.compare(second) == 0)
-				{
-					SendNotification("That game name already exists!");
-					return;
-				}
-			}
-		}
-		// Time to create a BG queue
-		// This will need garbage collecting, MEMORY LEAKKSSSSSSSS <---- MEMMOORRRYYYYYYYYYYY LEAKSSSSSSSSSSSSSSSSSSSSSSSS
-		// Okay it has SOME garbage collection, but it is still bad
-		unsigned int length = HG_Game_List.size();
-		bool added = false;
-		for (unsigned int i = 0; i < length; ++i)
-		{
-			if (HG_Game_List[i]->killMe)
-			{
-				added = true;
-				delete HG_Game_List[i];
-				HG_Game_List[i] = new HG_Game(/*second*/);
+				sender->LeaveBattleground(true);
 				break;
 			}
 		}
-		if (!added)
-			HG_Game_List.push_back(new HG_Game(/*second*/));
+		// Add BG
+		HG_Game* temp = new HG_Game();
+		temp->AddPlayer(sender);
+		temp->SetGameName(second, sender->GetGUID());
+		temp->SetHost(sender->GetGUID());
+		temp->SetTypeID(BATTLEGROUND_HG_1);
+		temp->SetInstanceID(temp->GetGUID());
+		sBattlegroundMgr->AddBattleground(temp);
 	}
 	else if (first.compare("PLRSLB") == 0)
 	{
@@ -587,22 +578,16 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (unsigned int i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
-		// Retrieve which game is being requested for
-		HG_Game * temp = NULL;
-		for (HG_Game* game : HG_Game_List)
+
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
-			if (!game->killMe)
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (temp->GetGameName().compare(second) == 0)
 			{
-				if (game->gameName.compare(second) == 0)
-				{
-					temp = game;
-					break;
-				}
+				SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
+				return;
 			}
-		}
-		// Send to player
-		if (temp != NULL)
-			SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
+		}	
 	}
 	else if (first.compare("JoinGame") == 0)
 	{
@@ -611,17 +596,19 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		if (second[i] == '-')
 			second[i] = '_';
 		// Retrieve which game is being requested for
-		for (HG_Game* game : HG_Game_List)
+		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
-			if (!game->killMe)
+			HG_Game* temp = (HG_Game*)pair.second;
+			if (temp->GetGameName().compare(second) == 0)
 			{
-				if (game->gameName.compare(second) == 0)
-				{
-					game->AddPlayer(sender);
-					break;
-				}
+				if (!temp->HasPlayer(sender->GetGUID()))
+					temp->AddPlayer(sender);
+				else
+					sWorld->SendServerMessage(SERVER_MSG_STRING, "Cheat detected, failed to add to game.", sender);
+				return;
 			}
 		}
+		sWorld->SendServerMessage(SERVER_MSG_STRING, "Something went wrong trying to join this game!", sender);
 	}
 }
 
