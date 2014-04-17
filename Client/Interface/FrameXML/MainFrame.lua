@@ -6,6 +6,8 @@ local WAITING_FOR_PLRS_STR = "Waiting for all players to be ready..."
 
 local PLAYER_IN_GAME_STR = nil
 local MENU_SELECTED = 0
+-- Lobby channels WIP, disabled atm since buggy
+local MENU_CHANNELS = {"Lobby", "Game"}
 local numScrollBarButtons = 50
 local dur = 27
 local mus_dur = 0
@@ -200,22 +202,34 @@ function mainFrameLoaded()
 	button:SetFrameLevel(4)
 	button:SetScript("OnClick", GoBackToMainMenu)
 	
-	local HandleScollBarEntryClick = 	function(self)
-											if MENU_SELECTED == 1 then
-												if not self:GetText() then
-													return
-												end
-												-- substring 9, 10 if whitespace
-												local lobbyName = string.sub(self:GetText(), 9)
-												if string.starts(lobbyName, " ") then
-													lobbyName = string.sub(lobbyName, 1)
-												end
-												SendAddonMessage("JoinGame", lobbyName, "WHISPER", UnitName("player"))
-												OpenGameLobby(lobbyName)
-											end
-										end
 	for i=1,50 do
 		_G["ScrollBarEntry"..tostring(i)]:SetScript("OnClick", HandleScollBarEntryClick)
+	end
+	
+	--JoinChannelByName(MENU_CHANNELS[1])
+end
+
+function HandleScollBarEntryClick(self)
+	if not self:GetText() then
+		return
+	end
+	-- If wanting to join a game
+	if MENU_SELECTED == 1 then
+		-- substring 9, 10 if whitespace
+		local lobbyName = string.sub(self:GetText(), 9)
+		if string.starts(lobbyName, " ") then
+			lobbyName = string.sub(lobbyName, 1)
+		end
+		SendAddonMessage("JoinGame", lobbyName, "WHISPER", UnitName("player"))
+		OpenGameLobby(lobbyName)
+	-- If in game lobby or main lobby
+	elseif MENU_SELECTED == 0 or MENU_SELECTED == 2 then
+		-- This needs writing properly
+		local buttonNumber = tonumber(string.sub(self:GetName(), 15))
+		table.insert(ONLINE_PLAYERS, buttonNumber + 1, {"  |cFF00FF00 0 Wins", "1"})
+		table.insert(ONLINE_PLAYERS, buttonNumber + 2, {"  |cFFFF0000 0 Losses", "1"})
+		-- update view
+		SB_Main_ScrollBar_Update()
 	end
 end
 
@@ -250,6 +264,11 @@ function GoBackToMainMenu()
 	MainFrame_OnlinePlayerList_2:Hide()
 	MainFrame_Chat_2:Hide()
 	
+	if PLAYER_IN_GAME_STR then
+		--LeaveChannelByName(PLAYER_IN_GAME_STR)
+	end
+	--JoinChannelByName(MENU_CHANNELS[1])
+	
 	-- Update menu selected
 	MENU_SELECTED = 0
 	dur = 31
@@ -258,6 +277,8 @@ end
 function OpenGameLobby(gameName)
 	PlaySound("igMainMenuOption");
 	PLAYER_IN_GAME_STR = gameName
+	--LeaveChannelByName(MENU_CHANNELS[1])
+	--JoinChannelByName(gameName)
 	MENU_SELECTED = 2
 	dur = 31
 	_G["HowToJoinGameStr"]:SetText(WAITING_FOR_PLRS_STR)
