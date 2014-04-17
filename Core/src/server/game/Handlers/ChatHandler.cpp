@@ -529,9 +529,12 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 
 			for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 			{
-				HG_Game* temp = (HG_Game*)pair.second;
-				str << (temp->HasGameStarted() ? "-2-" : "-1-");
-				str << temp->GetGameName();
+				BattlegroundStatus status = pair.second->GetStatus();
+				if (status != STATUS_WAIT_LEAVE)
+				{
+					str << (status >= STATUS_WAIT_JOIN ? "-2-" : "-1-");
+					str << pair.second->GetName();
+				}
 			}
 
 			SendAddonMessage(sender, str.str().c_str());
