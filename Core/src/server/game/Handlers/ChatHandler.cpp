@@ -534,7 +534,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 				if (status != STATUS_WAIT_LEAVE)
 				{
 					str << (status >= STATUS_WAIT_JOIN ? "-2-" : "-1-");
-					str << pair.second->GetName();
+					str << pair.second->GetGameName();
 				}
 			}
 
@@ -616,7 +616,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 void WorldSession::SendAddonMessage(Player* player, std::string message, uint32 packet)
 {
 	uint32 splitLength = 240;
-	uint32 splits = ceil(message.length() / splitLength);
+	uint32 splits = ceil((float)message.length() / (float)splitLength);
 	uint32 counter = 1;
 	for (uint32 i = 0; i < message.length(); i += splitLength)
 	{
@@ -628,7 +628,7 @@ void WorldSession::SendAddonMessage(Player* player, std::string message, uint32 
 		counter = counter + 1;
 
 		WorldPacket* data = new WorldPacket();
-		uint32 messageLength = message.length() + 1;
+		uint32 messageLength = send.str().length() + 1;
 		data->Initialize(SMSG_MESSAGECHAT, 100);
 		*data << (uint8)CHAT_MSG_SYSTEM;
 		*data << LANG_ADDON;
