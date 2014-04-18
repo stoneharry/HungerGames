@@ -14,6 +14,7 @@ local mus_dur = 0
 local ONLINE_PLAYERS = {}
 local UPDATE_INTERVALS = {30, 5, 5}
 local playing = nil
+local links = {}
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
@@ -287,16 +288,30 @@ function OpenGameLobby(gameName)
 	MainFrame_Chat_2:Hide()
 end
 
-function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
+function eventHandlerMainFrame(self, event, message, _, Type, Sender)
     if (event == "CHAT_MSG_ADDON" and Sender == UnitName("player")) then
-		if (MSG == "MAINMENU" or msg == "CREATEGAME") then
+		local packet, link, linkCount, MSG = message:match("(%d%d%d)(%d%d)(%d%d)(.+)");
+		if not packet or not link or not linkCount or not MSG then
 			return
 		end
+		packet, link, linkCount = tonumber(packet), tonumber(link), tonumber(linkCount);
+		
+		links[packet] = links[packet] or {count = 0};
+		links[packet][link] = MSG;
+		links[packet].count = links[packet].count + 1;
+		
+		if (links[packet].count ~= linkCount) then
+			return
+		end
+		
+		local fullMessage = table.concat(links[packet]);
+		links[packet] = {count = 0};
+		
         -- Handle addon messages
 		-- Handle game list
-		if string.starts(MSG, "GAMES-") then
+		if string.starts(fullMessage, "GAMES-") then
 			
-			local tokens = scen_split(MSG)
+			local tokens = scen_split(fullMessage)
 			local pos = 1
 			for i=2, #tokens, 2 do
 				ONLINE_PLAYERS[pos] = {tokens[i + 1], tokens[i]}
@@ -305,8 +320,8 @@ function eventHandlerMainFrame(self, event, MSG, _, Type, Sender)
 			
 			-- update view
 			SB_Main_ScrollBar_Update()
-		elseif string.starts(MSG, "PLAYERS-") then
-			local tokens = scen_split(MSG)
+		elseif string.starts(fullMessage, "PLAYERS-") then
+			local tokens = scen_split(fullMessage)
 			for i=2, #tokens do
 				ONLINE_PLAYERS[i - 1] = {tokens[i], "1"}
 			end
