@@ -1943,7 +1943,31 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
     {
         // attack can be redirected to another target
         victim = GetMeleeHitRedirectTarget(victim);
-
+		if (GetTypeId() == TYPEID_PLAYER)
+		{
+			uint32 equipslot = 0;
+			switch (attType)
+			{
+				case BASE_ATTACK:
+				{
+					equipslot = EQUIPMENT_SLOT_MAINHAND;
+				}break;
+				case OFF_ATTACK:
+				{
+					equipslot = EQUIPMENT_SLOT_OFFHAND;
+				}break;
+			}
+			Item* pItem = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, equipslot);
+			if (pItem)
+			{
+				if (pItem->GetTemplate()->overrideMeleeSpellId)
+				{
+					if (GetPower(POWER_ENERGY) >= pItem->GetTemplate()->overrideMeleeEnergyCost)
+						CastSpell(victim, pItem->GetTemplate()->overrideMeleeSpellId, pItem->GetTemplate()->overrideMeleeTriggeredCast);
+					return;
+				}
+			}
+		}
         CalcDamageInfo damageInfo;
         CalculateMeleeDamage(victim, 0, &damageInfo, attType);
         // Send log damage message to client

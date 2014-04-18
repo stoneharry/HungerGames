@@ -662,6 +662,9 @@ struct ItemTemplate
     uint32 MinMoneyLoot;
     uint32 MaxMoneyLoot;
     uint32 FlagsCu;
+	uint32 overrideMeleeSpellId;
+	uint32 overrideMeleeEnergyCost;
+	bool overrideMeleeTriggeredCast;
 
     // helpers
     bool CanChangeEquipStateInCombat() const

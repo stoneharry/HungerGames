@@ -567,8 +567,8 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		// Add BG
 		HG_Game* temp = new HG_Game();
 		temp->AddPlayer(sender);
-		temp->SetGameName(second, sender->GetGUID());
 		temp->SetHost(sender->GetGUID());
+		temp->SetGameName(second, sender->GetGUID());
 		temp->SetTypeID(BATTLEGROUND_HG_1);
 		temp->SetInstanceID(temp->GetGUID());
 		sBattlegroundMgr->AddBattleground(temp);
