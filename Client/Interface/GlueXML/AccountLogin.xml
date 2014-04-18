@@ -14,7 +14,7 @@
 		<Frames>
 			<Frame name="GlueDialogBackground">
 				<Size>
-					<AbsDimension x="412" y="240"/>
+					<AbsDimension x="412" y="190"/>
 				</Size>
 				<Anchors>
 					<Anchor point="TOP">
@@ -68,7 +68,7 @@
 				<Anchors>
 					<Anchor point="TOP">
 						<Offset>
-							<AbsDimension x="-80" y="-350"/>
+							<AbsDimension x="-80" y="-320"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -82,7 +82,7 @@
 				<Anchors>
 					<Anchor point="TOP">
 						<Offset>
-							<AbsDimension x="80" y="-350"/>
+							<AbsDimension x="80" y="-320"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
