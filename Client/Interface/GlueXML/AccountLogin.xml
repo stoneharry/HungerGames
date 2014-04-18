@@ -10,6 +10,293 @@
 		</Scripts>
 	</Button>
 	
+	<Frame name="CreateAccountFrame" toplevel="true" setAllPoints="true" enableMouse="true" enableKeyboard="true" frameStrata="DIALOG" hidden="true">
+		<Frames>
+			<Frame name="GlueDialogBackground">
+				<Size>
+					<AbsDimension x="412" y="240"/>
+				</Size>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-180"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="11" right="12" top="12" bottom="11"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="32"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="32"/>
+					</EdgeSize>
+				</Backdrop>
+				<Layers>
+					<Layer level="ARTWORK">
+						<FontString name="GlueDialogText" inherits="GlueFontNormalLarge">
+							<Size>
+								<AbsDimension x="450" y="0"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOP">
+									<Offset>
+										<AbsDimension x="0" y="-16"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+						<Texture name="GlueDialogAlertIcon" file="Interface\DialogFrame\DialogAlertIcon" hidden="true">
+							<Size>
+								<AbsDimension x="64" y="64"/>
+							</Size>
+							<Anchors>
+								<Anchor point="TOPLEFT">
+									<Offset>
+										<AbsDimension x="0" y="0"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
+			</Frame>
+			
+			<Button name="CreateFinalAccountButton" inherits="GlueButtonSmallTemplate" text="Create Account">
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="-80" y="-350"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CreateAccountFinal()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="CancelCreateAccount" inherits="GlueButtonSmallTemplate" text="Cancel">
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="80" y="-350"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						CreateAccountFrame:Hide()
+					</OnClick>
+				</Scripts>
+			</Button>
+			
+			<EditBox name="AccountNameEditBox" letters="30">
+				<Size x="250" y="37"/>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-200"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="C_USERNAME" inherits="GlueFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE" text="Enter Your Username">
+							<Anchors>
+								<Anchor point="CENTER" relativePoint="CENTER">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="10" right="5" top="4" bottom="9"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="16"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+				</Backdrop>
+				<Scripts>
+					<OnTabPressed>
+						AccountPasswordEditBox:SetFocus();
+					</OnTabPressed>
+					<OnEscapePressed>
+						CreateAccountFrame:Hide();
+					</OnEscapePressed>
+					<OnEnterPressed>
+						if ( CreateFinalAccountButton:IsEnabled() ) then
+							CreateAccountFinal()
+						end
+					</OnEnterPressed>
+					<OnEditFocusLost>
+						self:HighlightText(0, 0);
+					</OnEditFocusLost>
+					<OnEditFocusGained>
+						self:HighlightText();
+					</OnEditFocusGained>
+					<OnTextChanged>
+						if ( self:GetText() ~= "" ) then
+							C_USERNAME:Hide();
+						else
+							C_USERNAME:Show();
+						end
+						CreateAccountTextChange();
+					</OnTextChanged>
+				</Scripts>
+				<FontString inherits="GlueEditBoxFont"/>
+				<TextInsets>
+					<AbsInset left="12" right="5" bottom="5"/>
+				</TextInsets>
+			</EditBox>
+
+			<EditBox name="AccountPasswordEditBox" letters="16" password="1">
+				<Size x="250" y="37"/>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-240"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="C_PASSWORD" inherits="GlueFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE" text="Enter Your Password">
+							<Anchors>
+								<Anchor point="CENTER" relativePoint="CENTER">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="10" right="5" top="4" bottom="9"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="16"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+				</Backdrop>
+				<Scripts>
+					<OnTabPressed>
+						AccountPasswordConfirmEditBox:SetFocus();
+					</OnTabPressed>
+					<OnEscapePressed>
+						CreateAccountFrame:Hide();
+					</OnEscapePressed>
+					<OnEnterPressed>
+						if ( CreateFinalAccountButton:IsEnabled() ) then
+							CreateAccountFinal()
+						end
+					</OnEnterPressed>
+					<OnEditFocusLost>
+						self:HighlightText(0, 0);
+					</OnEditFocusLost>
+					<OnEditFocusGained>
+						self:HighlightText();
+					</OnEditFocusGained>
+					<OnTextChanged>
+						if ( self:GetText() ~= "" ) then
+							C_PASSWORD:Hide();
+						else
+							C_PASSWORD:Show();
+						end
+						CreateAccountTextChange();
+					</OnTextChanged>
+				</Scripts>
+				<FontString inherits="GlueEditBoxFont"/>
+				<TextInsets>
+					<AbsInset left="12" right="5" bottom="5"/>
+				</TextInsets>
+			</EditBox>
+			
+			<EditBox name="AccountPasswordConfirmEditBox" letters="16" password="1">
+				<Size x="250" y="37"/>
+				<Anchors>
+					<Anchor point="TOP">
+						<Offset>
+							<AbsDimension x="0" y="-280"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<FontString name="CC_PASSWORD" inherits="GlueFontDisableSmall" justifyH="LEFT" justifyV="MIDDLE" text="Confirm Password">
+							<Anchors>
+								<Anchor point="CENTER" relativePoint="CENTER">
+									<Offset>
+										<AbsDimension x="0" y="3"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</FontString>
+					</Layer>
+				</Layers>
+				<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Glues\Common\Glue-Tooltip-Border" tile="true">
+					<BackgroundInsets>
+						<AbsInset left="10" right="5" top="4" bottom="9"/>
+					</BackgroundInsets>
+					<TileSize>
+						<AbsValue val="16"/>
+					</TileSize>
+					<EdgeSize>
+						<AbsValue val="16"/>
+					</EdgeSize>
+				</Backdrop>
+				<Scripts>
+					<OnEscapePressed>
+						CreateAccountFrame:Hide();
+					</OnEscapePressed>
+					<OnEnterPressed>
+						if ( CreateFinalAccountButton:IsEnabled() ) then
+							CreateAccountFinal()
+						end
+					</OnEnterPressed>
+					<OnEditFocusLost>
+						self:HighlightText(0, 0);
+					</OnEditFocusLost>
+					<OnEditFocusGained>
+						self:HighlightText();
+					</OnEditFocusGained>
+					<OnTextChanged>
+						if ( self:GetText() ~= "" ) then
+							CC_PASSWORD:Hide();
+						else
+							CC_PASSWORD:Show();
+						end
+						CreateAccountTextChange();
+					</OnTextChanged>
+				</Scripts>
+				<FontString inherits="GlueEditBoxFont"/>
+				<TextInsets>
+					<AbsInset left="12" right="5" bottom="5"/>
+				</TextInsets>
+			</EditBox>
+			
+		</Frames>
+		<Scripts>
+			<OnShow>
+				self:Raise();
+				AccountNameEditBox:SetFocus();
+			</OnShow>
+		</Scripts>
+	</Frame>
+	
 	<Button name="AccountNameButton" virtual="true">
 		<Size x="250" y="20"/>
 		<Layers>
@@ -358,6 +645,25 @@
 						<Scripts>
 							<OnClick>
 								AccountLogin_Login();
+							</OnClick>
+						</Scripts>
+					</Button>
+					<Button name="AccountCreateButton" inherits="GlueButtonTemplate" text="Create Account">
+						<Size x="220" y="45"/>
+						<Anchors>
+							<Anchor point="CENTER" relativeTo="AccountLoginLoginButton" relativePoint="TOP">
+								<Offset>
+									<AbsDimension x="0" y="20"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnClick>
+								CreateAccountFrame:Show();
+								AccountNameEditBox:SetText("");
+								AccountPasswordEditBox:SetText("");
+								AccountPasswordConfirmEditBox:SetText("");
+								CreateFinalAccountButton:Disable();
 							</OnClick>
 						</Scripts>
 					</Button>

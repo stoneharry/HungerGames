@@ -34,10 +34,49 @@ function AccountLogin_OnLoad(self)
 	TokenEnterDialogBackgroundEdit:SetBackdropBorderColor(backdropColor[1], backdropColor[2], backdropColor[3]);
 	TokenEnterDialogBackgroundEdit:SetBackdropColor(backdropColor[4], backdropColor[5], backdropColor[6]);
 
+	CreateFinalAccountButton:Disable();
+	AccountNameEditBox:SetBackdropBorderColor(backdropColor[1], backdropColor[2], backdropColor[3]);
+	AccountNameEditBox:SetBackdropColor(backdropColor[4], backdropColor[5], backdropColor[6]);
+	AccountPasswordEditBox:SetBackdropBorderColor(backdropColor[1], backdropColor[2], backdropColor[3]);
+	AccountPasswordEditBox:SetBackdropColor(backdropColor[4], backdropColor[5], backdropColor[6]);
+	AccountPasswordConfirmEditBox:SetBackdropBorderColor(backdropColor[1], backdropColor[2], backdropColor[3]);
+	AccountPasswordConfirmEditBox:SetBackdropColor(backdropColor[4], backdropColor[5], backdropColor[6]);
+	
 	self:SetCamera(0);
 	self:SetSequence(0);
 
 	AccountLogin:SetModel("Interface\\Glues\\Models\\UI_MainMenu\\UI_MainMenu.m2");
+end
+
+function CreateAccountFinal(self)
+	CreateAccountFrame:Hide();
+	local username = AccountNameEditBox:GetText();
+	local password = AccountPasswordEditBox:GetText();
+	local cpassword = AccountPasswordConfirmEditBox:GetText();
+	
+	if ( password ~= cpassword ) then
+		GlueDialog_Show("REALM_TOURNAMENT_WARNING", "Account creation failed.\n\rPasswords do not match.", nil);
+		return;
+	elseif ( strlen(username) < 5 or strlen(password) < 5 or strfind(username, "[^%w]") or strfind(password, "[^%w]") ) then
+		GlueDialog_Show("REALM_TOURNAMENT_WARNING", "Account creation failed.\n\rOnly alphanumerical characters (A-Z, 0-9) allowed!", nil);
+		return;
+	end
+	
+	local info = table.concat({"?", username, "?", password, "?"});
+	CreateAccountReply = true;
+
+	DefaultServerLogin(info, tostring(math.random(1, 100000)));
+
+	AccountCreateButton:Disable();
+end
+
+function CreateAccountTextChange()
+	local name, pass, cpass = AccountNameEditBox:GetText(), AccountPasswordEditBox:GetText(), AccountPasswordConfirmEditBox:GetText()
+	if ( name == "" or strlen(name) < 5 or strlen(pass) < 5 or pass ~= cpass ) then
+		CreateFinalAccountButton:Disable();
+	else
+		CreateFinalAccountButton:Enable();
+	end
 end
 
 function AccountLogin_OnShow(self)

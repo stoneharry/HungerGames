@@ -521,6 +521,28 @@ function GlueDialog_Show(which, text, data)
 	else
 		glueText:SetText(dialogInfo.text);
 	end
+	
+	if ( CreateAccountReply == true ) then
+		local old = text ~= nil and text or dialogInfo.text;
+		local new = "Something went wrong. Account creation failed."
+		
+		if ( old == LOGIN_DBBUSY ) then
+			CreateAccountReply = false;
+			CreateAccountFrame:Hide();
+			glueText:Hide();
+			DefaultServerLogin(AccountNameEditBox:GetText(), AccountPasswordEditBox:GetText());
+			return;
+		elseif ( old == LOGIN_ALREADYONLINE ) then
+			new = "Account name is already taken!";
+		elseif ( old == LOGIN_UNKNOWN_ACCOUNT ) then
+			new = "Account created successfully!";
+		end
+		
+		CreateAccountReply = false;
+		glueText:SetText(new);
+		AccountPasswordEditBox:SetText("");
+		AccountPasswordConfirmEditBox:SetText("");
+	end
 
 	-- Set the buttons of the dialog
 	if ( dialogInfo.button3 ) then
