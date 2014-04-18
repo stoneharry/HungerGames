@@ -229,7 +229,7 @@ class WorldSession
 
 		// For handling addon messages
 		void OnPlayerAddonMessage(Player* plr, std::string& msg);
-		static void SendAddonMessage(Player* player, const char* msg);
+		static void SendAddonMessage(Player* player, std::string message, uint32 packet);
 
         AccountTypes GetSecurity() const { return _security; }
         uint32 GetAccountId() const { return _accountId; }

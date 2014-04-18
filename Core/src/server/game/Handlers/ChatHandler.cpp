@@ -41,6 +41,7 @@
 #include "AccountMgr.h"
 #include "HG_Game.h"
 #include "BattlegroundMgr.h"
+#include <iomanip>
 
 void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 {
@@ -537,7 +538,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 				}
 			}
 
-			SendAddonMessage(sender, str.str().c_str());
+			SendAddonMessage(sender, str.str(), 2);
 		}
 	}
 	else if (first.compare("CREATEGAME") == 0)
@@ -584,7 +585,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			HG_Game* temp = (HG_Game*)pair.second;
 			if (temp->GetGameName().compare(second) == 0)
 			{
-				SendAddonMessage(sender, temp->getPlayerNameListStr().c_str());
+				SendAddonMessage(sender, temp->getPlayerNameListStr(), 1);
 				return;
 			}
 		}	
@@ -612,24 +613,35 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	}
 }
 
-void WorldSession::SendAddonMessage(Player* player, const char* msg)
+void WorldSession::SendAddonMessage(Player* player, std::string message, uint32 packet)
 {
-	// Debug
-	TC_LOG_INFO("server.debug", "[DEBUG] Sending : %s", msg);
+	uint32 splitLength = 240;
+	uint32 splits = ceil(message.length() / splitLength);
+	uint32 counter = 1;
+	for (uint32 i = 0; i < message.length(); i += splitLength)
+	{
+		std::stringstream send;
+		send << std::setfill('0') << std::setw(3) << packet;
+		send << std::setw(2) << counter;
+		send << std::setw(2) << splits;
+		send << message.substr(i, std::min(splitLength, message.length() - i));
+		counter = counter + 1;
 
-	// Needs a custom built packet since TC doesnt send guid
-	WorldPacket* data = new WorldPacket();
-	uint32 messageLength = (uint32)strlen(msg) + 1;
-	data->Initialize(SMSG_MESSAGECHAT, 100);
-	*data << (uint8)CHAT_MSG_SYSTEM;
-	*data << LANG_ADDON;
-	*data << player->GetGUID();
-	*data << uint32(0);
-	*data << player->GetGUID();
-	*data << messageLength;
-	*data << msg;
-	*data << uint8(0);
-	player->GetSession()->SendPacket(data);
+		WorldPacket* data = new WorldPacket();
+		uint32 messageLength = message.length() + 1;
+		data->Initialize(SMSG_MESSAGECHAT, 100);
+		*data << (uint8)CHAT_MSG_SYSTEM;
+		*data << LANG_ADDON;
+		*data << player->GetGUID();
+		*data << uint32(0);
+		*data << player->GetGUID();
+		*data << messageLength;
+		*data << send.str().c_str();
+		*data << uint8(0);
+		player->GetSession()->SendPacket(data);
+
+		TC_LOG_INFO("server.debug", "[DEBUG] Sent: %s", send.str().c_str());
+	}
 }
 
 void WorldSession::HandleEmoteOpcode(WorldPacket& recvData)
