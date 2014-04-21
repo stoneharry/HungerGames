@@ -1963,7 +1963,10 @@ void Unit::AttackerStateUpdate (Unit* victim, WeaponAttackType attType, bool ext
 				if (pItem->GetTemplate()->overrideMeleeSpellId)
 				{
 					if (GetPower(POWER_ENERGY) >= pItem->GetTemplate()->overrideMeleeEnergyCost)
+					{
 						CastSpell(victim, pItem->GetTemplate()->overrideMeleeSpellId, pItem->GetTemplate()->overrideMeleeTriggeredCast);
+						this->ModifyPower(POWER_ENERGY, -pItem->GetTemplate()->overrideMeleeEnergyCost);
+					}
 					return;
 				}
 			}

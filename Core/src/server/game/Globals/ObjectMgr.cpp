@@ -2222,7 +2222,7 @@ void ObjectMgr::LoadItemTemplates()
     //                                            126                 127                     128            129            130            131         132         133
                                              "GemProperties, RequiredDisenchantSkill, ArmorDamageModifier, duration, ItemLimitCategory, HolidayId, ScriptName, DisenchantID, "
     //                                           134        135            136
-                                             "FoodType, minMoneyLoot, maxMoneyLoot, flagsCustom, overrideMeleeSpellId, overrideMeleeEnergyCost, overrideMeleeTriggeredCast FROM item_template");
+                                             "FoodType, minMoneyLoot, maxMoneyLoot, flagsCustom, overrideMeleeSpellId, overrideMeleeEnergyCost, overrideMeleeTriggeredCast, overrideMeleeRange FROM item_template");
 
     if (!result)
     {
@@ -2350,6 +2350,7 @@ void ObjectMgr::LoadItemTemplates()
 		itemTemplate.overrideMeleeSpellId    = fields[138].GetUInt32();
 		itemTemplate.overrideMeleeEnergyCost = fields[139].GetUInt32();
 		itemTemplate.overrideMeleeTriggeredCast = fields[140].GetBool();
+		itemTemplate.overrideMeleeRange = fields[141].GetFloat();
 
         if (itemTemplate.Class >= MAX_ITEM_CLASS)
         {

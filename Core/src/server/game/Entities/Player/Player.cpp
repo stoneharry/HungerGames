@@ -1646,7 +1646,14 @@ void Player::Update(uint32 p_time)
 
             if (isAttackReady(BASE_ATTACK))
             {
-                if (!IsWithinMeleeRange(victim))
+				float meleerange = MELEE_RANGE;
+				if (Item* pItem = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_MAINHAND))
+				{
+					if (pItem->GetTemplate()->overrideMeleeRange != 0.0f)
+						meleerange = pItem->GetTemplate()->overrideMeleeRange;
+				}
+
+				if (!IsWithinMeleeRange(victim, meleerange))
                 {
                     setAttackTimer(BASE_ATTACK, 100);
                     if (m_swingErrorMsg != 1)               // send single time (client auto repeat)
@@ -1682,7 +1689,13 @@ void Player::Update(uint32 p_time)
 
             if (haveOffhandWeapon() && isAttackReady(OFF_ATTACK))
             {
-                if (!IsWithinMeleeRange(victim))
+				float meleerange = MELEE_RANGE;
+				if (Item* pItem = ToPlayer()->GetItemByPos(INVENTORY_SLOT_BAG_0, EQUIPMENT_SLOT_OFFHAND))
+				{
+					if (pItem->GetTemplate()->overrideMeleeRange != 0.0f)
+						meleerange = pItem->GetTemplate()->overrideMeleeRange;
+				}
+				if (!IsWithinMeleeRange(victim, meleerange))
                     setAttackTimer(OFF_ATTACK, 100);
                 else if (!HasInArc(2*M_PI/3, victim))
                     setAttackTimer(OFF_ATTACK, 100);

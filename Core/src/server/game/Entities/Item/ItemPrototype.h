@@ -665,6 +665,7 @@ struct ItemTemplate
 	uint32 overrideMeleeSpellId;
 	uint32 overrideMeleeEnergyCost;
 	bool overrideMeleeTriggeredCast;
+	float overrideMeleeRange;
 
     // helpers
     bool CanChangeEquipStateInCombat() const
