@@ -115,7 +115,7 @@ function ToggleLoadoutFrame()
 								tile = true, tileSize = 16, edgeSize = 16, 
 								insets = { left = 4, right = 4, top = 4, bottom = 4 }});
 	frame:SetBackdropColor(0,0,0,1);
-	frame:SetFrameLevel(5)
+	frame:SetFrameLevel(3)
 	frame:SetWidth(500)
 	frame:SetHeight(500)
 	frame:SetPoint("CENTER")
@@ -137,6 +137,7 @@ function ToggleLoadoutFrame()
 		texture:SetWidth(68)
 		texture:SetHeight(68)
 		texture:SetPoint("CENTER", frame, "CENTER", pos, -80)
+		texture:SetFrameLevel(4)
 		texture:SetBackdrop({bgFile = [[Interface\FrameXML\slot]], 
 								edgeFile = "", 
 								tile = false, tileSize = 68, edgeSize = 16, 
@@ -149,7 +150,7 @@ function ToggleLoadoutFrame()
 	local button = CreateFrame("Button", nil, frame, "BigButtonTemplate")
 	button:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -10, -10)
 	button:SetText("Done")
-	button:SetFrameLevel(6)
+	button:SetFrameLevel(5)
 	button:SetWidth(150)
 	button:SetHeight(40)
 	button:SetScript("OnClick", ReturnToMainMenu)
@@ -166,6 +167,7 @@ function ToggleLoadoutFrame()
 		texture.X = pos
 		texture.Y = offset
 		texture.index = i
+		texture:SetFrameLevel(5)
 		texture:SetBackdrop({bgFile = PERKS[i][3], 
 								edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
 								tile = false, tileSize = 36, edgeSize = 16, 
@@ -187,25 +189,4 @@ function ToggleLoadoutFrame()
 			count = 0
 		end
 	end
-	
-	-- Enable this to create dummy icons to fill the row
-	--[[if (count < max_per_line) then
-		for i=count,max_per_line - 1 do
-			local texture = CreateFrame("frame", nil, frame, nil)
-			texture:SetWidth(36)
-			texture:SetHeight(36)
-			texture:SetPoint("BOTTOM", frame, "BOTTOM", pos, offset)
-			texture:SetBackdrop({bgFile = "Interface/Icons/INV_Misc_QuestionMark",
-									edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-									tile = false, tileSize = 36, edgeSize = 16, 
-									insets = { left = 4, right = 4, top = 4, bottom = 4 }});
-			pos = pos + 35
-			count = count + 1
-			if count == max_per_line then
-				pos = -200
-				offset = offset - 34
-				count = 0
-			end
-		end
-	end]]
 end
