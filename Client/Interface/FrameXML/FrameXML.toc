@@ -144,6 +144,7 @@ AlternatePowerBar.xml
 AnimationSystem.lua
 
 ## Custom stuff
+LoadOut.lua
 MainFrame.xml
 
 ## add new modules above here

@@ -5,14 +5,14 @@ local CLICK_GAME_TO_JOIN_STR = "Click a game to join it."
 local WAITING_FOR_PLRS_STR = "Waiting for all players to be ready..."
 
 local PLAYER_IN_GAME_STR = nil
-local MENU_SELECTED = 0
+MENU_SELECTED = 0
 -- Lobby channels WIP, disabled atm since buggy
 local MENU_CHANNELS = {"Lobby", "Game"}
 local numScrollBarButtons = 50
 local dur = 27
 local mus_dur = 0
 local ONLINE_PLAYERS = {}
-local UPDATE_INTERVALS = {30, 5, 5}
+local UPDATE_INTERVALS = {30, 5, 5, 0 ,0, 60}
 local playing = nil
 local links = {}
 
@@ -73,7 +73,11 @@ end
 
 function mainFrameLoaded()
 	-- Set background model
-	model:SetModel([[Interface\Glues\Models\UI_Orc\UI_Orc.m2]])
+	if math.random(1,2) == 1 then
+		model:SetModel([[Interface\Glues\Models\UI_Orc\UI_Orc.m2]])
+	else
+		model:SetModel([[Interface\GLUES\MODELS\UI_SCOURGE\UI_Scourge.m2]])
+	end
 	-- Set frame levels
 	MainFrame_Back:SetFrameLevel(1)
 	MainFrame_Header:SetFrameLevel(1)
@@ -109,6 +113,7 @@ function mainFrameLoaded()
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 813, -23)
 	button:SetFrameLevel(3)
 	_G["SmallButtonOnTopRight3Icon"]:SetTexture([[Interface\Portal\SmallButtonIcons\3]])
+	button:SetScript("OnClick", function() MENU_SELECTED = 5; PlaySound("igMainMenuOption"); ToggleLoadoutFrame() end)
 	
 	button = CreateFrame("Button", nil, MainFrame_Back, "LeftMiddleButtonTemplate")
 	button:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 30, -117)
@@ -456,7 +461,11 @@ function mainFrameUpdate(self, elapsed)
 	ChatFrame1:SetFading(nil)
 	ChatFrame1:SetPoint("BOTTOMLEFT", MainFrame_Back, "BOTTOMLEFT", 60, 50)
 	ChatFrame1:SetFrameStrata("MEDIUM")
-	ChatFrame1:SetWidth(700)
+	if (MENU_SELECTED == 5) then
+		ChatFrame1:SetWidth(325)
+	else
+		ChatFrame1:SetWidth(700)
+	end
 	ChatFrame1:SetHeight(300)
 	-- Keep that friends frame hidden
 	_G["FriendsFrame"]:Hide()
