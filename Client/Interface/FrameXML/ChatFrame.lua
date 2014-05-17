@@ -38,7 +38,7 @@ ChatTypeInfo["RAID"]									= { sticky = 1, flashTab = false, flashTabOnGeneral
 ChatTypeInfo["GUILD"]									= { sticky = 1, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["OFFICER"]									= { sticky = 1, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["YELL"]									= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
-ChatTypeInfo["WHISPER"]									= { sticky = 1, flashTab = true,  flashTabOnGeneral = true  };
+ChatTypeInfo["WHISPER"]									= { sticky = 1, flashTab = true, flashTabOnGeneral = true };
 ChatTypeInfo["WHISPER_INFORM"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["REPLY"]									= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["EMOTE"]									= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
@@ -46,7 +46,7 @@ ChatTypeInfo["TEXT_EMOTE"]								= { sticky = 0, flashTab = false, flashTabOnGe
 ChatTypeInfo["MONSTER_SAY"]								= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["MONSTER_PARTY"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["MONSTER_YELL"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
-ChatTypeInfo["MONSTER_WHISPER"]							= { sticky = 0, flashTab = true,  flashTabOnGeneral = true  };
+ChatTypeInfo["MONSTER_WHISPER"]							= { sticky = 0, flashTab = true, flashTabOnGeneral = true };
 ChatTypeInfo["MONSTER_EMOTE"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["CHANNEL"]									= { sticky = 1, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["CHANNEL_JOIN"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
@@ -54,7 +54,7 @@ ChatTypeInfo["CHANNEL_LEAVE"]							= { sticky = 0, flashTab = false, flashTabOn
 ChatTypeInfo["CHANNEL_LIST"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["CHANNEL_NOTICE"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["CHANNEL_NOTICE_USER"]						= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
-ChatTypeInfo["TARGETICONS"]							    = { sticky = 0, flashTab = false, flashTabOnGeneral = false };
+ChatTypeInfo["TARGETICONS"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["AFK"]										= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["DND"]										= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["IGNORED"]									= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
@@ -92,18 +92,18 @@ ChatTypeInfo["CHANNEL10"]								= { sticky = 1, flashTab = false, flashTabOnGen
 ChatTypeInfo["ACHIEVEMENT"]								= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["GUILD_ACHIEVEMENT"]						= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["PARTY_LEADER"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
-ChatTypeInfo["BN_WHISPER"]							    = { sticky = 1, flashTab = true,  flashTabOnGeneral = true  };
-ChatTypeInfo["BN_WHISPER_INFORM"]				        = { sticky = 0, flashTab = false, flashTabOnGeneral = false };
-ChatTypeInfo["BN_CONVERSATION"]					        = { sticky = 1, flashTab = true,  flashTabOnGeneral = false };
-ChatTypeInfo["BN_CONVERSATION_NOTICE"]					= { sticky = 0, flashTab = true,  flashTabOnGeneral = false };
-ChatTypeInfo["BN_CONVERSATION_LIST"]					= { sticky = 0, flashTab = true,  flashTabOnGeneral = false };
+ChatTypeInfo["BN_WHISPER"]							= { sticky = 1, flashTab = true, flashTabOnGeneral = true };
+ChatTypeInfo["BN_WHISPER_INFORM"]				= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
+ChatTypeInfo["BN_CONVERSATION"]					= { sticky = 1, flashTab = true, flashTabOnGeneral = false };
+ChatTypeInfo["BN_CONVERSATION_NOTICE"]					= { sticky = 0, flashTab = true, flashTabOnGeneral = false };
+ChatTypeInfo["BN_CONVERSATION_LIST"]					= { sticky = 0, flashTab = true, flashTabOnGeneral = false };
 ChatTypeInfo["BN_ALERT"]								= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["BN_BROADCAST"]							= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
 ChatTypeInfo["BN_BROADCAST_INFORM"]						= { sticky = 0, flashTab = false, flashTabOnGeneral = false };
-ChatTypeInfo["BN_INLINE_TOAST_ALERT"]					= { sticky = 0, flashTab = true,  flashTabOnGeneral = false };
-ChatTypeInfo["BN_INLINE_TOAST_BROADCAST"]				= { sticky = 0, flashTab = true,  flashTabOnGeneral = false };
-ChatTypeInfo["BN_INLINE_TOAST_BROADCAST_INFORM"]		= { sticky = 0, flashTab = true,  flashTabOnGeneral = false };
-ChatTypeInfo["BN_INLINE_TOAST_CONVERSATION"]			= { sticky = 0, flashTab = true,  flashTabOnGeneral = false };
+ChatTypeInfo["BN_INLINE_TOAST_ALERT"]					= { sticky = 0, flashTab = true, flashTabOnGeneral = false };
+ChatTypeInfo["BN_INLINE_TOAST_BROADCAST"]				= { sticky = 0, flashTab = true, flashTabOnGeneral = false };
+ChatTypeInfo["BN_INLINE_TOAST_BROADCAST_INFORM"]		= { sticky = 0, flashTab = true, flashTabOnGeneral = false };
+ChatTypeInfo["BN_INLINE_TOAST_CONVERSATION"]			= { sticky = 0, flashTab = true, flashTabOnGeneral = false };
 
 ChatTypeGroup = {};
 ChatTypeGroup["SYSTEM"] = {

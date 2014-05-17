@@ -40,11 +40,10 @@ local PERKS = {
 end]]
 
 local function OnEnterFrame(self, motion)
-	local index = string.sub(self:GetName(), 14)
-	if string.starts(index, "_") then
-		index = string.sub(index, 1)
+	local index = self.index
+	if not index then
+		return
 	end
-	index = tonumber(index)
 	GameTooltip:Hide()
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip:AddLine("|cFFFFFFFF" .. PERKS[index][1])
@@ -66,15 +65,26 @@ local function OnDragStop(self)
 	for i=1,4 do
 		if MouseIsOver(_G["loadout_slot"..tostring(i)]) then
 			local f = _G["loadout_slot"..tostring(i)]
-			self:Hide()
-			local index = string.sub(self:GetName(), 14)
-			if string.starts(index, "_") then
-				index = string.sub(index, 1)
+			index = self.index
+			local nope = false
+			for j=1,4 do
+				local t = _G["loadout_slot"..tostring(j)]
+				if t.ID then
+					if t.ID == index then
+						nope = true
+					end
+				end
 			end
-			index = tonumber(index)
-			f:SetTexture(PERKS[index][3])
-			f.ID = index
-			SELECTED_PERKS[i] = index
+			if not nope then
+				--self:Hide() -- no need to hide
+				--f:SetTexture(PERKS[index][3])
+				f:SetBackdrop({bgFile = PERKS[index][3], 
+							edgeFile = "", 
+							tile = false, tileSize = 68, edgeSize = 16, 
+							insets = { left = 4, right = 4, top = 4, bottom = 4 }});
+				f.index = index
+				SELECTED_PERKS[i] = index
+			end
 		end
 	end
 	self:ClearAllPoints()
@@ -94,6 +104,9 @@ end
 function ToggleLoadoutFrame()
 	if (_G["LOADOUT_FRAME"]) then
 		_G["LOADOUT_FRAME"]:Show()
+		--[[for i=1,#PERKS do
+			_G["loadout_perk_"..tostring(i)]:Show()
+		end]]
 		return
 	end
 	local frame = CreateFrame("frame", "LOADOUT_FRAME")
@@ -120,11 +133,16 @@ function ToggleLoadoutFrame()
 	
 	local pos = -100
 	for i=1,4 do
-		local texture = frame:CreateTexture("loadout_slot"..tostring(i))
-		texture:SetTexture([[Interface\FrameXML\slot]])
+		local texture = CreateFrame("Button", "loadout_slot"..tostring(i), frame, nil)
 		texture:SetWidth(68)
 		texture:SetHeight(68)
 		texture:SetPoint("CENTER", frame, "CENTER", pos, -80)
+		texture:SetBackdrop({bgFile = [[Interface\FrameXML\slot]], 
+								edgeFile = "", 
+								tile = false, tileSize = 68, edgeSize = 16, 
+								insets = { left = 4, right = 4, top = 4, bottom = 4 }});
+		texture:SetScript("OnEnter", OnEnterFrame)
+		texture:SetScript("OnLeave", OnLeaveFrame)	
 		pos = pos + 70
 	end
 	
@@ -147,6 +165,7 @@ function ToggleLoadoutFrame()
 		texture:SetPoint("BOTTOM", frame, "BOTTOM", pos, offset)
 		texture.X = pos
 		texture.Y = offset
+		texture.index = i
 		texture:SetBackdrop({bgFile = PERKS[i][3], 
 								edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
 								tile = false, tileSize = 36, edgeSize = 16, 
