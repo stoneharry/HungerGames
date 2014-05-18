@@ -69,8 +69,8 @@ local function OnDragStop(self)
 			local nope = false
 			for j=1,4 do
 				local t = _G["loadout_slot"..tostring(j)]
-				if t.ID then
-					if t.ID == index then
+				if t.index then
+					if t.index == index then
 						nope = true
 					end
 				end
