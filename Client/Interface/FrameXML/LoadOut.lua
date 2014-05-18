@@ -9,13 +9,15 @@ local PERKS = {
 	--   ID of requirement
 	--   Message if not unlocked
 	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\INV_Potion_120]], 0},
-	{"Hunter's Blunderbass", "Increases damage against beasts by 10%.", [[Interface\Icons\Ability_Hunter_LockAndLoad]], 0},
+	{"Hunter's Blunderbuss", "Increases damage against beasts by 10%.", [[Interface\Icons\Ability_Hunter_LockAndLoad]], 0},
 	{"Intelligence", "Your prowess in thinking increases your chance to land a critical strike by 3%.", [[Interface\Icons\Spell_Arcane_MindMastery]], 0},
 	{"Lungs of Air", "Allows you to breath underwater for 300% longer.", [[Interface\Icons\Spell_Shadow_DemonBreath]], 0},
 	{"Cowards Bane", "Deal 10% more damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
 	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 0},
 	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 0},
-	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_MonsterHead_01]], 1, 50, "This perk has not been unlocked."}
+	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_MonsterHead_01]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
+	{"Voodoo Shuffle", "While within Temple of Zul and the Ruins of Zun'Jatol, your chance to dodge is increased by 10%.", [[Interface\Icons\Achievement_Boss_trollgore]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
+	{"Time is Money!", "While within Venture Co. Base Camp and Operations Headquarters, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
 }
 
 --[[local function OnClickedFrame(self, button)
