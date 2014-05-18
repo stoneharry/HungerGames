@@ -3,36 +3,14 @@ SELECTED_PERKS = {0, 0, 0, 0}
 
 local PERKS = {
 	-- FORMAT: Name, Description, Icon, Required Wins To Use
-	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\Ability_Creature_Cursed_05]], 0},
-	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 1},
-	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 1},
-	-- Test data
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_04]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1}
+	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\INV_Potion_120]], 0},
+	{"Hunter's Blunderbass", "Increases damage against beasts by 10%.", [[Interface\Icons\Ability_Hunter_LockAndLoad]], 0},
+	{"Intelligence", "Your prowess in thinking increases your chance to land a critical strike by 3%.", [[Interface\Icons\Spell_Arcane_MindMastery]], 0},
+	{"Lungs of Air", "Allows you to breath underwater for 300% longer.", [[Interface\Icons\Spell_Shadow_DemonBreath]], 0},
+	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_MonsterHead_01]], 0},
+	{"Cowards Bane", "Deal 10% more damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
+	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 0},
+	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 0}
 }
 
 --[[local function OnClickedFrame(self, button)
