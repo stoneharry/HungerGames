@@ -578,7 +578,7 @@ bool AuthSocket::_HandleLogonChallenge()
 				LoginDatabase.Query("INSERT INTO ");
 
 				TC_LOG_INFO("server.authserver", "Created account: %s", username);
-				return;
+				return true;
 			}
 			//no account
 			pkt << uint8(WOW_FAIL_UNKNOWN_ACCOUNT);

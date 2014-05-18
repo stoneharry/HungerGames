@@ -42,6 +42,25 @@ end
 res = nil
 ]]
 
+function toggleLobbyUI(hide)
+	toggleInterface(not hide)
+	if hide then
+		model:Hide()
+		MainFrame_Back:Hide()
+		MainFrame_Header:Hide()
+		MainFrame_Chat:Hide()
+		MainFrame_OnlinePlayerList:Hide()
+		MainFrame_Chat_2:Hide()
+		MainFrame_OnlinePlayerList_2:Hide()
+	else
+		model:Show()
+		MainFrame_Back:Show()
+		MainFrame_Header:Show()
+		MainFrame_Chat:Show()
+		MainFrame_OnlinePlayerList:Show()	
+	end
+end
+
 function toggleInterface(hide)
 	if hide then
 		MiniMapWorldMapButton:Hide()
