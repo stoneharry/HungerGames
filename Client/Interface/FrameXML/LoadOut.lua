@@ -15,8 +15,8 @@ local PERKS = {
 	{"Cowards Bane", "Deal 10% more damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
 	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 0},
 	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 0},
-	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_MonsterHead_01]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
-	{"Voodoo Shuffle", "While within Temple of Zul and the Ruins of Zun'Jatol, your chance to dodge is increased by 10%.", [[Interface\Icons\Achievement_Boss_trollgore]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
+	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_MonsterHead_01]], 1, 50, "This perk has not yet been unlocked."}, -- @TODO: Correct achievement ID
+	{"Voodoo Shuffle", "While within Temple of Zul and the Ruins of Zun'Jatol, your chance to dodge is increased by 10%.", [[Interface\Icons\Achievement_Boss_trollgore]], 1, 50, "This perk has not yet been unlocked."}, -- @TODO: Correct achievement ID
 	{"Time is Money!", "While within Venture Co. Base Camp and Operations Headquarters, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
 }
 
@@ -32,7 +32,30 @@ local function OnEnterFrame(self, motion)
 	GameTooltip:Hide()
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip:AddLine("|cFFFFFFFF" .. PERKS[index][1])
-	GameTooltip:AddLine(PERKS[index][2])
+	local description = ""
+	local wantingToBreak = false
+	for i=1,#PERKS[index][2] do
+		local c = PERKS[index][2]:sub(i, i)
+		-- The below code works, don't ask why or how, just accept it
+		if wantingToBreak then
+			if c == " " then
+				description = description .. "\r\n"
+				wantingToBreak = false
+			else
+				description = description .. c
+				if i % 35 == 0 then
+					wantingToBreak = true
+				end
+			end
+		else
+			description = description .. c
+			if i % 35 == 0 then
+				wantingToBreak = true
+			end
+		end
+		-- End hacky mess
+	end
+	GameTooltip:AddLine(description)
 	if (PERKS[index][6]) then
 		GameTooltip:AddLine("|cFFFF0000" .. PERKS[index][6])
 	end
@@ -145,10 +168,10 @@ function ToggleLoadoutFrame()
 	button:SetHeight(40)
 	button:SetScript("OnClick", ReturnToMainMenu)
 	
-	pos = -200
+	pos = -135
 	local count = 0
 	local offset = 80
-	local max_per_line = 12
+	local max_per_line = 9
 	for i=1,#PERKS do
 		local texture = CreateFrame("Button", "loadout_perk_"..tostring(i), frame, nil)
 		texture:SetWidth(36)
@@ -189,7 +212,7 @@ function ToggleLoadoutFrame()
 		pos = pos + 35
 		count = count + 1
 		if count == max_per_line then
-			pos = -200
+			pos = -135
 			offset = offset - 34
 			count = 0
 		end
