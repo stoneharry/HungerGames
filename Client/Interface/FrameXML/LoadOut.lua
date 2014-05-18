@@ -4,8 +4,8 @@ SELECTED_PERKS = {0, 0, 0, 0}
 local PERKS = {
 	-- FORMAT: Name, Description, Icon, Required Wins To Use
 	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\Ability_Creature_Cursed_05]], 0},
+	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 1},
 	-- Test data
-	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_02]], 1},
 	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_03]], 1},
 	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_04]], 1},
 	{"test", "test.", [[Interface\Icons\Ability_Creature_Cursed_01]], 1},
