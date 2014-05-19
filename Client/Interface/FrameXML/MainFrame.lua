@@ -15,6 +15,7 @@ local ONLINE_PLAYERS = {}
 local UPDATE_INTERVALS = {30, 5, 5, 0 ,0, 60}
 local playing = nil
 local links = {}
+local IN_GAME = false
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
@@ -425,6 +426,9 @@ function SB_Main_ScrollBar_Update()
 end
 
 function mainFrameUpdate(self, elapsed)
+	if IN_GAME then
+		return
+	end
 	dur = dur + elapsed
 	mus_dur = mus_dur + elapsed
 	if not playing then

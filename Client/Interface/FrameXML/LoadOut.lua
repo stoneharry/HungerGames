@@ -131,9 +131,9 @@ function ToggleLoadoutFrame()
 	
 	local frame = CreateFrame("frame", "LOADOUT_FRAME")
 	frame:SetBackdrop({bgFile = "Interface/Tooltips/UI-Tooltip-Background", 
-								edgeFile = "Interface/Tooltips/UI-Tooltip-Border", 
-								tile = true, tileSize = 16, edgeSize = 16, 
-								insets = { left = 4, right = 4, top = 4, bottom = 4 }});
+								edgeFile = "Interface/Portal/Widgets/bnet-dialoguebox-border", 
+								tile = true, tileSize = 32, edgeSize = 64, 
+								insets = { left = 5, right = 5, top = 5, bottom = 5 }});
 	frame:SetBackdropColor(0,0,0,1);
 	frame:SetFrameLevel(3)
 	frame:SetWidth(500)
@@ -143,7 +143,7 @@ function ToggleLoadoutFrame()
 	local charmodel = CreateFrame("DressUpModel", nil, frame, nil)
 	charmodel:SetWidth(316)
 	charmodel:SetHeight(331)
-	charmodel:SetPoint("CENTER", frame, "CENTER", 0, 100)
+	charmodel:SetPoint("CENTER", frame, "CENTER", 0, 90)
 	charmodel:SetUnit("player")
 	
 	local pos = -100
@@ -163,7 +163,7 @@ function ToggleLoadoutFrame()
 	end
 	
 	local button = CreateFrame("Button", nil, frame, "BigButtonTemplate")
-	button:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -10, -10)
+	button:SetPoint("TOPRIGHT", frame, "TOPRIGHT", -20, -20)
 	button:SetText("Done")
 	button:SetFrameLevel(5)
 	button:SetWidth(150)
