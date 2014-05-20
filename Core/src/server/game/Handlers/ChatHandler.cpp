@@ -662,7 +662,7 @@ void WorldSession::SendAddonMessage(Player* player, std::string message, uint32 
 		send << std::setfill('0') << std::setw(3) << packet;
 		send << std::setw(2) << counter;
 		send << std::setw(2) << splits;
-		send << message.substr(i, std::min(splitLength, message.length() - i));
+        send << message.substr(i, std::min(splitLength, (uint32)(message.length() - i)));
 		counter = counter + 1;
 
 		WorldPacket* data = new WorldPacket();

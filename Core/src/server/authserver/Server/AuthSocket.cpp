@@ -577,7 +577,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
 				LoginDatabase.Query("INSERT INTO ");
 
-				TC_LOG_INFO("server.authserver", "Created account: %s", username);
+                TC_LOG_INFO("server.authserver", "Created account: %s", username.c_str());
 				return true;
 			}
 			//no account
