@@ -22827,9 +22827,15 @@ void Player::SendInitialPacketsBeforeAddToMap()
     SendEquipmentSetList();
 
     data.Initialize(SMSG_LOGIN_SETTIMESPEED, 4 + 4 + 4);
-    data.AppendPackedTime(sWorld->GetGameTime());
-    data << float(0.01666667f);                             // game speed
-    data << uint32(0);                                      // added in 3.1.2
+    data.AppendPackedTime(sWorld->GetGameTime()); // Need to change this to Battleground get BG time if HG
+	// ((0.01666667 * 60) * 72) / 60 = 0.01666667 * 72
+	// Because: 0.01666667 = 1/60
+	// 01666667 * 60 = 1 minute
+	// 1 minute * 72
+	// 72 because 1440 minutes in 24 hours divided by 20 minutes
+	// 20 minutes to 24 hours
+	data << float(1.20000024f); // faster day/night cycle
+    data << uint32(0); // added in 3.1.2
     GetSession()->SendPacket(&data);
 
     GetReputationMgr().SendForceReactions();                // SMSG_SET_FORCED_REACTIONS
