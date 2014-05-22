@@ -194,10 +194,11 @@ function mainFrameLoaded()
 	fontString:SetWidth(250)
 	fontString:SetHeight(37)
 	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 160, -47)
-	fontString:SetFontObject("NumberFontNormalYellow")
+	fontString:SetFontObject("ChatFontNormal")
 	fontString:SetMaxLetters(40)
 	fontString:SetBackdrop(editBoxBackdrop)
 	fontString:SetBackdropBorderColor(0.8, 0.8, 0.8)
+	fontString:SetBackdropColor(0.09, 0.09, 0.09)
 	-- Sets the insets from the edit box's edges which determine its interactive text area
 	fontString:SetTextInsets(14, -14, 0, 4)
 	fontString:SetScript("OnTextChanged",
