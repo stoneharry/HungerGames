@@ -1,5 +1,5 @@
 
-local BATTLEGROUND_MAP_STR = "Warsong Gulch" -- DO NOT CHANGE
+local BATTLEGROUND_MAP_STR = "The Trial of Darkspear" -- DO NOT CHANGE
 local WELCOME_MESSAGE_STR = "Version 1.0"
 local CLICK_GAME_TO_JOIN_STR = "Click a game to join it."
 local WAITING_FOR_PLRS_STR = "Waiting for all players to be ready..."
@@ -42,6 +42,12 @@ for value in string.gmatch(res, '([^x]+)') do
 end
 res = nil
 ]]
+
+-- For debug purposes
+function hgdebug()
+	toggleLobbyUI(true)
+	IN_GAME = true
+end
 
 function toggleLobbyUI(hide)
 	toggleInterface(not hide)
