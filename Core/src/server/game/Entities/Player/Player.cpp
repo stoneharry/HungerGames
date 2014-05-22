@@ -1,4 +1,4 @@
-/*
+Hey /*
  * Copyright (C) 2008-2014 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -24302,6 +24302,16 @@ void Player::UpdateUnderwaterState(Map* m, float x, float y, float z)
             m_MirrorTimerFlags |= UNDERWATER_INSLIME;
         else
             m_MirrorTimerFlags &= ~UNDERWATER_INSLIME;
+    }
+
+    // Hunger Games - Trial of Darkspear fatigue handling
+    // Hacky, possibly rewrite? Least it works..
+    if (liquid_status.type_flags & MAP_LIQUID_TYPE_OCEAN)
+    {
+        if (GetMapId() == 800 && GetAreaId() == 5007)
+            m_MirrorTimerFlags |= UNDERWARER_INDARKWATER;
+        else
+            m_MirrorTimerFlags &= ~UNDERWARER_INDARKWATER;
     }
 }
 
