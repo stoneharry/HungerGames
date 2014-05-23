@@ -62,7 +62,10 @@ local function OnEnterFrame(self, motion)
 	end
 	GameTooltip:AddLine(description)
 	if (PERKS[index][6]) then
-		GameTooltip:AddLine("|cFFFF0000" .. PERKS[index][6])
+		local _, _, _, completed = GetAchievementInfo(PERKS[index][5])
+		if not completed then
+			GameTooltip:AddLine("|cFFFF0000" .. PERKS[index][6])
+		end
 	end
 	GameTooltip:SetFrameLevel(5)
 	GameTooltip:Show()
