@@ -8,18 +8,21 @@ local PERKS = {
 	--   
 	--   ID of requirement
 	--   Message if not unlocked
+	
+	-- Default unlocked
 	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\INV_Potion_120]], 0},
 	{"Hunter's Blunderbuss", "Increases damage against beasts by 10%.", [[Interface\Icons\Ability_Hunter_LockAndLoad]], 0},
-	{"Intelligence", "Your prowess in thinking increases your chance to land a critical strike by 3%.", [[Interface\Icons\Spell_Arcane_MindMastery]], 0},
+	{"Intelligence", "Your prowess in thinking increases your chance to land a critical strike by 5%.", [[Interface\Icons\Spell_Arcane_MindMastery]], 0},
+	{"Cowards Bane", "Deal 10% more critical damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
 	{"Lungs of Air", "Allows you to breath underwater for 300% longer.", [[Interface\Icons\Spell_Shadow_DemonBreath]], 0},
-	{"Cheat Death", "You cheat death! Any damage that would normally kill you will spare you with 1 health left. This effect can only be triggered once per battle.", [[Interface\Icons\Ability_FiegnDead]], 0},
-	{"Cowards Bane", "Deal 10% more damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
-	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 0},
-	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 0},
-	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_MonsterHead_01]], 1, 50, "This perk has not yet been unlocked."}, -- @TODO: Correct achievement ID
-	{"Voodoo Shuffle", "While within a Troll controlled area, your chance to dodge is increased by 10%.", [[Interface\Icons\Achievement_Boss_trollgore]], 1, 50, "This perk has not yet been unlocked."}, -- @TODO: Correct achievement ID
-	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 50, "This perk has not yet been unlocked."}, -- @TODO: Correct achievement ID
-	{"To the Rescue!", "Your health regeneration is increased by 5% while out of combat.", [[Interface\Icons\Spell_Holy_ArdentDefender]], 1, 50, "This perk has not yet been unlocked."} -- @TODO: Correct achievement ID
+	-- Unlockable
+	{"Cheat Death", "You cheat death! Any damage that would normally kill you will spare you with 1 health left. This effect can only be triggered once per battle.", [[Interface\Icons\Ability_FiegnDead]], 1, 5000, "This perk has not yet been unlocked."},
+	{"To the Rescue!", "Your health regeneration is increased by 5% while out of combat.", [[Interface\Icons\Spell_Holy_ArdentDefender]], 1, 5001, "This perk has not yet been unlocked."},
+	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 1, 5002, "This perk has not yet been unlocked."},
+	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 1, 5003, "This perk has not yet been unlocked."},
+	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_Head_Murloc_01]], 1, 5004, "This perk has not yet been unlocked."},
+	{"Voodoo Shuffle", "While within a Troll controlled area, your chance to dodge is increased by 10%.", [[Interface\Icons\inv_banner_01]], 1, 5005, "This perk has not yet been unlocked."},
+	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 5006, "This perk has not yet been unlocked."}
 }
 
 --[[local function OnClickedFrame(self, button)

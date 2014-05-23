@@ -2875,14 +2875,14 @@
 									</Anchor>
 								</Anchors>							
 							</StatusBar>
-							<!--
 							<StatusBar name="$parentCategory4" inherits="AchievementFrameSummaryCategoryTemplate" id="96">	
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeTo="$parentCategory3" relativePoint="TOPRIGHT">
-										<Offset x="20" y="0"/>
+									<Anchor point="TOPLEFT" relativeTo="$parentCategory3" relativePoint="BOTTOMLEFT">
+										<Offset x="0" y="-14"/>
 									</Anchor>
 								</Anchors>						
 							</StatusBar>
+							<!--
 							<StatusBar name="$parentCategory5" inherits="AchievementFrameSummaryCategoryTemplate" id="168">	
 								<Anchors>
 									<Anchor point="TOPLEFT" relativeTo="$parentCategory3" relativePoint="BOTTOMLEFT">
