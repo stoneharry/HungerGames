@@ -11,10 +11,13 @@ local PERKS = {
 	
 	-- Default unlocked
 	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\INV_Potion_120]], 0},
+	{"Bandages", "Start with two bandages.", [[Interface\Icons\INV_Misc_Bandage_16]], 0},
 	{"Hunter's Blunderbuss", "Increases damage against beasts by 10%.", [[Interface\Icons\Ability_Hunter_LockAndLoad]], 0},
 	{"Intelligence", "Your prowess in thinking increases your chance to land a critical strike by 5%.", [[Interface\Icons\Spell_Arcane_MindMastery]], 0},
 	{"Cowards Bane", "Deal 10% more critical damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
 	{"Lungs of Air", "Allows you to breath underwater for 300% longer.", [[Interface\Icons\Spell_Shadow_DemonBreath]], 0},
+	{"Spyglass", "Start with a spyglass.", [[Interface\Icons\INV_Misc_Spyglass_03]], 0},
+		{"Team Work", "When attacking a player, any other players attacking that player will also be hit by your attacks.", [[Interface\Icons\Spell_Shaman_SpiritLink]], 0},
 	-- Unlockable
 	{"Cheat Death", "You cheat death! Any damage that would normally kill you will spare you with 1 health left. This effect can only be triggered once per battle.", [[Interface\Icons\Ability_FiegnDead]], 1, 5000, "This perk has not yet been unlocked."},
 	{"To the Rescue!", "Your health regeneration is increased by 5% while out of combat.", [[Interface\Icons\Spell_Holy_ArdentDefender]], 1, 5001, "This perk has not yet been unlocked."},
@@ -22,7 +25,16 @@ local PERKS = {
 	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 1, 5003, "This perk has not yet been unlocked."},
 	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_Head_Murloc_01]], 1, 5004, "This perk has not yet been unlocked."},
 	{"Voodoo Shuffle", "While within a Troll controlled area, your chance to dodge is increased by 10%.", [[Interface\Icons\inv_banner_01]], 1, 5005, "This perk has not yet been unlocked."},
-	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 5006, "This perk has not yet been unlocked."}
+	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 5006, "This perk has not yet been unlocked."},
+	-- Perks below here with achievement ID 10000 are temp
+	{"Crystal Meal", "Deal 10% more damage but take 20% more damage.", [[Interface\Icons\INV_Misc_Gem_Variety_02]], 1, 10000, "This perk has not yet been unlocked."},
+	{"Lantern of Sightseeing", "Allows visibility of all units at all times.", [[Interface\Icons\INV_Misc_Lantern_01]], 1, 10000, "This perk is not yet unlocked."},
+	{"Grave Robber", "Allows you to instantly loot killed players.", [[Interface\Icons\INV_Misc_Shovel_01]], 1, 10000},
+	{"Poisoned Blade", "When attacking with a melee weapon you have a 2% chance of inflicting a poison that will slowly kill the target over a long period of time.", [[Interface\Icons\INV_Misc_Slime_01]], 1, 10000},
+	{"Potion of Fire", "You start with 2 potions of fire.", [[Interface\Icons\INV_SummerFest_FirePotion]], 1, 10000, "You have not unlocked this perk yet."},
+	{"Berserker", "When you are below 10% health you deal 75% more damage.", [[Interface\Icons\RACIAL_TROLL_BERSERK]], 1, 10000, "You have not unlocked this perk yet."},
+	{"Divine Sacrifice", "Gain the ability to kill yourself but deal your remaining health as damage to all enemies within 30 yards.", [[Interface\Icons\Spell_Shadow_SacrificialShield]], 1, 10000, "You have not unlocked this perk yet."},
+	{"Vampire Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 10000, "You have not unlocked this perk yet."}
 }
 
 --[[local function OnClickedFrame(self, button)
@@ -178,7 +190,7 @@ function ToggleLoadoutFrame()
 	
 	pos = -135
 	local count = 0
-	local offset = 80
+	local offset = 90
 	local max_per_line = 9
 	for i=1,#PERKS do
 		local texture = CreateFrame("Button", "loadout_perk_"..tostring(i), frame, nil)
