@@ -1,13 +1,13 @@
 
+local NOT_UNLOCKED_STR = "This perk has not yet been unlocked."
+
 SELECTED_PERKS = {0, 0, 0, 0}
 
 local PERKS = {
 	-- FORMAT: Name, Description, Icon
 	--   Requirement: 0 = None
 	--                1 = Achievement
-	--   
 	--   ID of requirement
-	--   Message if not unlocked
 	
 	-- Default unlocked
 	{"Potions Galore", "Start with two healing potions.", [[Interface\Icons\INV_Potion_120]], 0},
@@ -19,28 +19,37 @@ local PERKS = {
 	{"Spyglass", "Start with a spyglass.", [[Interface\Icons\INV_Misc_Spyglass_03]], 0},
 	{"\"Team Work\"", "When attacking a player, any other players attacking that player will also be hit by your attacks.", [[Interface\Icons\Spell_Shaman_SpiritLink]], 0},
 	-- Unlockable
-	{"Cheat Death", "You cheat death! Any damage that would normally kill you will spare you with 1 health left. This effect can only be triggered once per battle.", [[Interface\Icons\Ability_FiegnDead]], 1, 5000, "This perk has not yet been unlocked."},
-	{"To the Rescue!", "Your health regeneration is increased by 5% while out of combat.", [[Interface\Icons\Spell_Holy_ArdentDefender]], 1, 5001, "This perk has not yet been unlocked."},
-	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 1, 5002, "This perk has not yet been unlocked."},
-	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 1, 5003, "This perk has not yet been unlocked."},
-	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_Head_Murloc_01]], 1, 5004, "This perk has not yet been unlocked."},
-	{"Voodoo Shuffle", "While within a Troll controlled area, your chance to dodge is increased by 10%.", [[Interface\Icons\inv_banner_01]], 1, 5005, "This perk has not yet been unlocked."},
-	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 5006, "This perk has not yet been unlocked."},
-	{"Crystal Meal", "Deal 10% more damage but take 20% more damage.", [[Interface\Icons\INV_Misc_Gem_Variety_02]], 1, 5018, "This perk has not yet been unlocked."},
-	{"Lantern of Sightseeing", "Allows visibility of all units at all times.", [[Interface\Icons\INV_Misc_Lantern_01]], 1, 5019, "This perk is not yet unlocked."},
-	{"Grave Robber", "Allows you to instantly loot killed players.", [[Interface\Icons\INV_Misc_Shovel_01]], 1, 5020, "This perk has not yet been unlocked."},
-	{"Poisoned Blade", "When attacking with a melee weapon you have a 2% chance of inflicting a poison that will slowly kill the target over a long period of time.", [[Interface\Icons\INV_Misc_Slime_01]], 1, 5021, "This perk has not yet been unlocked."},
-	{"Potion of Fire", "You start with 2 potions of fire.", [[Interface\Icons\INV_SummerFest_FirePotion]], 1, 5022, "You have not unlocked this perk yet."},
-	{"Berserker", "When you are below 10% health you deal 75% more damage.", [[Interface\Icons\RACIAL_TROLL_BERSERK]], 1, 5023, "You have not unlocked this perk yet."},
-	{"Divine Sacrifice", "Gain the ability to kill yourself but deal your remaining health as damage to all enemies within 30 yards.", [[Interface\Icons\Spell_Shadow_SacrificialShield]], 1, 5024, "You have not unlocked this perk yet."},
-	{"Vampiric Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 5025, "You have not unlocked this perk yet."},
-	{"Blood for the Blood God", "Your attacks heal you for 15% of the damage you deal but you take constant damage and do not regenerate health naturally.", [[Interface\Icons\Ability_Warlock_DemonicEmpowerment]], 1, 5026, "You have not yet unlocked this perk."}
-	-- Perks below here with achievement ID 10000 are temp
+	{"Cheat Death", "You cheat death! Any damage that would normally kill you will spare you with 1 health left. This effect can only be triggered once per battle.", [[Interface\Icons\Ability_FiegnDead]], 1, 5000},
+	{"To the Rescue!", "Your health regeneration is increased by 5% while out of combat.", [[Interface\Icons\Spell_Holy_ArdentDefender]], 1, 5001},
+	{"Nightstalker", "During night time, walking will make you harder to find.", [[Interface\Icons\Ability_Stealth]], 1, 5002},
+	{"Sun's Endurance", "During day time, your movement speed is slightly increased.", [[Interface\Icons\Spell_Holy_SurgeOfLight]], 1, 5003},
+	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_Head_Murloc_01]], 1, 5004},
+	{"Voodoo Shuffle", "While within a Troll controlled area, your chance to dodge is increased by 10%.", [[Interface\Icons\inv_banner_01]], 1, 5005},
+	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 5006},
+	{"Crystal Meal", "Deal 10% more damage but take 20% more damage.", [[Interface\Icons\INV_Misc_Gem_Variety_02]], 1, 5018},
+	{"Lantern of Sightseeing", "Allows visibility of all units at all times.", [[Interface\Icons\INV_Misc_Lantern_01]], 1, 5019},
+	{"Grave Robber", "Allows you to instantly loot killed players.", [[Interface\Icons\INV_Misc_Shovel_01]], 1, 5020},
+	{"Poisoned Blade", "When attacking with a melee weapon you have a 2% chance of inflicting a poison that will slowly kill the target over a long period of time.", [[Interface\Icons\INV_Misc_Slime_01]], 1, 5021},
+	{"Potion of Fire", "You start with 2 potions of fire.", [[Interface\Icons\INV_SummerFest_FirePotion]], 1, 5022},
+	{"Berserker", "When you are below 10% health you deal 75% more damage.", [[Interface\Icons\RACIAL_TROLL_BERSERK]], 1, 5023},
+	{"Divine Sacrifice", "Gain the ability to kill yourself but deal your remaining health as damage to all enemies within 30 yards.", [[Interface\Icons\Spell_Shadow_SacrificialShield]], 1, 5024},
+	{"Vampiric Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 5025},
+	{"Blood for the Blood God", "Your attacks heal you for 15% of the damage you deal but you take constant damage and do not regenerate health naturally.", [[Interface\Icons\Ability_Warlock_DemonicEmpowerment]], 1, 5026}
 }
 
---[[local function OnClickedFrame(self, button)
-	print(self:GetName() .. " clicked with " .. button)
-end]]
+local function OnClickedFrame(self, button)
+	if not self.index then
+		return
+	end
+	local id = tonumber(self:GetName():sub(13,13))
+	self:SetBackdrop({bgFile = [[Interface\FrameXML\slot]], 
+					edgeFile = "", 
+					tile = false, tileSize = 68, edgeSize = 16, 
+					insets = { left = 4, right = 4, top = 4, bottom = 4 }});
+	self.index = nil
+	SELECTED_PERKS[id] = 0
+	PlaySound("GAMESPELLACTIVATE")
+end
 
 local function OnEnterFrame(self, motion)
 	local index = self.index
@@ -54,10 +63,10 @@ local function OnEnterFrame(self, motion)
 	for _,v in pairs(description) do
 		GameTooltip:AddLine(v)
 	end
-	if (PERKS[index][6]) then
+	if (PERKS[index][5]) then
 		local _, _, _, completed = GetAchievementInfo(PERKS[index][5])
 		if not completed then
-			GameTooltip:AddLine("|cFFFF0000" .. PERKS[index][6])
+			GameTooltip:AddLine("|cFFFF0000" .. NOT_UNLOCKED_STR)
 		end
 	end
 	GameTooltip:SetFrameLevel(5)
@@ -157,7 +166,9 @@ function ToggleLoadoutFrame()
 								tile = false, tileSize = 68, edgeSize = 16, 
 								insets = { left = 4, right = 4, top = 4, bottom = 4 }});
 		texture:SetScript("OnEnter", OnEnterFrame)
-		texture:SetScript("OnLeave", OnLeaveFrame)	
+		texture:SetScript("OnLeave", OnLeaveFrame)
+		texture:RegisterForClicks("RightButtonUp")
+		texture:SetScript("OnClick", OnClickedFrame)
 		pos = pos + 70
 	end
 	
@@ -202,7 +213,6 @@ function ToggleLoadoutFrame()
 		
 		if unlocked then
 			texture:SetMovable(true)
-			--texture:SetScript("OnClick", OnClickedFrame)
 			texture:RegisterForDrag("LeftButton")
 			texture:SetScript("OnDragStart", OnDragStart)
 			texture:SetScript("OnDragStop", OnDragStop)
