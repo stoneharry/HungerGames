@@ -280,6 +280,12 @@ function AchievementFrameCategories_GetCategoryList (categories)
 		end
 	end
 	
+	-- Hacky fix for feats of strength appearing after perks
+	local perks = categories[#categories]
+	local feats = categories[#categories - 1]
+	categories[#categories] = feats
+	categories[#categories - 1] = perks
+	
 	local _, parent;
 	for i = #cats, 1, -1 do 
 		_, parent = GetCategoryInfo(cats[i]);
@@ -399,7 +405,7 @@ function AchievementFrameCategories_DisplayButton (button, element)
 	button.categoryID = id;
 	button.flags = flags;
 	button.element = element;
-
+	
 	-- For the tooltip
 	button.name = categoryName;
 	if ( id == FEAT_OF_STRENGTH_ID ) then
