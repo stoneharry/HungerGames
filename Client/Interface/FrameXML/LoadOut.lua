@@ -17,7 +17,7 @@ local PERKS = {
 	{"Cowards Bane", "Deal 10% more critical damage when hitting an enemy from behind.", [[Interface\Icons\Ability_Druid_Cower]], 0},
 	{"Lungs of Air", "Allows you to breath underwater for 300% longer.", [[Interface\Icons\Spell_Shadow_DemonBreath]], 0},
 	{"Spyglass", "Start with a spyglass.", [[Interface\Icons\INV_Misc_Spyglass_03]], 0},
-		{"Team Work", "When attacking a player, any other players attacking that player will also be hit by your attacks.", [[Interface\Icons\Spell_Shaman_SpiritLink]], 0},
+	{"\"Team Work\"", "When attacking a player, any other players attacking that player will also be hit by your attacks.", [[Interface\Icons\Spell_Shaman_SpiritLink]], 0},
 	-- Unlockable
 	{"Cheat Death", "You cheat death! Any damage that would normally kill you will spare you with 1 health left. This effect can only be triggered once per battle.", [[Interface\Icons\Ability_FiegnDead]], 1, 5000, "This perk has not yet been unlocked."},
 	{"To the Rescue!", "Your health regeneration is increased by 5% while out of combat.", [[Interface\Icons\Spell_Holy_ArdentDefender]], 1, 5001, "This perk has not yet been unlocked."},
@@ -34,7 +34,8 @@ local PERKS = {
 	{"Potion of Fire", "You start with 2 potions of fire.", [[Interface\Icons\INV_SummerFest_FirePotion]], 1, 10000, "You have not unlocked this perk yet."},
 	{"Berserker", "When you are below 10% health you deal 75% more damage.", [[Interface\Icons\RACIAL_TROLL_BERSERK]], 1, 10000, "You have not unlocked this perk yet."},
 	{"Divine Sacrifice", "Gain the ability to kill yourself but deal your remaining health as damage to all enemies within 30 yards.", [[Interface\Icons\Spell_Shadow_SacrificialShield]], 1, 10000, "You have not unlocked this perk yet."},
-	{"Vampire Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 10000, "You have not unlocked this perk yet."}
+	{"Vampire Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 10000, "You have not unlocked this perk yet."},
+	{"Blood for the Blood God", "Your attacks heal you for 15% of the damage you deal but you take constant damage and do not regenerate health naturally.", [[Interface\Icons\Ability_Warlock_DemonicEmpowerment]], 1, 10000, "You have not yet unlocked this perk."}
 }
 
 --[[local function OnClickedFrame(self, button)
@@ -49,30 +50,10 @@ local function OnEnterFrame(self, motion)
 	GameTooltip:Hide()
 	GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
 	GameTooltip:AddLine("|cFFFFFFFF" .. PERKS[index][1])
-	local description = ""
-	local wantingToBreak = false
-	for i=1,#PERKS[index][2] do
-		local c = PERKS[index][2]:sub(i, i)
-		-- The below code works, don't ask why or how, just accept it
-		if wantingToBreak then
-			if c == " " then
-				description = description .. "\r\n"
-				wantingToBreak = false
-			else
-				description = description .. c
-				if i % 35 == 0 then
-					wantingToBreak = true
-				end
-			end
-		else
-			description = description .. c
-			if i % 35 == 0 then
-				wantingToBreak = true
-			end
-		end
-		-- End hacky mess
+	local description = WordWrap(PERKS[index][2], 42)
+	for _,v in pairs(description) do
+		GameTooltip:AddLine(v)
 	end
-	GameTooltip:AddLine(description)
 	if (PERKS[index][6]) then
 		local _, _, _, completed = GetAchievementInfo(PERKS[index][5])
 		if not completed then
@@ -239,3 +220,97 @@ function ToggleLoadoutFrame()
 	end
 end
 
+-- For text wrap
+
+function WordWrap(input, width)
+	local result = {};
+	
+	for extra = 0, 1 do
+		local res = {lines = {}, missed = 0, missedSq = 0};
+		
+		local exploded = {};
+		for match in input:gmatch("(%S+)") do
+			table.insert(exploded, match);
+		end
+		local i = 1;
+		while i <= #exploded do
+			local t = {};
+			local len = 0;
+			while len < width do
+				local str = exploded[i];
+				if (not str) then
+					break;
+				elseif (len == 0 and #str >= width) then
+					if (#str == width) then
+						i = i + 1;
+					else
+						exploded[i] = str:sub(width+1);
+						str = str:sub(1, width);
+					end
+				elseif (len + #str + extra > width) then
+					break;
+				else
+					i = i + 1;
+				end
+				table.insert(t, str);
+				len = len + #str + 1;
+			end
+			
+			local line = table.concat(t, " ");
+			res.missed = res.missed + (width - #line);
+			res.missedSq = res.missedSq + (width - #line)^2;
+			
+			table.insert(res.lines, line);
+		end
+		
+		table.insert(result, res);
+	end
+	
+	local current;
+	local ret = false;
+	
+	for _, res in ipairs(result) do
+		if (not current) then
+			current = res;
+		else
+			if (#res.lines < #current.lines) then
+				current = res;
+				ret = true;
+			end
+		end
+	end
+	
+	if (ret) then
+		return current.lines;
+	end
+	
+	current = nil;
+	for _, res in ipairs(result) do
+		if (not current) then
+			current = res;
+		else
+			if (res.missed < current.missed) then
+				current = res;
+				ret = true;
+			end
+		end
+	end
+	
+	if (ret) then
+		return current.lines;
+	end
+	
+	current = nil;
+	for _, res in ipairs(result) do
+		if (not current) then
+			current = res;
+		else
+			if (res.missedSq <= current.missedSq) then
+				current = res;
+				ret = true;
+			end
+		end
+	end
+	
+	return current.lines;
+end
