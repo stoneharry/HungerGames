@@ -26,16 +26,16 @@ local PERKS = {
 	{"King of the Murloc", "All Murloc's will not attack you unless you attack them first.", [[Interface\Icons\INV_Misc_Head_Murloc_01]], 1, 5004, "This perk has not yet been unlocked."},
 	{"Voodoo Shuffle", "While within a Troll controlled area, your chance to dodge is increased by 10%.", [[Interface\Icons\inv_banner_01]], 1, 5005, "This perk has not yet been unlocked."},
 	{"Time is Money!", "While within a Goblin controlled area, your attack speed is increased by 5%.", [[Interface\Icons\INV_Misc_Coin_01]], 1, 5006, "This perk has not yet been unlocked."},
+	{"Crystal Meal", "Deal 10% more damage but take 20% more damage.", [[Interface\Icons\INV_Misc_Gem_Variety_02]], 1, 5018, "This perk has not yet been unlocked."},
+	{"Lantern of Sightseeing", "Allows visibility of all units at all times.", [[Interface\Icons\INV_Misc_Lantern_01]], 1, 5019, "This perk is not yet unlocked."},
+	{"Grave Robber", "Allows you to instantly loot killed players.", [[Interface\Icons\INV_Misc_Shovel_01]], 1, 5020, "This perk has not yet been unlocked."},
+	{"Poisoned Blade", "When attacking with a melee weapon you have a 2% chance of inflicting a poison that will slowly kill the target over a long period of time.", [[Interface\Icons\INV_Misc_Slime_01]], 1, 5021, "This perk has not yet been unlocked."},
+	{"Potion of Fire", "You start with 2 potions of fire.", [[Interface\Icons\INV_SummerFest_FirePotion]], 1, 5022, "You have not unlocked this perk yet."},
+	{"Berserker", "When you are below 10% health you deal 75% more damage.", [[Interface\Icons\RACIAL_TROLL_BERSERK]], 1, 5023, "You have not unlocked this perk yet."},
+	{"Divine Sacrifice", "Gain the ability to kill yourself but deal your remaining health as damage to all enemies within 30 yards.", [[Interface\Icons\Spell_Shadow_SacrificialShield]], 1, 5024, "You have not unlocked this perk yet."},
+	{"Vampiric Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 5025, "You have not unlocked this perk yet."},
+	{"Blood for the Blood God", "Your attacks heal you for 15% of the damage you deal but you take constant damage and do not regenerate health naturally.", [[Interface\Icons\Ability_Warlock_DemonicEmpowerment]], 1, 5026, "You have not yet unlocked this perk."}
 	-- Perks below here with achievement ID 10000 are temp
-	{"Crystal Meal", "Deal 10% more damage but take 20% more damage.", [[Interface\Icons\INV_Misc_Gem_Variety_02]], 1, 10000, "This perk has not yet been unlocked."},
-	{"Lantern of Sightseeing", "Allows visibility of all units at all times.", [[Interface\Icons\INV_Misc_Lantern_01]], 1, 10000, "This perk is not yet unlocked."},
-	{"Grave Robber", "Allows you to instantly loot killed players.", [[Interface\Icons\INV_Misc_Shovel_01]], 1, 10000},
-	{"Poisoned Blade", "When attacking with a melee weapon you have a 2% chance of inflicting a poison that will slowly kill the target over a long period of time.", [[Interface\Icons\INV_Misc_Slime_01]], 1, 10000},
-	{"Potion of Fire", "You start with 2 potions of fire.", [[Interface\Icons\INV_SummerFest_FirePotion]], 1, 10000, "You have not unlocked this perk yet."},
-	{"Berserker", "When you are below 10% health you deal 75% more damage.", [[Interface\Icons\RACIAL_TROLL_BERSERK]], 1, 10000, "You have not unlocked this perk yet."},
-	{"Divine Sacrifice", "Gain the ability to kill yourself but deal your remaining health as damage to all enemies within 30 yards.", [[Interface\Icons\Spell_Shadow_SacrificialShield]], 1, 10000, "You have not unlocked this perk yet."},
-	{"Vampire Aura", "You slow all enemies within 10 yards by 10% but take 25% more damage.", [[Interface\Icons\Spell_Shadow_VampiricAura]], 1, 10000, "You have not unlocked this perk yet."},
-	{"Blood for the Blood God", "Your attacks heal you for 15% of the damage you deal but you take constant damage and do not regenerate health naturally.", [[Interface\Icons\Ability_Warlock_DemonicEmpowerment]], 1, 10000, "You have not yet unlocked this perk."}
 }
 
 --[[local function OnClickedFrame(self, button)
