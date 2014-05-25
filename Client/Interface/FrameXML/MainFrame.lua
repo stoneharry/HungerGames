@@ -276,6 +276,7 @@ function PlayGame()
 	MainFrame_OnlinePlayerList_2:Show()
 	MainFrame_Chat_2:Show()
 	MainFrame_OnlinePlayerList:Show()
+	ONLINE_PLAYERS = {}
 	local str = _G["HowToJoinGameStr"]
 	if str then
 		str:SetText(CLICK_GAME_TO_JOIN_STR)
@@ -412,13 +413,18 @@ end
 
 function SB_Main_ScrollBar_Update()
 	-- 50 is max entries, 5 is number of lines, 16 is pixel height of each line
-	FauxScrollFrame_Update(MainScrollBar, #ONLINE_PLAYERS, 5, 16)
+	local entries = #ONLINE_PLAYERS
+	-- 50 maximum
+	if entries > 50 then
+		entries = 50
+	end
+	FauxScrollFrame_Update(MainScrollBar, entries, 5, 16)
 	
 	local line
 	local lineplusoffset
 	for line=1,12 do
 		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar)
-		if lineplusoffset <= #ONLINE_PLAYERS then
+		if lineplusoffset <= entries then
 			if ONLINE_PLAYERS[lineplusoffset] then
 				_G["ScrollBarEntry"..line]:SetText("     "..lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1])
 				_G["ScrollBarEntry"..line]:Show()
