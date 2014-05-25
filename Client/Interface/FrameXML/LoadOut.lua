@@ -189,10 +189,10 @@ function ToggleLoadoutFrame()
 	button:SetHeight(40)
 	button:SetScript("OnClick", ReturnToMainMenu)
 	
-	pos = -135
+	pos = -152
 	local count = 0
 	local offset = 90
-	local max_per_line = 9
+	local max_per_line = 10
 	for i=1,#PERKS do
 		local texture = CreateFrame("Button", "loadout_perk_"..tostring(i), frame, nil)
 		texture:SetWidth(36)
@@ -232,7 +232,7 @@ function ToggleLoadoutFrame()
 		pos = pos + 35
 		count = count + 1
 		if count == max_per_line then
-			pos = -135
+			pos = -152
 			offset = offset - 34
 			count = 0
 		end
