@@ -492,8 +492,10 @@ function mainFrameUpdate(self, elapsed)
 			SendWho("")
 		elseif MENU_SELECTED == 1 then
 			-- Retrieve list of games running
+			SB_Main_ScrollBar_Update()
 			SendAddonMessage("MAINMENU", "GetTheGamesAvailable", "WHISPER", UnitName("player"))
 		elseif MENU_SELECTED == 2 then
+			SB_Main_ScrollBar_Update()
 			-- Retrieve list of people in lobby
 			if not PLAYER_IN_GAME_STR then
 				print("ERROR: Game name is null and trying to retrieve the players in this games lobby.")
