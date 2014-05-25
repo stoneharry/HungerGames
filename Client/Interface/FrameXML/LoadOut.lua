@@ -48,6 +48,7 @@ local function OnClickedFrame(self, button)
 					insets = { left = 4, right = 4, top = 4, bottom = 4 }});
 	self.index = nil
 	SELECTED_PERKS[id] = 0
+	GameTooltip:Hide()
 	PlaySound("GAMESPELLACTIVATE")
 end
 
