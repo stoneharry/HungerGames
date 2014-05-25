@@ -458,10 +458,16 @@ function mainFrameUpdate(self, elapsed)
 			PlayMusic([[Interface\FrameXML\1.mp3]])
 		end
 	end
+	if dur > 3 then
+		-- update view
+		SB_Main_ScrollBar_Update()
+	end
 	if dur > UPDATE_INTERVALS[MENU_SELECTED + 1] then
 		dur = 0
 		ONLINE_PLAYERS = {}
 		if MENU_SELECTED == 0 then
+			FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE");
+			SetWhoToUI(1) -- do not appear in chat
 			SendWho("")
 			for i=1, GetNumWhoResults() do
 				-- name, guild, level, race, class, zone, classFileName
@@ -481,8 +487,6 @@ function mainFrameUpdate(self, elapsed)
 		end
 		-- hackfix location
 		ScrollBarEntry1:SetPoint("TOPLEFT", MainScrollBar, "TOPLEFT", 8, 0)
-		-- update view
-		SB_Main_ScrollBar_Update()
 	end
 	-- This is hacky as hell, but hey ho. It's set on update as there
 	--  needs to be a delay between on load and setting this.
@@ -497,6 +501,4 @@ function mainFrameUpdate(self, elapsed)
 		ChatFrame1:SetWidth(700)
 	end
 	ChatFrame1:SetHeight(300)
-	-- Keep that friends frame hidden
-	_G["FriendsFrame"]:Hide()
 end
