@@ -114,7 +114,7 @@ local function OnDragStop(self)
 end
 
 local function ReturnToMainMenu(self)
-	MENU_SELECTED = 1
+	MENU_SELECTED = 0
 	LOADOUT_FRAME:Hide()
 	MainFrame_Back:Show()
 	MainFrame_Chat:Show()
