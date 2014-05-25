@@ -9,7 +9,7 @@ MENU_SELECTED = 0
 -- Lobby channels WIP, disabled atm since buggy
 local MENU_CHANNELS = {"Lobby", "Game"}
 local numScrollBarButtons = 50
-local dur = 28
+local dur = 29
 local mus_dur = 0
 local ONLINE_PLAYERS = {}
 local UPDATE_INTERVALS = {30, 5, 5, 0 ,0, 60}
@@ -412,13 +412,13 @@ end
 
 function SB_Main_ScrollBar_Update()
 	-- 50 is max entries, 5 is number of lines, 16 is pixel height of each line
-	FauxScrollFrame_Update(MainScrollBar, 50, 5, 16)
+	FauxScrollFrame_Update(MainScrollBar, #ONLINE_PLAYERS, 5, 16)
 	
 	local line
 	local lineplusoffset
 	for line=1,12 do
 		lineplusoffset = line + FauxScrollFrame_GetOffset(MainScrollBar)
-		if lineplusoffset <= 50 then
+		if lineplusoffset <= #ONLINE_PLAYERS then
 			if ONLINE_PLAYERS[lineplusoffset] then
 				_G["ScrollBarEntry"..line]:SetText("     "..lineplusoffset..": "..ONLINE_PLAYERS[lineplusoffset][1])
 				_G["ScrollBarEntry"..line]:Show()

@@ -131,9 +131,18 @@ function ToggleLoadoutFrame()
 	
 	if (_G["LOADOUT_FRAME"]) then
 		_G["LOADOUT_FRAME"]:Show()
-		--[[for i=1,#PERKS do
-			_G["loadout_perk_"..tostring(i)]:Show()
-		end]]
+		-- Perks may now be unlocked that were locked previously, so update
+		for i=1,#PERKS do
+			local requirement = PERKS[i][4]
+			local unlocked = 0
+			if requirement == 1 then
+				local _, _, _, completed, _, _, _, _, _, _, _, _, _, _ = GetAchievementInfo(PERKS[i][5])
+				if not completed then
+					unlocked = 1
+				end
+			end
+			select(-9, _G["loadout_perk_"..tostring(i)]:GetRegions()):SetDesaturated(unlocked)
+		end
 		return
 	end
 	
