@@ -9,7 +9,7 @@ MENU_SELECTED = 0
 -- Lobby channels WIP, disabled atm since buggy
 local MENU_CHANNELS = {"Lobby", "Game"}
 local numScrollBarButtons = 50
-local dur = 27
+local dur = 28
 local mus_dur = 0
 local ONLINE_PLAYERS = {}
 local UPDATE_INTERVALS = {30, 5, 5, 0 ,0, 60}
@@ -167,7 +167,7 @@ function mainFrameLoaded()
 	fontString:SetText(WELCOME_MESSAGE_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_Back, "TOPLEFT", 255, -124)
 	
-		-- Listen for addon messages
+	-- Listen for addon messages
 	MainFrame_Chat_2:RegisterEvent("CHAT_MSG_ADDON")
 	MainFrame_Chat_2:SetScript("OnEvent", eventHandlerMainFrame)
 	
@@ -361,8 +361,25 @@ function eventHandlerMainFrame(self, event, message, _, Type, Sender)
 			-- update view
 			SB_Main_ScrollBar_Update()		
 		end
-    end
+	end
 end
+
+function my_FriendsFrame_OnEvent(self, event, message, _, Type, Sender)
+	if event == "WHO_LIST_UPDATE" and not IN_GAME then
+		for i=1, GetNumWhoResults() do
+			-- name, guild, level, race, class, zone, classFileName
+			local name, _, _, _, _, zone, _ = GetWhoInfo(i)
+			ONLINE_PLAYERS[i] = {name, zone}
+		end
+		-- update
+		SB_Main_ScrollBar_Update()
+	else
+		original_FriendsFrame_OnEvent(self, event, message, _, Type, Sender)
+	end
+end
+
+original_FriendsFrame_OnEvent = FriendsFrame_OnEvent;
+FriendsFrame_OnEvent = my_FriendsFrame_OnEvent;
 
 function string.starts(String,Start)
    return string.sub(String,1,string.len(Start))==Start
@@ -458,22 +475,12 @@ function mainFrameUpdate(self, elapsed)
 			PlayMusic([[Interface\FrameXML\1.mp3]])
 		end
 	end
-	if dur > 3 then
-		-- update view
-		SB_Main_ScrollBar_Update()
-	end
 	if dur > UPDATE_INTERVALS[MENU_SELECTED + 1] then
 		dur = 0
 		ONLINE_PLAYERS = {}
 		if MENU_SELECTED == 0 then
-			FriendsFrame:UnregisterEvent("WHO_LIST_UPDATE");
 			SetWhoToUI(1) -- do not appear in chat
 			SendWho("")
-			for i=1, GetNumWhoResults() do
-				-- name, guild, level, race, class, zone, classFileName
-				local name, _, _, _, _, zone, _ = GetWhoInfo(i)
-				ONLINE_PLAYERS[i] = {name, zone}
-			end
 		elseif MENU_SELECTED == 1 then
 			-- Retrieve list of games running
 			SendAddonMessage("MAINMENU", "GetTheGamesAvailable", "WHISPER", UnitName("player"))
