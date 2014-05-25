@@ -257,6 +257,8 @@ function HandleScollBarEntryClick(self)
 		OpenGameLobby(lobbyName)
 	-- If in game lobby or main lobby
 	elseif MENU_SELECTED == 0 or MENU_SELECTED == 2 then
+		return
+	
 		-- This needs writing properly
 		local buttonNumber = tonumber(string.sub(self:GetName(), 15))
 		table.insert(ONLINE_PLAYERS, buttonNumber + 1, {"  |cFF00FF00 0 Wins", "1"})
