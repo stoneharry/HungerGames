@@ -1041,7 +1041,11 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 		std::stringstream addonmessage;
 		addonmessage << "SelectedPerks-";
 		for (int i = 0; i < 4; ++i)
-			addonmessage << std::setfill('0') << std::setw(2) << fields[i].GetInt32();
+		{
+			int perk = fields[i].GetInt32();
+			_player->SetSelectedPerk(i, perk);
+			addonmessage << std::setfill('0') << std::setw(2) << perk;
+		}
 
 		SendAddonMessage(_player, addonmessage.str(), 5);
 	}

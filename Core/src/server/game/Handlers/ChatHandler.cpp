@@ -498,7 +498,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 
 void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 {
-	// Do not handle stupidly short addon messages
+	// Do not handle stupidly short or long addon messages
 	unsigned int length = msg.length();
 	if (length < 5 || length > 256)
 		return;
@@ -615,6 +615,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	{
 		if (second.length() < 8)
 			return;
+		int perks[4];
 		std::string talents[4];
 		// retrieve talents
 		talents[0] = second.substr(0, 2);
@@ -627,7 +628,27 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 			if (!isdigit(talents[i][0]) || !isdigit(talents[i][1]))
 				return;
 			// Set selected perk
-			sender->SetSelectedPerk(i, atoi(talents[i].c_str()));
+			perks[i] = atoi(talents[i].c_str());
+			sender->SetSelectedPerk(i, perks[i]);
+		}
+		// Save to database
+		QueryResult result = CharacterDatabase.PQuery("SELECT COUNT(*) FROM `character_perks` WHERE `GUID` = '%u'", sender->GetGUIDLow());
+		if (!result)
+			return;
+		int rows = result->Fetch()->GetInt32();
+		if (rows == 0)
+		{
+			CharacterDatabase.PQuery("INSERT INTO `character_perks` VALUES ('%u', '%u', '%u', '%u', '%u')", 
+				sender->GetGUIDLow(), perks[0], perks[1], perks[2], perks[3]);
+		}
+		else if (rows == 1)
+		{
+			CharacterDatabase.PQuery("UPDATE `character_perks` SET `perk1`='%u',`perk2`='%u',`perk3`='%u',`perk4`='%u' WHERE `GUID` = '%u'",
+				perks[0], perks[1], perks[2], perks[3], sender->GetGUIDLow());
+		}
+		else
+		{
+			TC_LOG_INFO("server.error", "[ERROR]: Character %s has multiple perk records in the database.", sender->GetName());
 		}
 	}
 }
