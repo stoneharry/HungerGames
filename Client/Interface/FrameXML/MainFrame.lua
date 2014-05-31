@@ -364,6 +364,13 @@ function eventHandlerMainFrame(self, event, message, _, Type, Sender)
 			
 			-- update view
 			SB_Main_ScrollBar_Update()		
+		elseif string.starts(fullMessage, "SelectedPerks-") then
+			local tokens = scen_split(fullMessage)
+			local perks = tokens[2]
+			local offsets = {1, 3, 5, 7}
+			for i=1,4 do
+				SELECTED_PERKS[i] = tonumber(perks:sub(offsets[i], offsets[i] + 1))
+			end
 		end
 	end
 end

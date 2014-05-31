@@ -46,7 +46,7 @@
 #include "World.h"
 #include "WorldPacket.h"
 #include "WorldSession.h"
-
+#include <iomanip>
 
 class LoginQueryHolder : public SQLQueryHolder
 {
@@ -797,238 +797,254 @@ void WorldSession::HandlePlayerLoginOpcode(WorldPacket& recvData)
 
 void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 {
-    uint64 playerGuid = holder->GetGuid();
+	uint64 playerGuid = holder->GetGuid();
 
-    Player* pCurrChar = new Player(this);
-     // for send server info and strings (config)
-    ChatHandler chH = ChatHandler(pCurrChar->GetSession());
+	Player* pCurrChar = new Player(this);
+	// for send server info and strings (config)
+	ChatHandler chH = ChatHandler(pCurrChar->GetSession());
 
-    // "GetAccountId() == db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)
-    if (!pCurrChar->LoadFromDB(GUID_LOPART(playerGuid), holder))
-    {
-        SetPlayer(NULL);
-        KickPlayer();                                       // disconnect client, player no set to session and it will not deleted or saved at kick
-        delete pCurrChar;                                   // delete it manually
-        delete holder;                                      // delete all unprocessed queries
-        m_playerLoading = false;
-        return;
-    }
+	// "GetAccountId() == db stored account id" checked in LoadFromDB (prevent login not own character using cheating tools)
+	if (!pCurrChar->LoadFromDB(GUID_LOPART(playerGuid), holder))
+	{
+		SetPlayer(NULL);
+		KickPlayer();                                       // disconnect client, player no set to session and it will not deleted or saved at kick
+		delete pCurrChar;                                   // delete it manually
+		delete holder;                                      // delete all unprocessed queries
+		m_playerLoading = false;
+		return;
+	}
 
-    pCurrChar->GetMotionMaster()->Initialize();
-    pCurrChar->SendDungeonDifficulty(false);
+	pCurrChar->GetMotionMaster()->Initialize();
+	pCurrChar->SendDungeonDifficulty(false);
 
-    WorldPacket data(SMSG_LOGIN_VERIFY_WORLD, 20);
-    data << pCurrChar->GetMapId();
-    data << pCurrChar->GetPositionX();
-    data << pCurrChar->GetPositionY();
-    data << pCurrChar->GetPositionZ();
-    data << pCurrChar->GetOrientation();
-    SendPacket(&data);
+	WorldPacket data(SMSG_LOGIN_VERIFY_WORLD, 20);
+	data << pCurrChar->GetMapId();
+	data << pCurrChar->GetPositionX();
+	data << pCurrChar->GetPositionY();
+	data << pCurrChar->GetPositionZ();
+	data << pCurrChar->GetOrientation();
+	SendPacket(&data);
 
-    // load player specific part before send times
-    LoadAccountData(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_ACCOUNT_DATA), PER_CHARACTER_CACHE_MASK);
-    SendAccountDataTimes(PER_CHARACTER_CACHE_MASK);
+	// load player specific part before send times
+	LoadAccountData(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_ACCOUNT_DATA), PER_CHARACTER_CACHE_MASK);
+	SendAccountDataTimes(PER_CHARACTER_CACHE_MASK);
 
-    data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 2);         // added in 2.2.0
-    data << uint8(2);                                       // unknown value
-    data << uint8(0);                                       // enable(1)/disable(0) voice chat interface in client
-    SendPacket(&data);
+	data.Initialize(SMSG_FEATURE_SYSTEM_STATUS, 2);         // added in 2.2.0
+	data << uint8(2);                                       // unknown value
+	data << uint8(0);                                       // enable(1)/disable(0) voice chat interface in client
+	SendPacket(&data);
 
-    // Send MOTD
-    {
-        data.Initialize(SMSG_MOTD, 50);                     // new in 2.0.1
-        data << (uint32)0;
+	// Send MOTD
+	{
+		data.Initialize(SMSG_MOTD, 50);                     // new in 2.0.1
+		data << (uint32)0;
 
-        uint32 linecount=0;
-        std::string str_motd = sWorld->GetMotd();
-        std::string::size_type pos, nextpos;
+		uint32 linecount = 0;
+		std::string str_motd = sWorld->GetMotd();
+		std::string::size_type pos, nextpos;
 
-        pos = 0;
-        while ((nextpos= str_motd.find('@', pos)) != std::string::npos)
-        {
-            if (nextpos != pos)
-            {
-                data << str_motd.substr(pos, nextpos-pos);
-                ++linecount;
-            }
-            pos = nextpos+1;
-        }
+		pos = 0;
+		while ((nextpos = str_motd.find('@', pos)) != std::string::npos)
+		{
+			if (nextpos != pos)
+			{
+				data << str_motd.substr(pos, nextpos - pos);
+				++linecount;
+			}
+			pos = nextpos + 1;
+		}
 
-        if (pos<str_motd.length())
-        {
-            data << str_motd.substr(pos);
-            ++linecount;
-        }
+		if (pos < str_motd.length())
+		{
+			data << str_motd.substr(pos);
+			++linecount;
+		}
 
-        data.put(0, linecount);
+		data.put(0, linecount);
 
-        SendPacket(&data);
-        TC_LOG_DEBUG("network", "WORLD: Sent motd (SMSG_MOTD)");
+		SendPacket(&data);
+		TC_LOG_DEBUG("network", "WORLD: Sent motd (SMSG_MOTD)");
 
-        // send server info
-        if (sWorld->getIntConfig(CONFIG_ENABLE_SINFO_LOGIN) == 1)
-            chH.PSendSysMessage(_FULLVERSION);
+		// send server info
+		if (sWorld->getIntConfig(CONFIG_ENABLE_SINFO_LOGIN) == 1)
+			chH.PSendSysMessage(_FULLVERSION);
 
-        TC_LOG_DEBUG("network", "WORLD: Sent server info");
-    }
+		TC_LOG_DEBUG("network", "WORLD: Sent server info");
+	}
 
-    //QueryResult* result = CharacterDatabase.PQuery("SELECT guildid, rank FROM guild_member WHERE guid = '%u'", pCurrChar->GetGUIDLow());
-    if (PreparedQueryResult resultGuild = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_GUILD))
-    {
-        Field* fields = resultGuild->Fetch();
-        pCurrChar->SetInGuild(fields[0].GetUInt32());
-        pCurrChar->SetRank(fields[1].GetUInt8());
-    }
-    else if (pCurrChar->GetGuildId())                        // clear guild related fields in case wrong data about non existed membership
-    {
-        pCurrChar->SetInGuild(0);
-        pCurrChar->SetRank(0);
-    }
+	//QueryResult* result = CharacterDatabase.PQuery("SELECT guildid, rank FROM guild_member WHERE guid = '%u'", pCurrChar->GetGUIDLow());
+	if (PreparedQueryResult resultGuild = holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOAD_GUILD))
+	{
+		Field* fields = resultGuild->Fetch();
+		pCurrChar->SetInGuild(fields[0].GetUInt32());
+		pCurrChar->SetRank(fields[1].GetUInt8());
+	}
+	else if (pCurrChar->GetGuildId())                        // clear guild related fields in case wrong data about non existed membership
+	{
+		pCurrChar->SetInGuild(0);
+		pCurrChar->SetRank(0);
+	}
 
-    if (pCurrChar->GetGuildId() != 0)
-    {
-        if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
-            guild->SendLoginInfo(this);
-        else
-        {
-            // remove wrong guild data
-            TC_LOG_ERROR("network", "Player %s (GUID: %u) marked as member of not existing guild (id: %u), removing guild membership for player.", pCurrChar->GetName().c_str(), pCurrChar->GetGUIDLow(), pCurrChar->GetGuildId());
-            pCurrChar->SetInGuild(0);
-        }
-    }
+	if (pCurrChar->GetGuildId() != 0)
+	{
+		if (Guild* guild = sGuildMgr->GetGuildById(pCurrChar->GetGuildId()))
+			guild->SendLoginInfo(this);
+		else
+		{
+			// remove wrong guild data
+			TC_LOG_ERROR("network", "Player %s (GUID: %u) marked as member of not existing guild (id: %u), removing guild membership for player.", pCurrChar->GetName().c_str(), pCurrChar->GetGUIDLow(), pCurrChar->GetGuildId());
+			pCurrChar->SetInGuild(0);
+		}
+	}
 
-    data.Initialize(SMSG_LEARNED_DANCE_MOVES, 4+4);
-    data << uint32(0);
-    data << uint32(0);
-    SendPacket(&data);
+	data.Initialize(SMSG_LEARNED_DANCE_MOVES, 4 + 4);
+	data << uint32(0);
+	data << uint32(0);
+	SendPacket(&data);
 
-    pCurrChar->SendInitialPacketsBeforeAddToMap();
+	pCurrChar->SendInitialPacketsBeforeAddToMap();
 
-    //Show cinematic at the first time that player login
-    if (!pCurrChar->getCinematic())
-    {
-        pCurrChar->setCinematic(1);
+	//Show cinematic at the first time that player login
+	if (!pCurrChar->getCinematic())
+	{
+		pCurrChar->setCinematic(1);
 
-        if (ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(pCurrChar->getClass()))
-        {
-            if (cEntry->CinematicSequence)
-                pCurrChar->SendCinematicStart(cEntry->CinematicSequence);
-            else if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->getRace()))
-                pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
+		if (ChrClassesEntry const* cEntry = sChrClassesStore.LookupEntry(pCurrChar->getClass()))
+		{
+			if (cEntry->CinematicSequence)
+				pCurrChar->SendCinematicStart(cEntry->CinematicSequence);
+			else if (ChrRacesEntry const* rEntry = sChrRacesStore.LookupEntry(pCurrChar->getRace()))
+				pCurrChar->SendCinematicStart(rEntry->CinematicSequence);
 
-            // send new char string if not empty
-            if (!sWorld->GetNewCharString().empty())
-                chH.PSendSysMessage("%s", sWorld->GetNewCharString().c_str());
-        }
-    }
+			// send new char string if not empty
+			if (!sWorld->GetNewCharString().empty())
+				chH.PSendSysMessage("%s", sWorld->GetNewCharString().c_str());
+		}
+	}
 
-    if (!pCurrChar->GetMap()->AddPlayerToMap(pCurrChar) || !pCurrChar->CheckInstanceLoginValid())
-    {
-        AreaTrigger const* at = sObjectMgr->GetGoBackTrigger(pCurrChar->GetMapId());
-        if (at)
-            pCurrChar->TeleportTo(at->target_mapId, at->target_X, at->target_Y, at->target_Z, pCurrChar->GetOrientation());
-        else
-            pCurrChar->TeleportTo(pCurrChar->m_homebindMapId, pCurrChar->m_homebindX, pCurrChar->m_homebindY, pCurrChar->m_homebindZ, pCurrChar->GetOrientation());
-    }
+	if (!pCurrChar->GetMap()->AddPlayerToMap(pCurrChar) || !pCurrChar->CheckInstanceLoginValid())
+	{
+		AreaTrigger const* at = sObjectMgr->GetGoBackTrigger(pCurrChar->GetMapId());
+		if (at)
+			pCurrChar->TeleportTo(at->target_mapId, at->target_X, at->target_Y, at->target_Z, pCurrChar->GetOrientation());
+		else
+			pCurrChar->TeleportTo(pCurrChar->m_homebindMapId, pCurrChar->m_homebindX, pCurrChar->m_homebindY, pCurrChar->m_homebindZ, pCurrChar->GetOrientation());
+	}
 
-    sObjectAccessor->AddObject(pCurrChar);
-    //TC_LOG_DEBUG("Player %s added to Map.", pCurrChar->GetName().c_str());
+	sObjectAccessor->AddObject(pCurrChar);
+	//TC_LOG_DEBUG("Player %s added to Map.", pCurrChar->GetName().c_str());
 
-    pCurrChar->SendInitialPacketsAfterAddToMap();
+	pCurrChar->SendInitialPacketsAfterAddToMap();
 
-    PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ONLINE);
+	PreparedStatement* stmt = CharacterDatabase.GetPreparedStatement(CHAR_UPD_CHAR_ONLINE);
 
-    stmt->setUInt32(0, pCurrChar->GetGUIDLow());
+	stmt->setUInt32(0, pCurrChar->GetGUIDLow());
 
-    CharacterDatabase.Execute(stmt);
+	CharacterDatabase.Execute(stmt);
 
-    stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_ONLINE);
+	stmt = LoginDatabase.GetPreparedStatement(LOGIN_UPD_ACCOUNT_ONLINE);
 
-    stmt->setUInt32(0, GetAccountId());
+	stmt->setUInt32(0, GetAccountId());
 
-    LoginDatabase.Execute(stmt);
+	LoginDatabase.Execute(stmt);
 
-    pCurrChar->SetInGameTime(getMSTime());
+	pCurrChar->SetInGameTime(getMSTime());
 
-    // announce group about member online (must be after add to player list to receive announce to self)
-    if (Group* group = pCurrChar->GetGroup())
-    {
-        //pCurrChar->groupInfo.group->SendInit(this); // useless
-        group->SendUpdate();
-        group->ResetMaxEnchantingLevel();
-    }
+	// announce group about member online (must be after add to player list to receive announce to self)
+	if (Group* group = pCurrChar->GetGroup())
+	{
+		//pCurrChar->groupInfo.group->SendInit(this); // useless
+		group->SendUpdate();
+		group->ResetMaxEnchantingLevel();
+	}
 
-    // friend status
-    sSocialMgr->SendFriendStatus(pCurrChar, FRIEND_ONLINE, pCurrChar->GetGUIDLow(), true);
+	// friend status
+	sSocialMgr->SendFriendStatus(pCurrChar, FRIEND_ONLINE, pCurrChar->GetGUIDLow(), true);
 
-    // Place character in world (and load zone) before some object loading
-    pCurrChar->LoadCorpse();
+	// Place character in world (and load zone) before some object loading
+	pCurrChar->LoadCorpse();
 
-    // setting Ghost+speed if dead
-    if (pCurrChar->m_deathState != ALIVE)
-    {
-        // not blizz like, we must correctly save and load player instead...
-        if (pCurrChar->getRace() == RACE_NIGHTELF)
-            pCurrChar->CastSpell(pCurrChar, 20584, true, 0);// auras SPELL_AURA_INCREASE_SPEED(+speed in wisp form), SPELL_AURA_INCREASE_SWIM_SPEED(+swim speed in wisp form), SPELL_AURA_TRANSFORM (to wisp form)
-        pCurrChar->CastSpell(pCurrChar, 8326, true, 0);     // auras SPELL_AURA_GHOST, SPELL_AURA_INCREASE_SPEED(why?), SPELL_AURA_INCREASE_SWIM_SPEED(why?)
+	// setting Ghost+speed if dead
+	if (pCurrChar->m_deathState != ALIVE)
+	{
+		// not blizz like, we must correctly save and load player instead...
+		if (pCurrChar->getRace() == RACE_NIGHTELF)
+			pCurrChar->CastSpell(pCurrChar, 20584, true, 0);// auras SPELL_AURA_INCREASE_SPEED(+speed in wisp form), SPELL_AURA_INCREASE_SWIM_SPEED(+swim speed in wisp form), SPELL_AURA_TRANSFORM (to wisp form)
+		pCurrChar->CastSpell(pCurrChar, 8326, true, 0);     // auras SPELL_AURA_GHOST, SPELL_AURA_INCREASE_SPEED(why?), SPELL_AURA_INCREASE_SWIM_SPEED(why?)
 
-        pCurrChar->SetMovement(MOVE_WATER_WALK);
-    }
+		pCurrChar->SetMovement(MOVE_WATER_WALK);
+	}
 
-    pCurrChar->ContinueTaxiFlight();
+	pCurrChar->ContinueTaxiFlight();
 
-    // reset for all pets before pet loading
-    if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_PET_TALENTS))
-        Pet::resetTalentsForAllPetsOf(pCurrChar);
+	// reset for all pets before pet loading
+	if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_PET_TALENTS))
+		Pet::resetTalentsForAllPetsOf(pCurrChar);
 
-    // Load pet if any (if player not alive and in taxi flight or another then pet will remember as temporary unsummoned)
-    pCurrChar->LoadPet();
+	// Load pet if any (if player not alive and in taxi flight or another then pet will remember as temporary unsummoned)
+	pCurrChar->LoadPet();
 
-    // Set FFA PvP for non GM in non-rest mode
-    if (sWorld->IsFFAPvPRealm() && !pCurrChar->IsGameMaster() && !pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
-        pCurrChar->SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP);
+	// Set FFA PvP for non GM in non-rest mode
+	if (sWorld->IsFFAPvPRealm() && !pCurrChar->IsGameMaster() && !pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_RESTING))
+		pCurrChar->SetByteFlag(UNIT_FIELD_BYTES_2, 1, UNIT_BYTE2_FLAG_FFA_PVP);
 
-    if (pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
-        pCurrChar->SetContestedPvP();
+	if (pCurrChar->HasFlag(PLAYER_FLAGS, PLAYER_FLAGS_CONTESTED_PVP))
+		pCurrChar->SetContestedPvP();
 
-    // Apply at_login requests
-    if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_SPELLS))
-    {
-        pCurrChar->resetSpells();
-        SendNotification(LANG_RESET_SPELLS);
-    }
+	// Apply at_login requests
+	if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_SPELLS))
+	{
+		pCurrChar->resetSpells();
+		SendNotification(LANG_RESET_SPELLS);
+	}
 
-    if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_TALENTS))
-    {
-        pCurrChar->resetTalents(true);
-        pCurrChar->SendTalentsInfoData(false);              // original talents send already in to SendInitialPacketsBeforeAddToMap, resend reset state
-        SendNotification(LANG_RESET_TALENTS);
-    }
+	if (pCurrChar->HasAtLoginFlag(AT_LOGIN_RESET_TALENTS))
+	{
+		pCurrChar->resetTalents(true);
+		pCurrChar->SendTalentsInfoData(false);              // original talents send already in to SendInitialPacketsBeforeAddToMap, resend reset state
+		SendNotification(LANG_RESET_TALENTS);
+	}
 
-    if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
-        pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
+	if (pCurrChar->HasAtLoginFlag(AT_LOGIN_FIRST))
+		pCurrChar->RemoveAtLoginFlag(AT_LOGIN_FIRST);
 
-    // show time before shutdown if shutdown planned.
-    if (sWorld->IsShuttingDown())
-        sWorld->ShutdownMsg(true, pCurrChar);
+	// show time before shutdown if shutdown planned.
+	if (sWorld->IsShuttingDown())
+		sWorld->ShutdownMsg(true, pCurrChar);
 
-    if (sWorld->getBoolConfig(CONFIG_ALL_TAXI_PATHS))
-        pCurrChar->SetTaxiCheater(true);
+	if (sWorld->getBoolConfig(CONFIG_ALL_TAXI_PATHS))
+		pCurrChar->SetTaxiCheater(true);
 
-    if (pCurrChar->IsGameMaster())
-        SendNotification(LANG_GM_ON);
+	if (pCurrChar->IsGameMaster())
+		SendNotification(LANG_GM_ON);
 
-    std::string IP_str = GetRemoteAddress();
-    TC_LOG_INFO("entities.player.character", "Account: %d (IP: %s) Login Character:[%s] (GUID: %u) Level: %d",
-        GetAccountId(), IP_str.c_str(), pCurrChar->GetName().c_str(), pCurrChar->GetGUIDLow(), pCurrChar->getLevel());
+	std::string IP_str = GetRemoteAddress();
+	TC_LOG_INFO("entities.player.character", "Account: %d (IP: %s) Login Character:[%s] (GUID: %u) Level: %d",
+		GetAccountId(), IP_str.c_str(), pCurrChar->GetName().c_str(), pCurrChar->GetGUIDLow(), pCurrChar->getLevel());
 
-    if (!pCurrChar->IsStandState() && !pCurrChar->HasUnitState(UNIT_STATE_STUNNED))
-        pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
+	if (!pCurrChar->IsStandState() && !pCurrChar->HasUnitState(UNIT_STATE_STUNNED))
+		pCurrChar->SetStandState(UNIT_STAND_STATE_STAND);
 
-    m_playerLoading = false;
+	m_playerLoading = false;
 
-    // Handle Login-Achievements (should be handled after loading)
-    _player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ON_LOGIN, 1);
+	// Handle Login-Achievements (should be handled after loading)
+	_player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ON_LOGIN, 1);
+
+	// The Hunger Games
+	std::stringstream query;
+	query << "SELECT `perk1`,`perk2`,`perk3`,`perk4` FROM `character_perks` WHERE `GUID` = '" << _player->GetGUID() << "'";
+	QueryResult result = CharacterDatabase.Query(query.str().c_str());
+	if (result->GetRowCount() == 1)
+	{
+		Field * fields = result->Fetch();
+
+		std::stringstream addonmessage;
+		addonmessage << "SelectedPerks-";
+		for (int i = 0; i < 4; ++i)
+			addonmessage << std::setfill('0') << std::setw(2) << fields[i].GetInt32();
+
+		SendAddonMessage(_player, addonmessage.str(), 5);
+	}
 
     sScriptMgr->OnPlayerLogin(pCurrChar);
     delete holder;

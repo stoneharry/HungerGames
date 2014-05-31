@@ -241,6 +241,17 @@ function ToggleLoadoutFrame()
 			count = 0
 		end
 	end
+	
+	for i=1,4 do
+		if SELECTED_PERKS[i] ~= 0 then
+			local f = _G["loadout_slot"..tostring(i)]
+			f:SetBackdrop({bgFile = PERKS[SELECTED_PERKS[i]][3], 
+						edgeFile = "", 
+						tile = false, tileSize = 68, edgeSize = 16, 
+						insets = { left = 4, right = 4, top = 4, bottom = 4 }});
+			f.index = SELECTED_PERKS[i]
+		end
+	end
 end
 
 -- For text wrap
