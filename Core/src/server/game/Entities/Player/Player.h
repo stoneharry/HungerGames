@@ -2564,7 +2564,7 @@ class Player : public Unit, public GridObject<Player>
 		// The Hunger Games
 		void SetSelectedPerk(int position, int perk)
 		{
-			if (perk >= NUMBER_OF_PERKS || perk < 0)
+			if (perk >= NUMBER_OF_PERKS || perk < 1)
 				return;
 			// No requirement
 			if (perk_requirement[perk - 1] != 0)

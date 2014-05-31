@@ -504,7 +504,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		return;
 	// Split message by \t
 	std::string first = "";
-	unsigned int i = 0;
+	uint32 i = 0;
 	for (; i < msg.length(); ++i)
 	{
 		char c = msg[i];
@@ -576,7 +576,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	else if (first.compare("PLRSLB") == 0)
 	{
 		// Filter characters that could cause bugs
-		for (unsigned int i = 0; i < second.length(); ++i)
+		for (uint32 i = 0; i < second.length(); ++i)
 			if (second[i] == '-')
 				second[i] = '_';
 
@@ -593,7 +593,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	else if (first.compare("JoinGame") == 0)
 	{
 		// Filter characters that could cause bugs
-		for (unsigned int i = 0; i < second.length(); ++i)
+		for (uint32 i = 0; i < second.length(); ++i)
 		if (second[i] == '-')
 			second[i] = '_';
 		// Retrieve which game is being requested for
@@ -615,14 +615,14 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	{
 		if (second.length() < 8)
 			return;
-		int perks[4];
+		int32 perks[4];
 		std::string talents[4];
 		// retrieve talents
 		talents[0] = second.substr(0, 2);
 		talents[1] = second.substr(2, 2);
 		talents[2] = second.substr(4, 2);
 		talents[3] = second.substr(6, 2);
-		for (int i = 0; i < 4; ++i)
+		for (int32 i = 0; i < 4; ++i)
 		{
 			// verify them
 			if (!isdigit(talents[i][0]) || !isdigit(talents[i][1]))
@@ -633,17 +633,15 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		}
 		// Save to database
 		QueryResult result = CharacterDatabase.PQuery("SELECT COUNT(*) FROM `character_perks` WHERE `GUID` = '%u'", sender->GetGUIDLow());
-		if (!result)
-			return;
-		int rows = result->Fetch()->GetInt32();
+		uint64 rows = result->Fetch()[0].GetUInt64();
 		if (rows == 0)
 		{
-			CharacterDatabase.PQuery("INSERT INTO `character_perks` VALUES ('%u', '%u', '%u', '%u', '%u')", 
+			CharacterDatabase.DirectPExecute("INSERT INTO `character_perks` VALUES ('%u', '%d', '%d', '%d', '%d')",
 				sender->GetGUIDLow(), perks[0], perks[1], perks[2], perks[3]);
 		}
 		else if (rows == 1)
 		{
-			CharacterDatabase.PQuery("UPDATE `character_perks` SET `perk1`='%u',`perk2`='%u',`perk3`='%u',`perk4`='%u' WHERE `GUID` = '%u'",
+			CharacterDatabase.DirectPExecute("UPDATE `character_perks` SET `perk1`='%d',`perk2`='%d',`perk3`='%d',`perk4`='%d' WHERE `GUID` = '%u'",
 				perks[0], perks[1], perks[2], perks[3], sender->GetGUIDLow());
 		}
 		else
