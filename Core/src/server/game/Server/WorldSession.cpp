@@ -442,15 +442,15 @@ void WorldSession::LogoutPlayer(bool save)
 
     if (_player)
     {
-		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
-		{
-			HG_Game* temp = (HG_Game*)pair.second;
-			if (!temp->HasPlayer(_player->GetGUID()))
-			{
-				temp->RemovePlayer(_player, _player->GetGUID(), -1);
-				break;
-			}
-		}
+        for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
+        {
+            HG_Game* temp = (HG_Game*)pair.second;
+            if (temp->HasPlayer(_player->GetGUID()))
+            {
+                temp->RemovePlayer(_player, _player->GetGUID(), -1);
+                break;
+            }
+        }
 
         if (uint64 lguid = _player->GetLootGUID())
             DoLootRelease(lguid);
@@ -487,6 +487,7 @@ void WorldSession::LogoutPlayer(bool save)
 
         sOutdoorPvPMgr->HandlePlayerLeaveZone(_player, _player->GetZoneId());
 
+        //! \todo replace hack fix above with system like this one
         for (int i=0; i < PLAYER_MAX_BATTLEGROUND_QUEUES; ++i)
         {
             if (BattlegroundQueueTypeId bgQueueTypeId = _player->GetBattlegroundQueueTypeId(i))

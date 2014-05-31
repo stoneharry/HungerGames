@@ -1,6 +1,8 @@
 
 #include "HG_Game.h"
 
+static uint64_t HG_GUID_COUNTER = 0;
+
 HG_Game::HG_Game()
 {
 	GUID = HG_GUID_COUNTER++;
@@ -35,7 +37,6 @@ void HG_Game::AddPlayer(Player* player)
 // This is not currently calld when a player logs out and needs to be
 void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 team)
 {
-	Battleground::RemovePlayer(player, guid, team);
 	for (int i = 0; i < 10; ++i)
 	{
 		if (playersInGame[i] != NULL && playersInGame[i]->GetGUID() == guid)
@@ -68,4 +69,15 @@ std::string HG_Game::getPlayerNameListStr()
 		}
 	}
 	return str.str();
+}
+
+bool HG_Game::SetGameName(std::string name, uint64 playerGUID)
+{
+    if (playerGUID == 0 && !IsHost(playerGUID))
+        return false;
+    if (GetStatus() >= STATUS_IN_PROGRESS)
+        return false;
+    //Todo: Filter non latin characters, disallow excessive caps ect.
+    GameName = name;
+    return true;
 }
