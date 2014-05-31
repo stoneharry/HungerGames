@@ -58,6 +58,8 @@ typedef std::deque<Mail*> PlayerMails;
 #define PLAYER_MAX_DAILY_QUESTS     25
 #define PLAYER_EXPLORED_ZONES_SIZE  128
 
+#define NUMBER_OF_PERKS 25
+
 // Note: SPELLMOD_* values is aura types in fact
 enum SpellModType
 {
@@ -2559,7 +2561,39 @@ class Player : public Unit, public GridObject<Player>
 
         uint8 m_grantableLevels;
 
+		// The Hunger Games
+		void SetSelectedPerk(int position, int perk)
+		{
+			if (perk >= NUMBER_OF_PERKS || perk < 0)
+				return;
+			// No requirement
+			if (perk_requirement[perk - 1] != 0)
+			{
+				if (!HasAchieved(perk_requirement[perk - 1]))
+				{
+					// Does not have achievement
+					return;
+				}
+			}
+			HG_Selected_Perks[position] = perk;
+		}
+
+		int GetSelectedPerk(int position)
+		{
+			return HG_Selected_Perks[position];
+		}
+
+		int* GetSelectedPerks()
+		{
+			return HG_Selected_Perks;
+		}
+
     private:
+		// The Hunger Games
+		int HG_Selected_Perks[4];
+		// The achievement requirements for each perk
+		const static int perk_requirement[NUMBER_OF_PERKS];
+
         // internal common parts for CanStore/StoreItem functions
         InventoryResult CanStoreItem_InSpecificSlot(uint8 bag, uint8 slot, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool swap, Item* pSrcItem) const;
         InventoryResult CanStoreItem_InBag(uint8 bag, ItemPosCountVec& dest, ItemTemplate const* pProto, uint32& count, bool merge, bool non_specialized, Item* pSrcItem, uint8 skip_bag, uint8 skip_slot) const;

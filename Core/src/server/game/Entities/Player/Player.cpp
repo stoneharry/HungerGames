@@ -897,7 +897,17 @@ Player::Player(WorldSession* session): Unit(true)
     _activeCheats = CHEAT_NONE;
     m_achievementMgr = new AchievementMgr(this);
     m_reputationMgr = new ReputationMgr(this);
+
+	// The Hunger Games
+	for (int i = 0; i < 4; ++i)
+		HG_Selected_Perks[i] = 0;
 }
+
+const int Player::perk_requirement[NUMBER_OF_PERKS] = {
+	0, 0, 0, 0, 0, 0, 0, 0, 5000, 5001, 5002, 5003, 5004,
+	5005, 5006, 5018, 5019, 5020, 5021, 5022, 5023, 5024,
+	5025, 5026
+};
 
 Player::~Player()
 {

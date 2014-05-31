@@ -611,6 +611,25 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		}
 		sWorld->SendServerMessage(SERVER_MSG_STRING, "Something went wrong trying to join this game!", sender);
 	}
+	else if (first.compare("SelectTalents") == 0)
+	{
+		if (second.length() < 8)
+			return;
+		std::string talents[4];
+		// retrieve talents
+		talents[0] = second.substr(0, 2);
+		talents[1] = second.substr(2, 2);
+		talents[2] = second.substr(4, 2);
+		talents[3] = second.substr(6, 2);
+		for (int i = 0; i < 4; ++i)
+		{
+			// verify them
+			if (!isdigit(talents[i][0]) || !isdigit(talents[i][1]))
+				return;
+			// Set selected perk
+			sender->SetSelectedPerk(i, atoi(talents[i].c_str()));
+		}
+	}
 }
 
 void WorldSession::SendAddonMessage(Player* player, std::string message, uint32 packet)

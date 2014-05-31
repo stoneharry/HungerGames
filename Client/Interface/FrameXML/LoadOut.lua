@@ -115,6 +115,9 @@ local function OnDragStop(self)
 end
 
 local function ReturnToMainMenu(self)
+	local perks_selected = string.format("%02i", SELECTED_PERKS[1]) .. string.format("%02i", SELECTED_PERKS[2])
+							.. string.format("%02i", SELECTED_PERKS[3]) .. string.format("%02i", SELECTED_PERKS[4])
+	SendAddonMessage("SelectTalents", perks_selected, "WHISPER", UnitName("player"))
 	MENU_SELECTED = 0
 	LOADOUT_FRAME:Hide()
 	MainFrame_Back:Show()
