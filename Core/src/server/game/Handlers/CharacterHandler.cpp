@@ -1031,10 +1031,8 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
 	_player->UpdateAchievementCriteria(ACHIEVEMENT_CRITERIA_TYPE_ON_LOGIN, 1);
 
 	// The Hunger Games
-	std::stringstream query;
-	query << "SELECT `perk1`,`perk2`,`perk3`,`perk4` FROM `character_perks` WHERE `GUID` = '" << _player->GetGUID() << "'";
-	QueryResult result = CharacterDatabase.Query(query.str().c_str());
-	if (result->GetRowCount() == 1)
+	QueryResult result = CharacterDatabase.PQuery("SELECT `perk1`,`perk2`,`perk3`,`perk4` FROM `character_perks` WHERE `GUID` = '%u'", _player->GetGUIDLow());
+	if (result)
 	{
 		Field * fields = result->Fetch();
 
