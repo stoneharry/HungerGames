@@ -523,7 +523,8 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 	if (first.compare("MAINMENU") == 0)
 	{
 		// Handle second GetTheGamesAvailable
-		if (second.compare("GetTheGamesAvailable") == 0)
+        if (second.compare("GetTheGamesAvailable") == 0
+            && sBattlegroundMgr->bgDataStore.find(BATTLEGROUND_HG_1) != sBattlegroundMgr->bgDataStore.end())
 		{
 			// Send: GAMES-icon-gamename...
 			std::stringstream str;
@@ -536,7 +537,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 				if (status != STATUS_WAIT_LEAVE)
 				{
 					str << (status >= STATUS_WAIT_JOIN ? "-2-" : "-1-");
-					str << pair.second->GetGameName();
+                    str << ((HG_Game *)pair.second)->GetGameName();
 				}
 			}
 
@@ -560,7 +561,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
 		{
 			HG_Game* temp = (HG_Game*)pair.second;
-			if (!temp->HasPlayer(sender->GetGUID()))
+            if (!temp->HasPlayer(sender->GetGUID())) //wat? what has that to do with game name?
 			{
 				sender->LeaveBattleground(true);
 				break;
@@ -648,7 +649,7 @@ void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 		}
 		else
 		{
-			TC_LOG_INFO("server.error", "[ERROR]: Character %s has multiple perk records in the database.", sender->GetName());
+            TC_LOG_INFO("server.error", "[ERROR]: Character %s has multiple perk records in the database.", sender->GetName().c_str());
 		}
 	}
 }
