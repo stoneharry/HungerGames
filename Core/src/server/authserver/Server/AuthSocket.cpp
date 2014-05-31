@@ -308,6 +308,19 @@ void AuthSocket::_SetVSFields(const std::string& rI)
     OPENSSL_free(s_hex);
 }
 
+//! \todo this is not a perfect place. maybe move AccountMgr's version of it into util
+std::string CalculateShaPassHash(std::string const& name, std::string const& password)
+{
+    SHA1Hash sha;
+    sha.Initialize();
+    sha.UpdateData(name);
+    sha.UpdateData(":");
+    sha.UpdateData(password);
+    sha.Finalize();
+
+    return ByteArrayToHexStr(sha.GetDigest(), sha.GetLength());
+}
+
 // Logon Challenge command handler
 bool AuthSocket::_HandleLogonChallenge()
 {
@@ -545,25 +558,26 @@ bool AuthSocket::_HandleLogonChallenge()
 		{
 			// Oh screw this I'll come back to it
 			// This will only handle if the account doesn't exist already anyway
-			if (_login.substr(0, 1) == "?")
-			{
-				if (_login.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?") != _login.npos)
+            if (_login[0] == '?')
+            {
+                // not sure what that is supposed to be
+                //if (_login.find_first_not_of("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789?") != _login.npos)
+                //{
+                //	pkt << uint8(WOW_FAIL_NO_GAME_ACCOUNT);
+                //	socket().send((char const*)pkt.contents(), pkt.size());
+                //	return true;
+                //}
+
+                size_t pass_start = _login.find("?", 1) + 1;
+                if (pass_start == std::string::npos || pass_start < 4) //No username
 				{
 					pkt << uint8(WOW_FAIL_NO_GAME_ACCOUNT);
 					socket().send((char const*)pkt.contents(), pkt.size());
 					return true;
 				}
 
-				int pass_start = _login.find("?", 1) + 1;
-				if (pass_start < 4) //No username
-				{
-					pkt << uint8(WOW_FAIL_NO_GAME_ACCOUNT);
-					socket().send((char const*)pkt.contents(), pkt.size());
-					return true;
-				}
-
-				int pass_end = _login.rfind("?");
-				if (pass_end <= pass_start) //No password
+                size_t pass_end = _login.rfind("?");
+                if (pass_end == std::string::npos || pass_end <= pass_start) //No password
 				{
 					pkt << uint8(WOW_FAIL_NO_GAME_ACCOUNT);
 					socket().send((char const*)pkt.contents(), pkt.size());
@@ -572,14 +586,40 @@ bool AuthSocket::_HandleLogonChallenge()
 
 				int name_len = pass_start - 2;
 				int pass_len = pass_end - pass_start;
-				std::string username = _login.substr(1, name_len);
-				std::string password = _login.substr(pass_start, pass_len);
 
-				LoginDatabase.Query("INSERT INTO ");
+                std::string username = _login.substr(1, name_len);
+                std::string password = _login.substr(pass_start, pass_len);
+                std::string email = "";
+
+                std::transform(username.begin(), username.end(), username.begin(), ::toupper);
+                std::transform(password.begin(), password.end(), password.begin(), ::toupper);
+
+                PreparedStatement* stmt = LoginDatabase.GetPreparedStatement(LOGIN_GET_ACCOUNT_ID_BY_USERNAME);
+                stmt->setString(0, username);
+                PreparedQueryResult result = LoginDatabase.Query(stmt);
+
+                if(result) //acc name exists
+                {
+                    pkt << uint8(WOW_FAIL_NO_GAME_ACCOUNT);
+                    socket().send((char const*)pkt.contents(), pkt.size());
+                    return true;
+                }
+
+                stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_ACCOUNT);
+
+                stmt->setString(0, username);
+                stmt->setString(1, CalculateShaPassHash(username, password));
+                stmt->setString(2, email);
+                stmt->setString(3, email);
+
+                LoginDatabase.DirectExecute(stmt); // Enforce saving, otherwise AddGroup can fail
+
+                stmt = LoginDatabase.GetPreparedStatement(LOGIN_INS_REALM_CHARACTERS_INIT);
+                LoginDatabase.Execute(stmt);
 
                 TC_LOG_INFO("server.authserver", "Created account: %s", username.c_str());
 				return true;
-			}
+            }
 			//no account
 			pkt << uint8(WOW_FAIL_UNKNOWN_ACCOUNT);
 		}
