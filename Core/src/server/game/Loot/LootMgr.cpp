@@ -413,6 +413,60 @@ void LootItem::AddAllowedLooter(const Player* player)
 // Inserts the item into the loot (called by LootTemplate processors)
 void Loot::AddItem(LootStoreItem const& item)
 {
+	// The Hunger Games
+	// This code is for random item generation
+	if (item.itemid == 1000000) // some arbitrary number that we can flag with, this can be common (white)
+	{
+		// Generate a item ID to retrieve
+		/*
+		4 bits: item inventory type
+		1 bool: stren
+		1 bool: stam
+		1 bool: agil
+		1 bool: spirit
+		4 bits: stat1
+		4 bits: stat2
+		4 bits: stat3
+		4 bits: stat4
+		*/
+
+		try
+		{
+			std::bitset<32> x(0);
+
+			const int32 types[] = { 7 }; // 7 = legs
+
+			// type
+			int32 type = irand(0, 0);
+			std::bitset<4> typ(type);
+			for (int i = 0; i < 4; ++i)
+				x[i] = typ[i];
+
+			// which stat to use
+			int32 stat = irand(0, 3);
+			x[4 + stat] = 1;
+
+			// stat1 value
+			std::bitset<4> y(1);
+			for (int i = 8; i < 12; ++i)
+				x[i] = y[i];
+
+			// Get entry based of bits set
+			uint32 entry = (uint32)x.to_ulong();
+
+			std::stringstream test;
+			test << "Entry generated: " << entry;
+
+			TC_LOG_INFO("server.info", "Entry generated: %u", entry);
+		}
+		catch (std::exception ex)
+		{
+			TC_LOG_INFO("server.error", "ERROR: %s", ex.what());
+		}
+
+		return;
+	}
+
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item.itemid);
     if (!proto)
         return;

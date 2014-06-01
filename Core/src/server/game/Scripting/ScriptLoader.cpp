@@ -17,6 +17,8 @@
 
 #include "ScriptLoader.h"
 
+#undef SCRIPTS
+
 //examples
 void AddSC_example_creature();
 void AddSC_example_escort();
