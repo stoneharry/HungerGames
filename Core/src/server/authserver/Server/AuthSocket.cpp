@@ -600,7 +600,7 @@ bool AuthSocket::_HandleLogonChallenge()
 
                 if(result) //acc name exists
                 {
-                    pkt << uint8(WOW_FAIL_NO_GAME_ACCOUNT);
+                    pkt << uint8(WOW_FAIL_INTERNET_GAME_ROOM_WITHOUT_BNET);
                     socket().send((char const*)pkt.contents(), pkt.size());
                     return true;
                 }
@@ -618,6 +618,9 @@ bool AuthSocket::_HandleLogonChallenge()
                 LoginDatabase.Execute(stmt);
 
                 TC_LOG_INFO("server.authserver", "Created account: %s", username.c_str());
+
+				pkt << uint8(WOW_FAIL_USE_BATTLENET);
+				socket().send((char const*)pkt.contents(), pkt.size());
 				return true;
             }
 			//no account

@@ -49,7 +49,7 @@ function AccountLogin_OnLoad(self)
 end
 
 function CreateAccountFinal(self)
-	CreateAccountFrame:Hide();
+	PlaySound("gsLoginNewAccount");
 	local username = AccountNameEditBox:GetText();
 	local password = AccountPasswordEditBox:GetText();
 	local cpassword = AccountPasswordConfirmEditBox:GetText();
@@ -64,10 +64,11 @@ function CreateAccountFinal(self)
 	
 	local info = table.concat({"?", username, "?", password, "?"});
 	CreateAccountReply = true;
-
+	
+	--AccountCreateButton:Disable();
+	CreateAccountFrame:Hide();
+	
 	DefaultServerLogin(info, tostring(math.random(1, 100000)));
-
-	AccountCreateButton:Disable();
 end
 
 function CreateAccountTextChange()

@@ -88,6 +88,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
+						PlaySound("gsLoginNewAccount");
 						CreateAccountFrame:Hide()
 					</OnClick>
 				</Scripts>
@@ -664,6 +665,7 @@
 								AccountPasswordEditBox:SetText("");
 								AccountPasswordConfirmEditBox:SetText("");
 								CreateFinalAccountButton:Disable();
+								PlaySound("gsLoginNewAccount");
 							</OnClick>
 						</Scripts>
 					</Button>

@@ -523,23 +523,12 @@ function GlueDialog_Show(which, text, data)
 	end
 	
 	if ( CreateAccountReply == true ) then
-		local old = text ~= nil and text or dialogInfo.text;
-		local new = "Something went wrong. Account creation failed."
-		
+		local old = text ~= nil and text or dialogInfo.text;		
 		if ( old == LOGIN_DBBUSY ) then
 			CreateAccountReply = false;
-			CreateAccountFrame:Hide();
-			glueText:Hide();
-			DefaultServerLogin(AccountNameEditBox:GetText(), AccountPasswordEditBox:GetText());
 			return;
-		elseif ( old == LOGIN_ALREADYONLINE ) then
-			new = "Account name is already taken!";
-		elseif ( old == LOGIN_UNKNOWN_ACCOUNT ) then
-			new = "Account created successfully!";
 		end
-		
 		CreateAccountReply = false;
-		glueText:SetText(new);
 		AccountPasswordEditBox:SetText("");
 		AccountPasswordConfirmEditBox:SetText("");
 	end
@@ -631,7 +620,7 @@ function GlueDialog_Show(which, text, data)
 	else
 		textHeight = GlueDialogText:GetHeight();
 	end
-
+	
 	-- now size the dialog box height
 	if ( dialogInfo.hasEditBox ) then
 		GlueDialogBackground:SetHeight(16 + textHeight + 8 + GlueDialogEditBox:GetHeight() + 8 + GlueDialogButton1:GetHeight() + 16);
