@@ -418,51 +418,48 @@ void Loot::AddItem(LootStoreItem const& item)
 	if (item.itemid == 1000000) // some arbitrary number that we can flag with, this can be common (white)
 	{
 		// Generate a item ID to retrieve
+		std::bitset<32> x(0);
+
+		// 5 = chest, 6 = waist, 7 = legs, 8 = feet, 9 = wrists
+		// 10 = hands, 13 = weapon, 14 = shield, 16 = back
+		//    9 values
+		const int32 types[] = { 5, 6, 7, 8, 9, 10, 13, 14, 16 };
+
 		/*
 		4 bits: item inventory type
-		1 bool: stren
-		1 bool: stam
-		1 bool: agil
-		1 bool: spirit
-		4 bits: stat1
-		4 bits: stat2
-		4 bits: stat3
-		4 bits: stat4
+		4 bits: stren
+		4 bits: agil
+		4 bits: stam
+		4 bits: spir
 		*/
 
-		try
-		{
-			std::bitset<32> x(0);
+		// type
+		int32 type = types[irand(0, 8)];
+		std::bitset<4> typ(type);
+		for (int i = 0; i < 4; ++i)
+			x[i] = typ[i];
 
-			const int32 types[] = { 7 }; // 7 = legs
+		// which stat to use
+		int32 stat = irand(0, 3);
 
-			// type
-			int32 type = irand(0, 0);
-			std::bitset<4> typ(type);
-			for (int i = 0; i < 4; ++i)
-				x[i] = typ[i];
+		// Set that stat = 1
+		// 4 = stren
+		// + 4 * stat = stat index
+		// + 3 = 4th bit
+		x[4 + (4 * stat) + 3] = 1;
 
-			// which stat to use
-			int32 stat = irand(0, 3);
-			x[4 + stat] = 1;
+		// Get entry based of bits set
+		uint32 entry = (uint32)x.to_ulong();
 
-			// stat1 value
-			std::bitset<4> y(1);
-			for (int i = 8; i < 12; ++i)
-				x[i] = y[i];
+		// Increment entry to get a higher value
+		uint64 data_size_test = entry += 1000000;
+		if (data_size_test < 0xffffffff)
+			entry += 100000;
 
-			// Get entry based of bits set
-			uint32 entry = (uint32)x.to_ulong();
+		std::stringstream test;
+		test << "Entry generated: " << entry;
 
-			std::stringstream test;
-			test << "Entry generated: " << entry;
-
-			TC_LOG_INFO("server.info", "Entry generated: %u", entry);
-		}
-		catch (std::exception ex)
-		{
-			TC_LOG_INFO("server.error", "ERROR: %s", ex.what());
-		}
+		TC_LOG_INFO("server.info", "Generated item entry: %s", test.str().c_str());
 
 		return;
 	}
