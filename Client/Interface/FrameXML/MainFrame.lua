@@ -383,6 +383,8 @@ function GoBackToMainMenu()
 	--JoinChannelByName(MENU_CHANNELS[1])
 	
 	-- Update menu selected
+	ONLINE_PLAYERS = {}
+	SB_Main_ScrollBar_Update()
 	MENU_SELECTED = 0
 	dur = 31
 end
