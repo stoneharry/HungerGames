@@ -12,10 +12,11 @@ local numScrollBarButtons = 50
 local dur = 29
 local mus_dur = 0
 local ONLINE_PLAYERS = {}
-local UPDATE_INTERVALS = {30, 5, 5, 0 ,0, 60}
+local UPDATE_INTERVALS = {30, 20, 20, 0 ,0, 60}
 local playing = nil
 local links = {}
 local IN_GAME = false
+local CAN_JOIN_GAME = false
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
@@ -94,6 +95,34 @@ function toggleInterface(hide)
 		MainMenuBarLeftEndCap:Show() -- to hide the left one
 		MainMenuBarRightEndCap:Show() -- to hide the right one
 		--ShapeshiftBarFrame:Show()
+	end
+end
+
+local function HandleGameModeSwitch(self)
+	if (_G["RankedGameChck"] == self) then
+		CasualGameChck:SetChecked(not self:GetChecked())
+	else
+		RankedGameChck:SetChecked(not self:GetChecked())
+	end
+	
+	if (_G["RankedGameChck"]:GetChecked()) then
+		CreateGameBtn:SetText("Join A Ranked Game")
+		CreateGameBtn:Enable()
+		GameNameInput:Hide()
+		GameNameInput:SetText("")
+		GameNameStr:Hide()
+		MainFrame_OnlinePlayerList_2:Hide()
+		GamePassStr:Hide()
+		GamePasswordInput:Hide()
+		CAN_JOIN_GAME = false
+	else
+		CreateGameBtn:SetText("Create Game")
+		GameNameInput:Show()
+		GameNameStr:Show()
+		MainFrame_OnlinePlayerList_2:Show()
+		GamePassStr:Show()
+		GamePasswordInput:Show()
+		CAN_JOIN_GAME = true
 	end
 end
 
@@ -177,11 +206,38 @@ function mainFrameLoaded()
 	fontString:SetText(CLICK_GAME_TO_JOIN_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_OnlinePlayerList_2, "TOPLEFT", 30, -50)
 	
+	fontString = MainFrame_Chat_2:CreateFontString(nil, "OVERLAY")
+	fontString:SetFontObject("GameFontNormalHuge")
+	fontString:SetTextColor(1, 1, 1)
+	fontString:SetText("Ranked Game:")
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 30, -50)
+	
+	fontString = MainFrame_Chat_2:CreateFontString(nil, "OVERLAY")
+	fontString:SetFontObject("GameFontNormalHuge")
+	fontString:SetTextColor(1, 1, 1)
+	fontString:SetText("Casual Game:")
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 30, -75)
+	
+	local checkbtn = CreateFrame("CheckButton", "RankedGameChck", MainFrame_Chat_2, "ChatConfigCheckButtonTemplate")
+	checkbtn:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 170, -50)
+	checkbtn:SetScript("OnClick", HandleGameModeSwitch)
+	
+	checkbtn = CreateFrame("CheckButton", "CasualGameChck", MainFrame_Chat_2, "ChatConfigCheckButtonTemplate")
+	checkbtn:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 170, -75)
+	checkbtn:SetScript("OnClick", HandleGameModeSwitch)
+	checkbtn:SetChecked(true)
+	
 	fontString = MainFrame_Chat_2:CreateFontString("GameNameStr", "OVERLAY")
 	fontString:SetFontObject("GameFontNormalHuge")
 	fontString:SetTextColor(1, 1, 1)
 	fontString:SetText("Game Name:")
-	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 30, -50)
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 30, -115)
+	
+	fontString = MainFrame_Chat_2:CreateFontString("GamePassStr", "OVERLAY")
+	fontString:SetFontObject("GameFontNormalHuge")
+	fontString:SetTextColor(1, 1, 1)
+	fontString:SetText("Game Password:")
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 30, -145)
 	
 	local editBoxBackdrop = {
 	  bgFile = [[Interface\Tooltips\UI-Tooltip-Background]],
@@ -199,13 +255,12 @@ function mainFrameLoaded()
 	fontString = CreateFrame("EditBox", "GameNameInput", MainFrame_Chat_2)
 	fontString:SetWidth(250)
 	fontString:SetHeight(37)
-	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 160, -47)
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 180, -110)
 	fontString:SetFontObject("ChatFontNormal")
 	fontString:SetMaxLetters(40)
 	fontString:SetBackdrop(editBoxBackdrop)
 	fontString:SetBackdropBorderColor(0.8, 0.8, 0.8)
 	fontString:SetBackdropColor(0.09, 0.09, 0.09)
-	-- Sets the insets from the edit box's edges which determine its interactive text area
 	fontString:SetTextInsets(14, -14, 0, 4)
 	fontString:SetScript("OnTextChanged",
 		function(self, userInput)
@@ -215,21 +270,39 @@ function mainFrameLoaded()
 				CreateGameBtn:Enable();
 			end
 		end)
+	fontString:SetScript("OnTabPressed", function() _G["GamePasswordInput"]:SetFocus() end)
+		
+	fontString = CreateFrame("EditBox", "GamePasswordInput", MainFrame_Chat_2)
+	fontString:SetWidth(250)
+	fontString:SetHeight(37)
+	fontString:SetPassword()
+	fontString:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 180, -140)
+	fontString:SetFontObject("ChatFontNormal")
+	fontString:SetMaxLetters(40)
+	fontString:SetBackdrop(editBoxBackdrop)
+	fontString:SetBackdropBorderColor(0.8, 0.8, 0.8)
+	fontString:SetBackdropColor(0.09, 0.09, 0.09)
+	fontString:SetTextInsets(14, -14, 0, 4)
+	fontString:SetScript("OnTabPressed", function() _G["GameNameInput"]:SetFocus() end)
 	
-	button = CreateFrame("Button", "CreateGameBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
-	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -118, -65)
+	button = CreateFrame("Button", "CreateGameBtn", MainFrame_Chat_2, "LeftMiddleButtonTemplate")
+	button:SetPoint("BOTTOMRIGHT", MainFrame_Chat_2, "BOTTOMRIGHT", 247, 120)
 	button:SetText("Create Game")
 	button:SetWidth(200)
 	button:SetFrameLevel(4)
 	button:Disable()
 	button:SetScript("OnClick",
 		function()
-			SendAddonMessage("CREATEGAME", _G["GameNameInput"]:GetText(), "WHISPER", UnitName("player"))
+			local messageToSend = _G["GameNameInput"]:GetText()
+			if string.len(_G["GamePasswordInput"]:GetText()) > 0 then
+				messageToSend = messageToSend.."-".._G["GamePasswordInput"]:GetText()
+			end
+			SendAddonMessage("CREATEGAME", messageToSend, "WHISPER", UnitName("player"))
 			OpenGameLobby(_G["GameNameInput"]:GetText())
 		end)
 	
-	button = CreateFrame("Button", "GoBackBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
-	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -123, -155)
+	button = CreateFrame("Button", "GoBackBtn", MainFrame_Chat_2, "LeftMiddleButtonTemplate")
+	button:SetPoint("BOTTOMRIGHT", MainFrame_Chat_2, "BOTTOMRIGHT", 242, 29)
 	button:SetText("Go Back")
 	button:SetWidth(190)
 	button:SetFrameLevel(4)
@@ -248,6 +321,9 @@ function HandleScollBarEntryClick(self)
 	end
 	-- If wanting to join a game
 	if MENU_SELECTED == 1 then
+		if not CAN_JOIN_GAME then
+			return
+		end
 		-- substring 9, 10 if whitespace
 		local lobbyName = string.sub(self:GetText(), 9)
 		if string.starts(lobbyName, " ") then

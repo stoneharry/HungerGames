@@ -576,6 +576,22 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<AbsDimension x="-490" y="0" />
 					</Anchor>
 				</Anchors>
+				<Layers>
+					<Layer level="ARTWORK">
+						<Texture file="Interface\Portal\Widgets\ExitAndStuffPart">
+							<Size>
+								<AbsDimension x="296" y="168"/>
+							</Size>
+							<Anchors>
+								<Anchor point="BOTTOMRIGHT">
+									<Offset>
+										<AbsDimension x="265" y="10"/>
+									</Offset>
+								</Anchor>
+							</Anchors>
+						</Texture>
+					</Layer>
+				</Layers>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 					edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
@@ -594,22 +610,6 @@ HIGHLIGHT - Level 4. Place your text, objects, and buttons in this level
 						<AbsDimension x="0" y="180" />
 					</Anchor>
 				</Anchors>
-				<Layers>
-					<Layer level="ARTWORK">
-						<Texture file="Interface\Portal\Widgets\ExitAndStuffPart">
-							<Size>
-								<AbsDimension x="296" y="168"/>
-							</Size>
-							<Anchors>
-								<Anchor point="BOTTOMRIGHT">
-									<Offset>
-										<AbsDimension x="-100" y="-175"/>
-									</Offset>
-								</Anchor>
-							</Anchors>
-						</Texture>
-					</Layer>
-				</Layers>
 			    <Backdrop bgFile="Interface\TutorialFrame\TutorialFrameBackground"
 					edgeFile="Interface\Portal\Widgets\bnet-dialoguebox-border" tile="true">
 					<EdgeSize val="64"/>
