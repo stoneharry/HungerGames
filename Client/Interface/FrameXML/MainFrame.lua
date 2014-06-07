@@ -221,11 +221,12 @@ function mainFrameLoaded()
 	local checkbtn = CreateFrame("CheckButton", "RankedGameChck", MainFrame_Chat_2, "ChatConfigCheckButtonTemplate")
 	checkbtn:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 170, -50)
 	checkbtn:SetScript("OnClick", HandleGameModeSwitch)
-	
+
 	checkbtn = CreateFrame("CheckButton", "CasualGameChck", MainFrame_Chat_2, "ChatConfigCheckButtonTemplate")
 	checkbtn:SetPoint("TOPLEFT", MainFrame_Chat_2, "TOPLEFT", 170, -75)
 	checkbtn:SetScript("OnClick", HandleGameModeSwitch)
 	checkbtn:SetChecked(true)
+	CAN_JOIN_GAME = true -- initial state
 	
 	fontString = MainFrame_Chat_2:CreateFontString("GameNameStr", "OVERLAY")
 	fontString:SetFontObject("GameFontNormalHuge")
