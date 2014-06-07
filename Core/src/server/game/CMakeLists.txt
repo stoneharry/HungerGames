@@ -50,7 +50,6 @@ file(GLOB_RECURSE sources_Weather Weather/*.cpp Weather/*.h)
 file(GLOB_RECURSE sources_World World/*.cpp World/*.h)
 
 # Create game-libary
-
 if (USE_COREPCH)
   set(game_STAT_PCH_HDR PrecompiledHeaders/gamePCH.h)
   set(game_STAT_PCH_SRC PrecompiledHeaders/gamePCH.cpp)
@@ -199,6 +198,8 @@ include_directories(
   ${MYSQL_INCLUDE_DIR}
   ${OPENSSL_INCLUDE_DIR}
 )
+
+BuildVSDirs(${game_STAT_SRCS} ${game_STAT_PCH_SRC})
 
 add_library(game STATIC
   ${game_STAT_SRCS}
