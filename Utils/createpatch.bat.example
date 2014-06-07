@@ -1,0 +1,5 @@
+:: using mpqcreate you can create a bat to rebuild the pathc when ever you need to.
+:: just rename this file to createpatch.bat and adjust the following files to match your paths.
+:: (i already put it into gitignore)
+@echo off
+bin\mpqcreate.exe -f "C:\World.of.Warcraft.3.3.5\Data\deDE\patch-deDE-4.MPQ" ../Client

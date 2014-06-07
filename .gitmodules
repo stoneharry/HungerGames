@@ -1,0 +1,3 @@
+[submodule "Utils/MPQCreate"]
+	path = Utils/MPQCreate
+	url = https://github.com/hanfer/MPQCreate.git
