@@ -39,7 +39,7 @@
 #include "Util.h"
 #include "ScriptMgr.h"
 #include "AccountMgr.h"
-#include "HG_Game.h"
+#include "HGManager.h"
 #include "BattlegroundMgr.h"
 #include <iomanip>
 
@@ -500,157 +500,51 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket& recvData)
 
 void WorldSession::OnPlayerAddonMessage(Player* sender, std::string& msg)
 {
-	// Do not handle stupidly short or long addon messages
+	// Do not handle stupidly short or long addon messages; are there too long ones?
 	unsigned int length = msg.length();
 	if (length < 5 || length > 256)
 		return;
+
 	// Split message by \t
-	std::string first = "";
-	uint32 i = 0;
-	for (; i < msg.length(); ++i)
+	std::vector<std::string> tokens;
 	{
-		char c = msg[i];
-		if (c == '\t')
-			break;
-		first.push_back(c);
+		std::stringstream input(msg);
+		std::string token;
+
+		while(std::getline(input, token, '\t'))
+			tokens.push_back(token);
 	}
-	std::string second = msg.substr(++i).c_str();
 
-	// Debug
-	TC_LOG_INFO("server.debug", "[DEBUG] From %s: %s, %s", sender->GetName().c_str(), first.c_str(), second.c_str());
+	if(tokens.empty())
+		return; //TODO throw some error here
 
-	// Handle message
-	if (first.compare("MAINMENU") == 0)
+	auto toLower = [](std::string str) {
+		std::string res = str;
+
+		std::transform(res.begin(), res.end(), res.begin(), ::tolower);
+		return res;
+	};
+
+	for(HG::HandlerList::iterator it = HG::handlers.begin(); it != HG::handlers.end(); ++it)
 	{
-		// Handle second GetTheGamesAvailable
-        if (second.compare("GetTheGamesAvailable") == 0
-            && sBattlegroundMgr->bgDataStore.find(BATTLEGROUND_HG_1) != sBattlegroundMgr->bgDataStore.end())
-		{
-			// Send: GAMES-icon-gamename...
-			std::stringstream str;
+		unsigned char currToken = 0;
 
-			str << "GAMES";
+		if(toLower(it->command) != toLower(tokens[currToken++]))
+			continue;
 
-			for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
-			{
-				BattlegroundStatus status = pair.second->GetStatus();
-				if (status != STATUS_WAIT_LEAVE)
-				{
-					str << (status >= STATUS_WAIT_JOIN ? "-2-" : "-1-");
-                    str << ((HG_Game *)pair.second)->GetGameName();
-				}
-			}
+		if(it->subcommand.size())
+		{
+			if(tokens.size() < 2)
+				continue;
 
-			SendAddonMessage(sender, str.str(), 2);
+			if(toLower(it->subcommand) != toLower(tokens[currToken++]))
+				continue;
 		}
-	}
-	else if (first.compare("CREATEGAME") == 0)
-	{
-		// second = game name
-		// Handle second contains game name
-		if (second.length() < 3)
-		{
-			sWorld->SendServerMessage(SERVER_MSG_STRING, "Game name is too short!", sender);
-			return;
-		}
-		// Filter characters that could cause bugs
-		for (unsigned int i = 0; i < second.length(); ++i)
-			if (second[i] == '-')
-				second[i] = '_';
-		// Check game name doesn't already exist
-		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
-		{
-			HG_Game* temp = (HG_Game*)pair.second;
-            if (!temp->HasPlayer(sender->GetGUID())) //wat? what has that to do with game name?
-			{
-				sender->LeaveBattleground(true);
-				break;
-			}
-		}
-		// Add BG
-		HG_Game* temp = new HG_Game();
-		temp->AddPlayer(sender);
-		temp->SetHost(sender->GetGUID());
-		temp->SetGameName(second, sender->GetGUID());
-		temp->SetTypeID(BATTLEGROUND_HG_1);
-		temp->SetInstanceID(temp->GetGUID());
-		sBattlegroundMgr->AddBattleground(temp);
-	}
-	else if (first.compare("PLRSLB") == 0)
-	{
-		// Filter characters that could cause bugs
-		for (uint32 i = 0; i < second.length(); ++i)
-			if (second[i] == '-')
-				second[i] = '_';
 
-		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
-		{
-			HG_Game* temp = (HG_Game*)pair.second;
-			if (temp->GetGameName().compare(second) == 0)
-			{
-				SendAddonMessage(sender, temp->getPlayerNameListStr(), 1);
-				return;
-			}
-		}	
-	}
-	else if (first.compare("JoinGame") == 0)
-	{
-		// Filter characters that could cause bugs
-		for (uint32 i = 0; i < second.length(); ++i)
-		if (second[i] == '-')
-			second[i] = '_';
-		// Retrieve which game is being requested for
-		for (auto& pair : sBattlegroundMgr->bgDataStore[BATTLEGROUND_HG_1].m_Battlegrounds)
-		{
-			HG_Game* temp = (HG_Game*)pair.second;
-			if (temp->GetGameName().compare(second) == 0)
-			{
-				if (!temp->HasPlayer(sender->GetGUID()))
-					temp->AddPlayer(sender);
-				else
-					sWorld->SendServerMessage(SERVER_MSG_STRING, "Cheat detected, failed to add to game.", sender);
-				return;
-			}
-		}
-		sWorld->SendServerMessage(SERVER_MSG_STRING, "Something went wrong trying to join this game!", sender);
-	}
-	else if (first.compare("SelectTalents") == 0)
-	{
-		if (second.length() < 8)
-			return;
-		int32 perks[4];
-		std::string talents[4];
-		// retrieve talents
-		talents[0] = second.substr(0, 2);
-		talents[1] = second.substr(2, 2);
-		talents[2] = second.substr(4, 2);
-		talents[3] = second.substr(6, 2);
-		for (int32 i = 0; i < 4; ++i)
-		{
-			// verify them
-			if (!isdigit(talents[i][0]) || !isdigit(talents[i][1]))
-				return;
-			// Set selected perk
-			perks[i] = atoi(talents[i].c_str());
-			sender->SetSelectedPerk(i, perks[i]);
-		}
-		// Save to database
-		QueryResult result = CharacterDatabase.PQuery("SELECT COUNT(*) FROM `character_perks` WHERE `GUID` = '%u'", sender->GetGUIDLow());
-		uint64 rows = result->Fetch()[0].GetUInt64();
-		if (rows == 0)
-		{
-			CharacterDatabase.DirectPExecute("INSERT INTO `character_perks` VALUES ('%u', '%d', '%d', '%d', '%d')",
-				sender->GetGUIDLow(), perks[0], perks[1], perks[2], perks[3]);
-		}
-		else if (rows == 1)
-		{
-			CharacterDatabase.DirectPExecute("UPDATE `character_perks` SET `perk1`='%d',`perk2`='%d',`perk3`='%d',`perk4`='%d' WHERE `GUID` = '%u'",
-				perks[0], perks[1], perks[2], perks[3], sender->GetGUIDLow());
-		}
-		else
-		{
-            TC_LOG_INFO("server.error", "[ERROR]: Character %s has multiple perk records in the database.", sender->GetName().c_str());
-		}
+		std::string arg = tokens.size() > currToken ? tokens[currToken] : "";
+		TC_LOG_INFO("server.debug", "[DEBUG] From %s: %s %s %s", sender->GetName().c_str(), it->command.c_str(), it->subcommand.c_str(), arg);
+
+		it->handler(sender, arg);
 	}
 }
 

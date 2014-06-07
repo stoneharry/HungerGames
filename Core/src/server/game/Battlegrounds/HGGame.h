@@ -1,7 +1,7 @@
 #ifndef HGGame_h__
 #define HGGame_h__
 
-namespace HungerGames
+namespace HG
 {
 	class Game
 	{
@@ -13,7 +13,5 @@ namespace HungerGames
 
 	};
 }
-
-namespace HG = HungerGames;
 
 #endif // HGGame_h__

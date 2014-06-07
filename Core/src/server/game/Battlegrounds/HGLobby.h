@@ -1,7 +1,7 @@
 #ifndef HGLobby_h__
 #define HGLobby_h__
 
-namespace HungerGames
+namespace HG
 {
 	class Lobby
 	{
@@ -13,7 +13,5 @@ namespace HungerGames
 
 	};
 }
-
-namespace HG = HungerGames;
 
 #endif // HGLobby_h__
