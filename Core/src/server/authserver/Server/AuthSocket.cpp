@@ -371,12 +371,11 @@ bool AuthSocket::_HandleXferResume()
 // Cancel patch transfer
 bool AuthSocket::_HandleXferCancel()
 {
-	//sLog->outStaticDebug("Entering _HandleXferCancel");
-	
+
 	// Close and delete the socket
 	socket().recv_skip(1); //clear input buffer
 	socket().shutdown();
-	
+
 	return true;
 }
 
@@ -694,7 +693,6 @@ bool AuthSocket::_HandleLogonChallenge()
     if (_os.size() > 4)
         return false;
 
-	// NOTE TO HARRY - CHECK IF THIS IS NEEDED
 	_localizationName.resize(4);
 	for (int i = 0; i < 4; ++i)
 		_localizationName[i] = ch->country[4 - i - 1];
@@ -837,7 +835,7 @@ bool AuthSocket::_HandleLogonChallenge()
 					// Fill the response packet with the result
 					if (AuthHelper::IsAcceptedClientBuild(_build))
 						pkt << uint8(WOW_SUCCESS);
-					else if (patcher.PossiblePatching(_build, _localizationName))
+					else if (_expversion == NO_VALID_EXP_FLAG && patcher.PossiblePatching(_build, _localizationName))
 					{
 						// This feels hacky as hell
 						uint8 response[119] = {
@@ -989,7 +987,7 @@ bool AuthSocket::_HandleLogonProof()
     if (!socket().recv((char *)&lp, sizeof(sAuthLogonProof_C)))
         return false;
 
-	if (patcher.PossiblePatching(_build, _localizationName))
+	if (_expversion == NO_VALID_EXP_FLAG && patcher.PossiblePatching(_build, _localizationName))
     {
 		if (!patcher.InitPatching(_build, _localizationName, this))
 		{
