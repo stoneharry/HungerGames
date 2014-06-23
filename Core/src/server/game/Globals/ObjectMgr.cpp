@@ -8862,3 +8862,39 @@ PlayerInfo const* ObjectMgr::GetPlayerInfo(uint32 race, uint32 class_) const
         return NULL;
     return info;
 }
+
+void ObjectMgr::LoadPerks()
+{
+	QueryResult result = WorldDatabase.Query("SELECT entry, RequiredAchivementId, PerkFlags, SpellId FROM perk_template");
+
+	if (!result)
+	{
+		return;
+	}
+
+	_perkStore.rehash(result->GetRowCount());
+	uint32 count = 0;
+
+	do
+	{
+		Field* fields = result->Fetch();
+
+		uint32 entry = fields[0].GetUInt32();
+
+		PerkTemplate& perkTemplate = _perkStore[entry];
+
+		perkTemplate.Entry = entry;
+		perkTemplate.RequiredAchivementId = fields[1].GetUInt32();
+		perkTemplate.PerkFlags = fields[2].GetUInt32();
+		perkTemplate.SpellId = fields[3].GetUInt32();
+	} while (result->NextRow());
+}
+
+PerkTemplate const* ObjectMgr::GetPerk(uint32 entry)
+{
+	PerkContainer::const_iterator itr = _perkStore.find(entry);
+	if (itr != _perkStore.end())
+		return &(itr->second);
+
+	return NULL;
+}
