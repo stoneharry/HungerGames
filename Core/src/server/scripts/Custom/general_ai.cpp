@@ -9,6 +9,8 @@ enum CREATURES
 
 class generalAI : public CreatureScript
 {
+private:
+	Creature* me;
 public:
 	generalAI() : CreatureScript("generalAI") { }
 
@@ -19,14 +21,15 @@ public:
 
 	struct generalAI_ : public ScriptedAI
     {
-		generalAI_(Creature* creature) : ScriptedAI(creature) { TC_LOG_INFO("server.debug", "CREATURE CONSTRUCTOR!"); }
+
+		generalAI_(Creature* creature) : ScriptedAI(creature)
+		{
+			me = creature;
+		}
 
         void EnterCombat(Unit* aggro) OVERRIDE
         {
-			Creature me = ((Creature)this);
-
-			int entry = me.GetEntry();
-			switch (entry)
+			switch (me->GetEntry())
 			{
 				case TROLL_GUY:
 				{
@@ -44,7 +47,7 @@ public:
 					msg << "You die now!";
 				}
 				if (msg.str().length() != 0)
-					me.MonsterSay(msg.str().c_str(), LANG_UNIVERSAL, NULL);
+					me->MonsterSay(msg.str().c_str(), LANG_UNIVERSAL, NULL);
 				break;
 				}
 			}
@@ -52,8 +55,7 @@ public:
 
 		void JustDied(Unit* killer) OVERRIDE
 		{
-			Creature me = ((Creature)this);
-			int entry = me.GetEntry();
+			int entry = me->GetEntry();
 			switch (entry)
 			{
 				case TROLL_GUY:
@@ -69,7 +71,7 @@ public:
 						msg << "Hakkar I beg ye'...";
 					}
 					if (msg.str().length() != 0)
-						me.MonsterSay(msg.str().c_str(), LANG_UNIVERSAL, NULL);
+						me->MonsterSay(msg.str().c_str(), LANG_UNIVERSAL, NULL);
 					break;
 				}
 			}
