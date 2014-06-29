@@ -19,6 +19,9 @@
 
 #undef SCRIPTS
 
+// HG
+void addHG_GeneralAI();
+
 //examples
 void AddSC_example_creature();
 void AddSC_example_escort();
@@ -707,6 +710,7 @@ void AddScripts()
     AddSpellScripts();
     AddSC_SmartSCripts();
     AddCommandScripts();
+	AddCustomScripts();
 #ifdef SCRIPTS
     AddWorldScripts();
     AddEasternKingdomsScripts();
@@ -717,7 +721,6 @@ void AddScripts()
     AddPetScripts();
     AddBattlegroundScripts();
     AddOutdoorPvPScripts();
-    AddCustomScripts();
 #endif
 }
 
@@ -1443,6 +1446,9 @@ void AddBattlegroundScripts()
 
 void AddCustomScripts()
 {
+	// HG
+	addHG_GeneralAI();
+
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
 

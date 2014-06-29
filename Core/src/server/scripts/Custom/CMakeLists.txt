@@ -10,6 +10,7 @@
 
 set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
+  Custom/general_ai.cpp
 )
 
 message("  -> Prepared: Custom")
