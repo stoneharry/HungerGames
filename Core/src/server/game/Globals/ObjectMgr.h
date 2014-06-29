@@ -640,6 +640,23 @@ typedef std::list<DungeonEncounter const*> DungeonEncounterList;
 typedef UNORDERED_MAP<uint32, DungeonEncounterList> DungeonEncounterContainer;
 
 class PlayerDumpReader;
+//Hunger Games
+struct PerkTemplate
+{
+	uint32 Entry;
+	uint32 RequiredAchivementId;
+	uint32 PerkFlags;
+	uint32 SpellId;
+};
+
+enum PerkFlags
+{
+	PERK_FLAG_AT_START = 0x1,
+	PERK_FLAG_AT_DAYTIME = 0x2,
+	PERK_FLAG_AT_NIGHTTIME = 0x4
+};
+
+typedef UNORDERED_MAP<uint32, PerkTemplate> PerkContainer;
 
 class ObjectMgr
 {
@@ -1239,6 +1256,10 @@ class ObjectMgr
         void LoadFactionChangeReputations();
         void LoadFactionChangeSpells();
         void LoadFactionChangeTitles();
+		//Hunger Games
+		PerkTemplate const* GetPerk(uint32 entry);
+		void LoadPerks();
+
 
     private:
         // first free id for selected id type
@@ -1373,7 +1394,7 @@ class ObjectMgr
 
         CacheVendorItemContainer _cacheVendorItemStore;
         CacheTrainerSpellContainer _cacheTrainerSpellStore;
-
+		PerkContainer _perkStore;
         std::set<uint32> _difficultyEntries[MAX_DIFFICULTY - 1]; // already loaded difficulty 1 value in creatures, used in CheckCreatureTemplate
         std::set<uint32> _hasDifficultyEntries[MAX_DIFFICULTY - 1]; // already loaded creatures with difficulty 1 values, used in CheckCreatureTemplate
 
