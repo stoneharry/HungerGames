@@ -60,7 +60,7 @@ public:
 			{
 				case TROLL_GUY:
 				{
-					int option = urand(0, 5);
+					int option = urand(0, 7);
 					std::stringstream msg;
 					switch (option)
 					{
