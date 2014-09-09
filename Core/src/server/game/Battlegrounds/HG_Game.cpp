@@ -8,7 +8,18 @@ HG_Game::HG_Game()
 	GUID = HG_GUID_COUNTER++;
 	IsInGame = false;
 	for (int i = 0; i < 10; ++i)
-		playersInGame[i] = NULL;
+		playersInGame[i] = 0;
+	locations[0] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[1] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[2] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[3] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[4] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[5] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[6] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[7] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[8] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[9] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	std::random_shuffle(std::begin(locations), std::end(locations));
 }
 
 HG_Game::~HG_Game()
@@ -26,22 +37,40 @@ void HG_Game::AddPlayer(Player* player)
 	Battleground::AddPlayer(player);
 	for (int i = 0; i < 10; ++i)
 	{
-		if (playersInGame[i] == NULL)
+		if (playersInGame[i] == 0)
 		{
-			playersInGame[i] = player;
+			playersInGame[i] = player->GetGUIDLow();
+			break;
+		}
+	}
+	for (int i = 9; i >= 0; --i)
+	{
+		if (playersInGame[i] == 0)
 			return;
+		Player * plr = sObjectMgr->GetPlayerByLowGUID(playersInGame[i]);
+		if (plr == NULL)
+		{
+			playersInGame[i] = 0;
+			return;
+		}
+	}
+	for (int i = 0; i < 10; ++i) {
+		if (playersInGame[i] != 0) // should always be really
+		{
+			Player * plr = sObjectMgr->GetPlayerByLowGUID(playersInGame[i]);
+			if (plr != NULL)
+				plr->TeleportTo(locations[i]);
 		}
 	}
 }
 
-// This is not currently calld when a player logs out and needs to be
-void HG_Game::RemovePlayer(Player* player, uint64 guid, uint32 team)
+void HG_Game::RemovePlayer(uint64 guid, uint32 team)
 {
 	for (int i = 0; i < 10; ++i)
 	{
-		if (playersInGame[i] != NULL && playersInGame[i]->GetGUID() == guid)
+		if (playersInGame[i] == guid)
 		{
-			playersInGame[i] = NULL;
+			playersInGame[i] = 0;
 			return;
 		}
 	}
@@ -51,7 +80,7 @@ bool HG_Game::HasPlayer(uint64 GUID)
 {
 	for (int i = 0; i < 10; ++i)
 	{
-		if (playersInGame[i] != NULL && playersInGame[i]->GetGUID() == GUID)
+		if (playersInGame[i] == GUID)
 			return true;
 	}
 	return false;
@@ -63,9 +92,13 @@ std::string HG_Game::getPlayerNameListStr()
 	str << "PLAYERS";
 	for (int i = 0; i < 10; ++i)
 	{
-		if (playersInGame[i] != NULL)
+		if (playersInGame[i] != 0)
 		{
-			str << "-" << playersInGame[i]->GetName();
+			Player * plr = sObjectMgr->GetPlayerByLowGUID(playersInGame[i]);
+			if (plr != NULL)
+				str << "-" << plr->GetName();
+			else
+				playersInGame[i] = 0;
 		}
 	}
 	return str.str();
