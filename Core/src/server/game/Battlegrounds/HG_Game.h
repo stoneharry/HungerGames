@@ -16,7 +16,7 @@ class HG_Game : public Battleground
 		bool SetupBattleground();
 		std::string getPlayerNameListStr();
 		void AddPlayer(Player * plr);
-		void RemovePlayer(uint64 guid, uint32 /*team*/);
+		void RemovePlayer(Player* plr, uint64 guid, uint32 /*team*/);
 		bool HasPlayer(uint64 guid);
 
         std::string GetGameName() { return GameName; }

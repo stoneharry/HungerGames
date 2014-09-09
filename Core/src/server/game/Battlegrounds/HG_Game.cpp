@@ -64,7 +64,7 @@ void HG_Game::AddPlayer(Player* player)
 	}
 }
 
-void HG_Game::RemovePlayer(uint64 guid, uint32 team)
+void HG_Game::RemovePlayer(Player* plr, uint64 guid, uint32 team)
 {
 	for (int i = 0; i < 10; ++i)
 	{
