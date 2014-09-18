@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <array>
 #include "Battleground.h"
 #include "Player.h"
 
@@ -30,11 +31,11 @@ class HG_Game : public Battleground
         uint64 hostGUID;
 
 	private:
-		uint32 playersInGame[10];
+		std::array<uint32, 10> playersInGame;
 		bool IsInGame;
 		uint32 GUID;
         std::string GameName;
-		WorldLocation locations[10];
+		std::array<WorldLocation, 10> locations;
 };
 
 #endif

@@ -9,6 +9,7 @@ HG_Game::HG_Game()
 	IsInGame = false;
 	for (int i = 0; i < 10; ++i)
 		playersInGame[i] = 0;
+	// To do: Put proper coordinates in here
 	locations[0] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	locations[1] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	locations[2] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
@@ -18,7 +19,7 @@ HG_Game::HG_Game()
 	locations[6] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	locations[7] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	locations[8] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
-	locations[9] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
+	locations[9] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0)
 	std::random_shuffle(std::begin(locations), std::end(locations));
 }
 
@@ -28,7 +29,7 @@ HG_Game::~HG_Game()
 
 bool HG_Game::SetupBattleground()
 {
-	// spawn creatures and stuff here
+	// Spawn creatures in here
 	return true;
 }
 
