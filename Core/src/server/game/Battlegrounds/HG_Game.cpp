@@ -19,7 +19,7 @@ HG_Game::HG_Game()
 	locations[6] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	locations[7] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	locations[8] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
-	locations[9] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0)
+	locations[9] = WorldLocation(800, -4303.87, 3279.05, 0.435464, 0);
 	std::random_shuffle(std::begin(locations), std::end(locations));
 }
 
