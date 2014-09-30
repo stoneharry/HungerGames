@@ -16,7 +16,7 @@ local UPDATE_INTERVALS = {30, 20, 20, 0 ,0, 60}
 local playing = nil
 local links = {}
 local IN_GAME = false
-local CAN_JOIN_GAME = false
+local CAN_JOIN_GAME = true
 
 -- Set up background model
 local model = CreateFrame("Model"--[[, "BackgroundF", MainFrame]])
@@ -321,7 +321,7 @@ function HandleScollBarEntryClick(self)
 	end
 	-- If wanting to join a game
 	if MENU_SELECTED == 1 then
-		if not CAN_JOIN_GAME then
+		if CAN_JOIN_GAME then
 			return
 		end
 		-- substring 9, 10 if whitespace
@@ -417,7 +417,6 @@ function eventHandlerMainFrame(self, event, message, _, Type, Sender)
 		if (links[packet].count ~= linkCount) then
 			return
 		end
-		
 		local fullMessage = table.concat(links[packet]);
 		links[packet] = {count = 0};
 		

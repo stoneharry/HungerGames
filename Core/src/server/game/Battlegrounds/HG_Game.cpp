@@ -29,7 +29,6 @@ HG_Game::~HG_Game()
 
 bool HG_Game::SetupBattleground()
 {
-	// Spawn creatures in here
 	return true;
 }
 
