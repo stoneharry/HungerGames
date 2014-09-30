@@ -28,7 +28,10 @@
 #include "ObjectMgr.h"
 #include "Util.h"
 #include "ScriptMgr.h"
-#include "Opcodes.h"
+#ifdef ELUNA
+#include "LuaEngine.h"
+#endif
+#include "WorldSession.h"
 
 /// Create the Weather object
 Weather::Weather(uint32 zone, WeatherData const* weatherChances)
@@ -40,6 +43,13 @@ Weather::Weather(uint32 zone, WeatherData const* weatherChances)
 
     TC_LOG_INFO("misc", "WORLD: Starting weather system for zone %u (change every %u minutes).", m_zone, (uint32)(m_timer.GetInterval() / (MINUTE*IN_MILLISECONDS)));
 }
+
+Weather::~Weather()
+{
+#ifdef ELUNA
+    Eluna::RemoveRef(this);
+#endif
+};
 
 /// Launch a weather update
 bool Weather::Update(uint32 diff)
@@ -94,7 +104,7 @@ bool Weather::ReGenerate()
     // season source http://aa.usno.navy.mil/data/docs/EarthSeasons.html
     time_t gtime = sWorld->GetGameTime();
     struct tm ltime;
-    ACE_OS::localtime_r(&gtime, &ltime);
+    localtime_r(&gtime, &ltime);
     uint32 season = ((ltime.tm_yday - 78 + 365)/91)%4;
 
     static char const* seasonName[WEATHER_SEASONS] = { "spring", "summer", "fall", "winter" };

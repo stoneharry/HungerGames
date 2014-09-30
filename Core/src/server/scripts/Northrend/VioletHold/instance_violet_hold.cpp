@@ -105,7 +105,7 @@ class instance_violet_hold : public InstanceMapScript
 public:
     instance_violet_hold() : InstanceMapScript("instance_violet_hold", 608) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* map) const OVERRIDE
+    InstanceScript* GetInstanceScript(InstanceMap* map) const override
     {
         return new instance_violet_hold_InstanceMapScript(map);
     }
@@ -114,35 +114,35 @@ public:
     {
         instance_violet_hold_InstanceMapScript(Map* map) : InstanceScript(map) { }
 
-        uint64 uiMoragg;
-        uint64 uiErekem;
-        uint64 uiErekemGuard[2];
-        uint64 uiIchoron;
-        uint64 uiLavanthor;
-        uint64 uiXevozz;
-        uint64 uiZuramat;
-        uint64 uiCyanigosa;
-        uint64 uiSinclari;
+        ObjectGuid uiMoragg;
+        ObjectGuid uiErekem;
+        ObjectGuid uiErekemGuard[2];
+        ObjectGuid uiIchoron;
+        ObjectGuid uiLavanthor;
+        ObjectGuid uiXevozz;
+        ObjectGuid uiZuramat;
+        ObjectGuid uiCyanigosa;
+        ObjectGuid uiSinclari;
 
-        uint64 uiMoraggCell;
-        uint64 uiErekemCell;
-        uint64 uiErekemLeftGuardCell;
-        uint64 uiErekemRightGuardCell;
-        uint64 uiIchoronCell;
-        uint64 uiLavanthorCell;
-        uint64 uiXevozzCell;
-        uint64 uiZuramatCell;
-        uint64 uiMainDoor;
-        uint64 uiTeleportationPortal;
-        uint64 uiSaboteurPortal;
+        ObjectGuid uiMoraggCell;
+        ObjectGuid uiErekemCell;
+        ObjectGuid uiErekemLeftGuardCell;
+        ObjectGuid uiErekemRightGuardCell;
+        ObjectGuid uiIchoronCell;
+        ObjectGuid uiLavanthorCell;
+        ObjectGuid uiXevozzCell;
+        ObjectGuid uiZuramatCell;
+        ObjectGuid uiMainDoor;
+        ObjectGuid uiTeleportationPortal;
+        ObjectGuid uiSaboteurPortal;
 
-        uint64 uiActivationCrystal[4];
+        ObjectGuid uiActivationCrystal[4];
 
         uint32 uiActivationTimer;
         uint32 uiCyanigosaEventTimer;
         uint32 uiDoorSpellTimer;
 
-        std::set<uint64> trashMobs; // to kill with crystal
+        GuidSet trashMobs; // to kill with crystal
 
         uint8 uiWaveCount;
         uint8 uiLocation;
@@ -168,30 +168,9 @@ public:
 
         std::string str_data;
 
-        void Initialize() OVERRIDE
+        void Initialize() override
         {
-            uiMoragg = 0;
-            uiErekem = 0;
-            uiIchoron = 0;
-            uiLavanthor = 0;
-            uiXevozz = 0;
-            uiZuramat = 0;
-            uiCyanigosa = 0;
-            uiSinclari = 0;
-
-            uiMoraggCell = 0;
-            uiErekemCell = 0;
-            uiErekemGuard[0] = 0;
-            uiErekemGuard[1] = 0;
-            uiIchoronCell = 0;
-            uiLavanthorCell = 0;
-            uiXevozzCell = 0;
-            uiZuramatCell = 0;
-            uiMainDoor = 0;
-            uiTeleportationPortal = 0;
-            uiSaboteurPortal = 0;
-
-            trashMobs.clear();
+            SetHeaders(DataHeader);
 
             uiRemoveNpc = 0;
 
@@ -218,7 +197,7 @@ public:
             memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
         }
 
-        bool IsEncounterInProgress() const OVERRIDE
+        bool IsEncounterInProgress() const override
         {
             for (uint8 i = 0; i < MAX_ENCOUNTER; ++i)
                 if (m_auiEncounter[i] == IN_PROGRESS)
@@ -227,7 +206,7 @@ public:
             return false;
         }
 
-        void OnCreatureCreate(Creature* creature) OVERRIDE
+        void OnCreatureCreate(Creature* creature) override
         {
             switch (creature->GetEntry())
             {
@@ -265,14 +244,17 @@ public:
                     break;
             }
 
+            /*
+            BEWARE - SHIT.
             if (creature->GetGUID() == uiFirstBoss || creature->GetGUID() == uiSecondBoss)
             {
                 creature->AllLootRemovedFromCorpse();
                 creature->RemoveLootMode(1);
             }
+            */
         }
 
-        void OnGameObjectCreate(GameObject* go) OVERRIDE
+        void OnGameObjectCreate(GameObject* go) override
         {
             switch (go->GetEntry())
             {
@@ -310,7 +292,7 @@ public:
             }
         }
 
-        void SetData(uint32 type, uint32 data) OVERRIDE
+        void SetData(uint32 type, uint32 data) override
         {
             switch (type)
             {
@@ -406,7 +388,7 @@ public:
             }
         }
 
-        void SetData64(uint32 type, uint64 data) OVERRIDE
+        void SetGuidData(uint32 type, ObjectGuid data) override
         {
             switch (type)
             {
@@ -419,7 +401,7 @@ public:
             }
         }
 
-        uint32 GetData(uint32 type) const OVERRIDE
+        uint32 GetData(uint32 type) const override
         {
             switch (type)
             {
@@ -440,7 +422,7 @@ public:
             return 0;
         }
 
-        uint64 GetData64(uint32 identifier) const OVERRIDE
+        ObjectGuid GetGuidData(uint32 identifier) const override
         {
             switch (identifier)
             {
@@ -467,7 +449,7 @@ public:
                 case DATA_SABOTEUR_PORTAL:          return uiSaboteurPortal;
             }
 
-            return 0;
+            return ObjectGuid::Empty;
         }
 
         void SpawnPortal()
@@ -616,7 +598,7 @@ public:
             }
         }
 
-        std::string GetSaveData() OVERRIDE
+        std::string GetSaveData() override
         {
             OUT_SAVE_INST_DATA;
 
@@ -633,7 +615,7 @@ public:
             return str_data;
         }
 
-        void Load(const char* in) OVERRIDE
+        void Load(const char* in) override
         {
             if (!in)
             {
@@ -682,7 +664,7 @@ public:
             return true;
         }
 
-        void Update(uint32 diff) OVERRIDE
+        void Update(uint32 diff) override
         {
             if (!instance->HavePlayers())
                 return;
@@ -812,8 +794,8 @@ public:
             // visuals
             trigger->CastSpell(trigger, spellInfoLightning, true, 0, 0, trigger->GetGUID());
 
-            // Kill all mobs registered with SetData64(ADD_TRASH_MOB)
-            for (std::set<uint64>::const_iterator itr = trashMobs.begin(); itr != trashMobs.end(); ++itr)
+            // Kill all mobs registered with SetGuidData(ADD_TRASH_MOB)
+            for (GuidSet::const_iterator itr = trashMobs.begin(); itr != trashMobs.end(); ++itr)
             {
                 Creature* creature = instance->GetCreature(*itr);
                 if (creature && creature->IsAlive())

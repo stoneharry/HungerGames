@@ -85,33 +85,42 @@ enum NPCs
 
 class boss_venoxis : public CreatureScript
 {
-    public: boss_venoxis() : CreatureScript("boss_venoxis") { }
+    public:
+        boss_venoxis() : CreatureScript("boss_venoxis") { }
 
         struct boss_venoxisAI : public BossAI
         {
-            boss_venoxisAI(Creature* creature) : BossAI(creature, DATA_VENOXIS) { }
+            boss_venoxisAI(Creature* creature) : BossAI(creature, DATA_VENOXIS)
+            {
+                Initialize();
+            }
 
-            void Reset() OVERRIDE
+            void Initialize()
+            {
+                _inMeleeRange = 0;
+                _transformed = false;
+                _frenzied = false;
+            }
+
+            void Reset() override
             {
                 _Reset();
                 // remove all spells and auras from previous attempts
                 me->RemoveAllAuras();
                 me->SetReactState(REACT_PASSIVE);
                 // set some internally used variables to their defaults
-                _inMeleeRange = 0;
-                _transformed = false;
-                _frenzied = false;
+                Initialize();
                 events.SetPhase(PHASE_ONE);
             }
 
-            void JustDied(Unit* /*killer*/) OVERRIDE
+            void JustDied(Unit* /*killer*/) override
             {
                 _JustDied();
                 Talk(SAY_VENOXIS_DEATH);
                 me->RemoveAllAuras();
             }
 
-            void EnterCombat(Unit* /*who*/) OVERRIDE
+            void EnterCombat(Unit* /*who*/) override
             {
                 _EnterCombat();
                 me->SetReactState(REACT_AGGRESSIVE);
@@ -130,7 +139,7 @@ class boss_venoxis : public CreatureScript
                 DoZoneInCombat();
             }
 
-            void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/) OVERRIDE
+            void DamageTaken(Unit* /*attacker*/, uint32& /*damage*/) override
             {
                 // check if venoxis is ready to transform
                 if (!_transformed && !HealthAbovePct(50))
@@ -147,7 +156,7 @@ class boss_venoxis : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 diff) OVERRIDE
+            void UpdateAI(uint32 diff) override
             {
                 if (!UpdateVictim())
                     return;
@@ -167,7 +176,6 @@ class boss_venoxis : public CreatureScript
                             DoCast(me, SPELL_THRASH, true);
                             events.ScheduleEvent(EVENT_THRASH, urand(10000, 20000));
                             break;
-
                         // troll form spells and Actions (first part)
                         case EVENT_DISPEL_MAGIC:
                             DoCast(me, SPELL_DISPEL_MAGIC);
@@ -262,7 +270,7 @@ class boss_venoxis : public CreatureScript
             bool _frenzied;
         };
 
-        CreatureAI* GetAI(Creature* creature) const OVERRIDE
+        CreatureAI* GetAI(Creature* creature) const override
         {
             return new boss_venoxisAI(creature);
         }

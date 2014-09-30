@@ -22,7 +22,7 @@ namespace AuthHelper
 {
     static RealmBuildInfo const PostBcAcceptedClientBuilds[] =
     {
-        {12340, 3, 3, 5, 'a'},
+        {12350, 3, 3, 5, 'a'},
         {0,     0, 0, 0, ' '}                                   // terminator
     };
 
@@ -66,4 +66,4 @@ namespace AuthHelper
 
         return NULL;
     }
-};
+}

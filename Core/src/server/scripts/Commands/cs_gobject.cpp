@@ -37,7 +37,7 @@ class gobject_commandscript : public CommandScript
 public:
     gobject_commandscript() : CommandScript("gobject_commandscript") { }
 
-    ChatCommand* GetCommands() const
+    ChatCommand* GetCommands() const override
     {
         static ChatCommand gobjectAddCommandTable[] =
         {
@@ -166,7 +166,11 @@ public:
 
         // fill the gameobject data and save to the db
         object->SaveToDB(map->GetId(), (1 << map->GetSpawnMode()), player->GetPhaseMaskForSpawn());
+        // delete the old object and do a clean load from DB with a fresh new GameObject instance.
+        // this is required to avoid weird behavior and memory leaks
+        delete object;
 
+        object = new GameObject();
         // this will generate a new guid if the object is in an instance
         if (!object->LoadGameObjectFromDB(guidLow, map))
         {
@@ -208,6 +212,13 @@ public:
         float rot3 = std::cos(ang/2);
 
         uint32 objectId = atoi(id);
+
+        if (!sObjectMgr->GetGameObjectTemplate(objectId))
+        {
+            handler->PSendSysMessage(LANG_GAMEOBJECT_NOT_EXIST, objectId);
+            handler->SetSentErrorMessage(true);
+            return false;
+        }
 
         player->SummonGameObject(objectId, x, y, z, ang, 0, 0, rot2, rot3, spawntm);
 
@@ -313,7 +324,7 @@ public:
             return false;
         }
 
-        GameObject* target = handler->GetSession()->GetPlayer()->GetMap()->GetGameObject(MAKE_NEW_GUID(guidLow, id, HIGHGUID_GAMEOBJECT));
+        GameObject* target = handler->GetSession()->GetPlayer()->GetMap()->GetGameObject(ObjectGuid(HIGHGUID_GAMEOBJECT, id, guidLow));
 
         handler->PSendSysMessage(LANG_GAMEOBJECT_DETAIL, guidLow, objectInfo->name.c_str(), guidLow, id, x, y, z, mapId, o, phase);
 
@@ -356,13 +367,13 @@ public:
             return false;
         }
 
-        uint64 ownerGuid = object->GetOwnerGUID();
+        ObjectGuid ownerGuid = object->GetOwnerGUID();
         if (ownerGuid)
         {
             Unit* owner = ObjectAccessor::GetUnit(*handler->GetSession()->GetPlayer(), ownerGuid);
-            if (!owner || !IS_PLAYER_GUID(ownerGuid))
+            if (!owner || !ownerGuid.IsPlayer())
             {
-                handler->PSendSysMessage(LANG_COMMAND_DELOBJREFERCREATURE, GUID_LOPART(ownerGuid), object->GetGUIDLow());
+                handler->PSendSysMessage(LANG_COMMAND_DELOBJREFERCREATURE, ownerGuid.GetCounter(), object->GetGUIDLow());
                 handler->SetSentErrorMessage(true);
                 return false;
             }

@@ -161,7 +161,7 @@ uint32 LootStore::LoadLootTable()
         if (group >= 1 << 7)                                     // it stored in 7 bit field
         {
             TC_LOG_ERROR("sql.sql", "Table '%s' entry %d item %d: group (%u) must be less %u - skipped", GetName(), entry, item, group, 1 << 7);
-            return false;
+            return 0;
         }
 
         LootStoreItem* storeitem = new LootStoreItem(item, chanceOrQuestChance, lootmode, group, mincountOrRef, maxcount);
@@ -413,57 +413,6 @@ void LootItem::AddAllowedLooter(const Player* player)
 // Inserts the item into the loot (called by LootTemplate processors)
 void Loot::AddItem(LootStoreItem const& item)
 {
-	// The Hunger Games
-	// This code is for random item generation
-	if (item.itemid == 1000000) // some arbitrary number that we can flag with, this can be common (white)
-	{
-		// Generate a item ID to retrieve
-		std::bitset<32> x(0);
-
-		// 5 = chest, 6 = waist, 7 = legs, 8 = feet, 9 = wrists
-		// 10 = hands, 13 = weapon, 14 = shield, 16 = back
-		//    9 values
-		const int32 types[] = { 5, 6, 7, 8, 9, 10, 13, 14, 16 };
-
-		/*
-		4 bits: item inventory type
-		4 bits: stren
-		4 bits: agil
-		4 bits: stam
-		4 bits: spir
-		*/
-
-		// type
-		int32 type = types[irand(0, 8)];
-		std::bitset<4> typ(type);
-		for (int i = 0; i < 4; ++i)
-			x[i] = typ[i];
-
-		// which stat to use
-		int32 stat = irand(0, 3);
-
-		// Set that stat = 1
-		// 4 = stren
-		// + 4 * stat = stat index
-		// + 3 = 4th bit
-		x[4 + (4 * stat) + 3] = 1;
-
-		// Get entry based of bits set
-		uint32 entry = (uint32)x.to_ulong();
-
-		// Increment entry to get a higher value
-		uint64 data_size_test = entry += 1000000;
-		if (data_size_test < 0xffffffff)
-			entry += 100000;
-
-		std::stringstream test;
-		test << "Entry generated: " << entry;
-
-		TC_LOG_INFO("server.info", "Generated item entry: %s", test.str().c_str());
-
-		return;
-	}
-
     ItemTemplate const* proto = sObjectMgr->GetItemTemplate(item.itemid);
     if (!proto)
         return;
@@ -671,8 +620,8 @@ void Loot::NotifyItemRemoved(uint8 lootIndex)
 {
     // notify all players that are looting this that the item was removed
     // convert the index to the slot the player sees
-    std::set<uint64>::iterator i_next;
-    for (std::set<uint64>::iterator i = PlayersLooting.begin(); i != PlayersLooting.end(); i = i_next)
+    GuidSet::iterator i_next;
+    for (GuidSet::iterator i = PlayersLooting.begin(); i != PlayersLooting.end(); i = i_next)
     {
         i_next = i;
         ++i_next;
@@ -686,8 +635,8 @@ void Loot::NotifyItemRemoved(uint8 lootIndex)
 void Loot::NotifyMoneyRemoved()
 {
     // notify all players that are looting this that the money was removed
-    std::set<uint64>::iterator i_next;
-    for (std::set<uint64>::iterator i = PlayersLooting.begin(); i != PlayersLooting.end(); i = i_next)
+    GuidSet::iterator i_next;
+    for (GuidSet::iterator i = PlayersLooting.begin(); i != PlayersLooting.end(); i = i_next)
     {
         i_next = i;
         ++i_next;
@@ -705,8 +654,8 @@ void Loot::NotifyQuestItemRemoved(uint8 questIndex)
     // (other questitems can be looted by each group member)
     // bit inefficient but isn't called often
 
-    std::set<uint64>::iterator i_next;
-    for (std::set<uint64>::iterator i = PlayersLooting.begin(); i != PlayersLooting.end(); i = i_next)
+    GuidSet::iterator i_next;
+    for (GuidSet::iterator i = PlayersLooting.begin(); i != PlayersLooting.end(); i = i_next)
     {
         i_next = i;
         ++i_next;
@@ -949,8 +898,13 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
                                 slot_type = LOOT_SLOT_TYPE_ROLL_ONGOING;
                                 break;
                             case MASTER_PERMISSION:
-                                slot_type = LOOT_SLOT_TYPE_MASTER;
+                            {
+                                if (lv.viewer->GetGroup() && lv.viewer->GetGroup()->GetMasterLooterGuid() == lv.viewer->GetGUID())
+                                    slot_type = LOOT_SLOT_TYPE_MASTER;
+                                else
+                                    slot_type = LOOT_SLOT_TYPE_LOCKED;
                                 break;
+                            }
                             case RESTRICTED_PERMISSION:
                                 slot_type = LOOT_SLOT_TYPE_LOCKED;
                                 break;
@@ -958,7 +912,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
                                 continue;
                         }
                     }
-                    else if (l.roundRobinPlayer == 0 || lv.viewer->GetGUID() == l.roundRobinPlayer || !l.items[i].is_underthreshold)
+                    else if (l.roundRobinPlayer.IsEmpty() || lv.viewer->GetGUID() == l.roundRobinPlayer || !l.items[i].is_underthreshold)
                     {
                         // no round robin owner or he has released the loot
                         // or it IS the round robin group owner
@@ -982,7 +936,7 @@ ByteBuffer& operator<<(ByteBuffer& b, LootView const& lv)
             {
                 if (!l.items[i].is_looted && !l.items[i].freeforall && l.items[i].conditions.empty() && l.items[i].AllowedForPlayer(lv.viewer))
                 {
-                    if (l.roundRobinPlayer != 0 && lv.viewer->GetGUID() != l.roundRobinPlayer)
+                    if (!l.roundRobinPlayer.IsEmpty() && lv.viewer->GetGUID() != l.roundRobinPlayer)
                         // item shall not be displayed.
                         continue;
 

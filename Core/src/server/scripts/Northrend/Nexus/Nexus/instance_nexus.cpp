@@ -33,7 +33,7 @@ class instance_nexus : public InstanceMapScript
 public:
     instance_nexus() : InstanceMapScript("instance_nexus", 576) { }
 
-    InstanceScript* GetInstanceScript(InstanceMap* map) const OVERRIDE
+    InstanceScript* GetInstanceScript(InstanceMap* map) const override
     {
         return new instance_nexus_InstanceMapScript(map);
     }
@@ -44,27 +44,22 @@ public:
 
         uint32 m_auiEncounter[NUMBER_OF_ENCOUNTERS];
 
-        uint64 Anomalus;
-        uint64 Keristrasza;
+        ObjectGuid Anomalus;
+        ObjectGuid Keristrasza;
 
-        uint64 AnomalusContainmentSphere;
-        uint64 OrmoroksContainmentSphere;
-        uint64 TelestrasContainmentSphere;
+        ObjectGuid AnomalusContainmentSphere;
+        ObjectGuid OrmoroksContainmentSphere;
+        ObjectGuid TelestrasContainmentSphere;
 
         std::string strInstData;
 
-        void Initialize() OVERRIDE
+        void Initialize() override
         {
+            SetHeaders(DataHeader);
             memset(&m_auiEncounter, 0, sizeof(m_auiEncounter));
-
-            Anomalus = 0;
-            Keristrasza = 0;
-            AnomalusContainmentSphere = 0;
-            OrmoroksContainmentSphere = 0;
-            TelestrasContainmentSphere = 0;
         }
 
-        void OnCreatureCreate(Creature* creature) OVERRIDE
+        void OnCreatureCreate(Creature* creature) override
         {
             Map::PlayerList const &players = instance->GetPlayers();
             uint32 TeamInInstance = 0;
@@ -88,7 +83,7 @@ public:
                     if (ServerAllowsTwoSideGroups())
                         creature->setFaction(FACTION_HOSTILE_FOR_ALL);
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(26799, HORDE);
+                        creature->UpdateEntry(26799);
                     break;
                 }
                 case 26802:
@@ -96,7 +91,7 @@ public:
                     if (ServerAllowsTwoSideGroups())
                         creature->setFaction(FACTION_HOSTILE_FOR_ALL);
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(26801, HORDE);
+                        creature->UpdateEntry(26801);
                     break;
                 }
                 case 26805:
@@ -104,7 +99,7 @@ public:
                     if (ServerAllowsTwoSideGroups())
                         creature->setFaction(FACTION_HOSTILE_FOR_ALL);
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(26803, HORDE);
+                        creature->UpdateEntry(26803);
                     break;
                 }
                 case 27949:
@@ -112,7 +107,7 @@ public:
                     if (ServerAllowsTwoSideGroups())
                         creature->setFaction(FACTION_HOSTILE_FOR_ALL);
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(27947, HORDE);
+                        creature->UpdateEntry(27947);
                     break;
                 }
                 case 26796:
@@ -120,13 +115,13 @@ public:
                     if (ServerAllowsTwoSideGroups())
                         creature->setFaction(FACTION_HOSTILE_FOR_ALL);
                     if (TeamInInstance == ALLIANCE)
-                        creature->UpdateEntry(26798, HORDE);
+                        creature->UpdateEntry(26798);
                     break;
                 }
             }
         }
 
-        void OnGameObjectCreate(GameObject* go) OVERRIDE
+        void OnGameObjectCreate(GameObject* go) override
         {
             switch (go->GetEntry())
             {
@@ -154,7 +149,7 @@ public:
             }
         }
 
-        uint32 GetData(uint32 identifier) const OVERRIDE
+        uint32 GetData(uint32 identifier) const override
         {
             switch (identifier)
             {
@@ -166,7 +161,7 @@ public:
             return 0;
         }
 
-        void SetData(uint32 identifier, uint32 data) OVERRIDE
+        void SetData(uint32 identifier, uint32 data) override
         {
             switch (identifier)
             {
@@ -221,7 +216,7 @@ public:
             }
         }
 
-        uint64 GetData64(uint32 uiIdentifier) const OVERRIDE
+        ObjectGuid GetGuidData(uint32 uiIdentifier) const override
         {
             switch (uiIdentifier)
             {
@@ -231,10 +226,10 @@ public:
                 case ORMOROKS_CONTAINMET_SPHERE:    return OrmoroksContainmentSphere;
                 case TELESTRAS_CONTAINMET_SPHERE:   return TelestrasContainmentSphere;
             }
-            return 0;
+            return ObjectGuid::Empty;
         }
 
-        std::string GetSaveData() OVERRIDE
+        std::string GetSaveData() override
         {
             return strInstData;
         }
