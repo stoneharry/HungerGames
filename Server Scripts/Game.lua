@@ -30,9 +30,26 @@ function JoinGame(plr, msg)
 				plr:SendBroadcastMessage("You cannot join a game that is already in progress!")
 				return
 			end
-			table.insert(v[5], plr)
+			table.insert(v[5], plr:GetGUID())
 			plr:SetData("GAME", msg)
 			plr:SendBroadcastMessage("You have joined: " .. msg)
+			return
+		end
+	end
+end
+
+function leaveGame(plr, msg)
+	-- Filter unwanted chars
+	for i=1, msg:len() do
+		if msg[i] == '-' then
+			message[i] = '_'
+		end
+	end
+	for k,v in pairs(games) do
+		if v[2] == msg then
+			games[k][5][plr:GetGUID()] = nil
+			plr:SetData("GAME", nil)
+			plr:SendBroadcastMessage("You have left: " .. msg)
 			return
 		end
 	end
@@ -50,7 +67,7 @@ function CREATEGAME(plr, msg)
 		return
 	end
 	-- Insert a new record
-	local newGame = {gameId, msg, false, plr, {plr}}
+	local newGame = {gameId, msg, false, plr:GetGUID(), {plr:GetGUID()}}
 	gameId = gameId + 1
 	plr:SetData("GAME", msg)
 	table.insert(games, newGame)
@@ -85,7 +102,9 @@ function PLRSLB(plr, msg)
 		if v[2] == msg then
 			local peopleInGame = "PLAYERS"
 			for _,k in pairs(v[5]) do
-				peopleInGame = peopleInGame .. "-" .. k:GetName()
+				if GetPlayerByGUID(k) then
+					peopleInGame = peopleInGame .. "-" .. GetPlayerByGUID(k):GetName()
+				end
 			end
 			sendAddonMessage(plr, peopleInGame, 2)
 			return
@@ -96,12 +115,12 @@ end
 ------------------------------------------
 
 local function updateAllGames()
-	for _,game in pairs(games) do
+	for k,game in pairs(games) do
 --print("Handling: {" .. tostring(game[1]) .. ", " .. tostring(game[2]) .. ", " .. tostring(game[3]) .. ", " .. tostring(game[4]) .. ", " .. tostring(game[5]) .. "}")
 		if game[3] then -- active
 			handleActiveGame(game)
 		else
-			handleInactiveGame(game)
+			handleInactiveGame(game, k)
 		end
 	end
 end
@@ -112,25 +131,28 @@ function handleActiveGame(game)
 
 end
 
-function handleInactiveGame(game)
+function handleInactiveGame(game, k)
 	-- Handle bad host
-	if not game[4] or not game[4]:IsInWorld() then -- host
+	if not GetPlayerByGUID(game[4]) then -- host
 		for _,plr in pairs(game[5]) do -- all players
-			if plr and plr:IsInWorld() then
-				plr:SendBroadcastMessage("You have been removed from the queue because the host went offline.")
-				plr:SetData("GAME", nil)
+			local rPlr = GetPlayerByGUID(plr)
+			if rPlr then
+				sendAddonMessage(rPlr, "RESET", 3)
+				rPlr:SendBroadcastMessage("You have been removed from the queue because the host went offline.")
+				rPlr:SetData("GAME", nil)
 			end
 		end
-		table.remove(games, game)
+		games[k] = nil
 		return
 	end
 	-- Check we have enough players
-	for _,plr in pairs(game[5]) do
-		if not plr or not plr:IsInWorld() then
-			table.remove(game[5], plr)
+	for kk,plr in pairs(game[5]) do
+		local rPlr = GetPlayerByGUID(plr)
+		if not rPlr then
+			game[5][kk] = nil
 		else
-			if plr:GetMap():GetMapId() ~= 13 then
-				plr:Teleport(13, 0.0, 0.0, 0.0, 0.0)
+			if rPlr:GetMap():GetMapId() ~= 13 then
+				rPlr:Teleport(13, 0.0, 0.0, 0.0, 0.0)
 			end
 		end
 	end
@@ -156,10 +178,17 @@ function handleStartGame(game)
 	locations = shuffled(locations)
 	local count = 1
 	for _,plr in pairs(game[5]) do
-		if plr then
-			plr:SendBroadcastMessage("The game will start in 30 seconds!")
-			plr:Teleport(800, locations[count][1], locations[count][2], locations[count][3], locations[count][4])
-			sendAddonMessage(plr, "STARTINGGAME", 3)
+		local rPlr = GetPlayerByGUID(plr)
+		if rPlr then
+			rPlr:SendBroadcastMessage("The game will start in 30 seconds!")
+			rPlr:Teleport(800, locations[count][1], locations[count][2], locations[count][3], locations[count][4])
+			sendAddonMessage(rPlr, "STARTINGGAME", 3) -- interface
+			-- Set time to 7am
+			local p = CreatePacket(66, 12)
+			p:WriteULong(120000) -- time
+			p:WriteFloat(1.20000024) -- speed
+			p:WriteULong(0)
+			rPlr:SendPacket(p)
 			-- need some sort of phasing system
 		end
 	end

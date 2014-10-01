@@ -1,4 +1,6 @@
 
+_DEBUG = true
+
 print("\n---------------")
 print("Loaded main")
 print("---------------")
@@ -10,6 +12,7 @@ local functionLookup
 local function onReceiveAddonMsg(event, plr, Type, prefix, msg, receiver)
 	if receiver ~= plr then return end
 	if not msg or not prefix or not plr then return end
+	if _DEBUG then print("[GOT] " .. prefix .. " | " .. msg) end
 	local func = functionLookup[prefix]
 	if func then
 		func(plr, msg)
@@ -38,11 +41,18 @@ function SelectTalents(plr, msg)
 		tostring(talents[4]) .. "\')")
 end
 
+local function test(plr, msg)
+	plr:SendBroadcastMessage("Testing...")
+	-- this function is for testing things
+end
+
 -- function lookup
 functionLookup = {
 	["MAINMENU"] = GetTheGamesAvailable,
 	["CREATEGAME"] = CREATEGAME,
 	["PLRSLB"] = PLRSLB,
 	["JoinGame"] = JoinGame,
-	["SelectTalents"] = SelectTalents
+	["SelectTalents"] = SelectTalents,
+	["LEAVEGAME"] = leaveGame,
+	["TEST"] = test
 }

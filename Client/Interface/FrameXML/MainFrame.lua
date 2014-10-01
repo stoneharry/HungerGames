@@ -12,7 +12,7 @@ local numScrollBarButtons = 50
 local dur = 29
 local mus_dur = 0
 local ONLINE_PLAYERS = {}
-local UPDATE_INTERVALS = {30, 20, 20, 0 ,0, 60}
+local UPDATE_INTERVALS = {30, 20, 5, 0 ,0, 60}
 local playing = nil
 local links = {}
 local IN_GAME = false
@@ -205,6 +205,14 @@ function mainFrameLoaded()
 	fontString:SetTextColor(1, 1, 1)
 	fontString:SetText(CLICK_GAME_TO_JOIN_STR)
 	fontString:SetPoint("TOPLEFT", MainFrame_OnlinePlayerList_2, "TOPLEFT", 30, -50)
+	
+	button = CreateFrame("Button", "LeaveGameBtn", MainFrame_OnlinePlayerList_2, "LeftMiddleButtonTemplate")
+	button:SetPoint("BOTTOMRIGHT", MainFrame_OnlinePlayerList_2, "BOTTOMRIGHT", -290, -40)
+	button:SetText("Leave Game")
+	button:SetWidth(190)
+	button:SetFrameLevel(4)
+	button:SetScript("OnClick", leaveGame)
+	button:Hide()
 	
 	fontString = MainFrame_Chat_2:CreateFontString(nil, "OVERLAY")
 	fontString:SetFontObject("GameFontNormalHuge")
@@ -400,6 +408,12 @@ function OpenGameLobby(gameName)
 	_G["CreateGameBtn"]:Hide()
 	_G["GoBackBtn"]:Hide()
 	MainFrame_Chat_2:Hide()
+	_G["LeaveGameBtn"]:Show()
+end
+
+function leaveGame()
+	SendAddonMessage("LEAVEGAME", PLAYER_IN_GAME_STR, "WHISPER", UnitName("player"))
+	ReloadUI()
 end
 
 function eventHandlerMainFrame(self, event, message, _, Type, Sender)
@@ -427,6 +441,8 @@ function eventHandlerMainFrame(self, event, message, _, Type, Sender)
 		elseif fullMessage == "EXITEDGAME" then
 			toggleLobbyUI(false)
 			IN_GAME = false
+		elseif fullMessage == "RESET" then
+			ReloadUI();
 		-- Handle game list
 		elseif string.starts(fullMessage, "GAMES-") then
 			
