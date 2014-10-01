@@ -321,7 +321,7 @@ function HandleScollBarEntryClick(self)
 	end
 	-- If wanting to join a game
 	if MENU_SELECTED == 1 then
-		if CAN_JOIN_GAME then
+		if not CAN_JOIN_GAME then
 			return
 		end
 		-- substring 9, 10 if whitespace
@@ -421,8 +421,14 @@ function eventHandlerMainFrame(self, event, message, _, Type, Sender)
 		links[packet] = {count = 0};
 		
         -- Handle addon messages
+		if fullMessage == "STARTINGGAME" then
+			toggleLobbyUI(true)
+			IN_GAME = true
+		elseif fullMessage == "EXITEDGAME" then
+			toggleLobbyUI(false)
+			IN_GAME = false
 		-- Handle game list
-		if string.starts(fullMessage, "GAMES-") then
+		elseif string.starts(fullMessage, "GAMES-") then
 			
 			local tokens = scen_split(fullMessage)
 			local pos = 1

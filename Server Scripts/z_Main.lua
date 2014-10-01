@@ -30,6 +30,7 @@ function SelectTalents(plr, msg)
 		talents[i] = tonumber(talents[i])
 		if not talents[i] then return end
 	end
+	-- Will probably need some sort of verification to see if the player can use this talent
 	CharDBQuery("REPLACE INTO `character_perks` VALUES (\'".. 
 		tostring(plr:GetGUIDLow()) .."\', \'" ..
 		tostring(talents[1]) .. "\', \'" .. tostring(talents[2]) ..

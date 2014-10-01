@@ -15,6 +15,7 @@ function sendAddonMessage(plr, msg, packet)
 		end
 		counter = counter + 1
 
+		print("[SENT] " .. send)
 		plr:SendAddonMessage(send, "", 7, plr)
 	end
 end
