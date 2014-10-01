@@ -1345,12 +1345,12 @@ int32 Player::getMaxTimer(MirrorTimerType timer)
     switch (timer)
     {
         case FATIGUE_TIMER:
-            return MINUTE * IN_MILLISECONDS;
+            return 10 * IN_MILLISECONDS;
         case BREATH_TIMER:
         {
             if (!IsAlive() || HasAuraType(SPELL_AURA_WATER_BREATHING) || GetSession()->GetSecurity() >= AccountTypes(sWorld->getIntConfig(CONFIG_DISABLE_BREATHING)))
                 return DISABLED_MIRROR_TIMER;
-            int32 UnderWaterTime = 3 * MINUTE * IN_MILLISECONDS;
+            int32 UnderWaterTime = 30000;
             AuraEffectList const& mModWaterBreathing = GetAuraEffectsByType(SPELL_AURA_MOD_WATER_BREATHING);
             for (AuraEffectList::const_iterator i = mModWaterBreathing.begin(); i != mModWaterBreathing.end(); ++i)
                 AddPct(UnderWaterTime, (*i)->GetAmount());
@@ -22896,9 +22896,17 @@ void Player::SendInitialPacketsBeforeAddToMap()
     SendEquipmentSetList();
 
     data.Initialize(SMSG_LOGIN_SETTIMESPEED, 4 + 4 + 4);
-    data.AppendPackedTime(sWorld->GetGameTime());
-    data << float(0.01666667f);                             // game speed
-    data << uint32(0);                                      // added in 3.1.2
+	data.AppendPackedTime(sWorld->GetGameTime()); // Need to change this to Battleground get BG time if HG
+
+		// ((0.01666667 * 60) * 72) / 60 = 0.01666667 * 72
+		// Because: 0.01666667 = 1/60
+		// 01666667 * 60 = 1 minute
+		// 1 minute * 72
+		// 72 because 1440 minutes in 24 hours divided by 20 minutes
+		// 20 minutes to 24 hours
+
+	data << float(1.20000024f); // faster day/night cycle
+	data << uint32(0);
     GetSession()->SendPacket(&data);
 
     GetReputationMgr().SendForceReactions();                // SMSG_SET_FORCED_REACTIONS
