@@ -2197,6 +2197,19 @@ namespace LuaPlayer
         return 0;
     }
 
+	int PlayMusicToPlayer(lua_State* L, Player* player)
+	{
+		uint32 soundId = Eluna::CHECKVAL<uint32>(L, 2);
+		SoundEntriesEntry const* soundEntry = sSoundEntriesStore.LookupEntry(soundId);
+		if (!soundEntry)
+			return 0;
+
+		WorldPacket data(SMSG_PLAY_MUSIC, 4);
+		data << uint32(soundEntry);
+		player->SendDirectMessage(&data);
+		return 0;
+	}
+
     int StartTaxi(lua_State* L, Player* player)
     {
         uint32 pathId = Eluna::CHECKVAL<uint32>(L, 2);
