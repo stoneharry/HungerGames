@@ -4,14 +4,11 @@ print("Loaded game")
 print("---------------")
 
 local NUM_PLAYERS_TO_START_GAME = 3
-
 local gameId = 1
---			1    2     3       4     5
--- Game = { id, name, active, host, {players} }
-local games = {
-	--[[{1000, "Test Game 1", false},
-	{1001, "Test Game 2", true}]]
-}
+--			1    2     3       4     5			6		7
+-- Game = { id, name, active, host, {players}, state, data }
+local games = {}
+local entities = {}
 
 function JoinGame(plr, msg)
 	-- Filter unwanted chars
@@ -128,7 +125,42 @@ end
 CreateLuaEvent(updateAllGames, 5000, 0)
 
 function handleActiveGame(game)
-
+	local state = game[6]
+	if state == 1 then
+		local locations = game[7]
+		local temp = {}
+		local count = 1
+		for _,plr in pairs(game[5]) do
+			plr = GetPlayerByGUID(plr)
+			if plr then
+				local obj = PerformIngameSpawn(2, 184719, 800, 0, locations[count][1], locations[count][2], locations[count][3], 0, false, 0, game[1])
+				obj:SetScale(0.05)
+				--obj:SetByteValue(6 + 0x000B, 0, 1)
+				--obj:SetByteValue(6 + 0x000B, 3, 100)
+				obj:SetUInt32Value(0x0006 + 0x0003, 0x1) -- untargetable
+				count = count + 1
+				table.insert(temp, obj)
+			end
+		end
+		game[7] = temp
+		state = state + 1
+	elseif state < 7 then -- spawning
+		state = state + 1
+	elseif state == 7 then
+		state = 8
+		for _,obj in pairs(game[7]) do
+			if obj then
+				obj:Despawn(0)
+			end
+		end
+		for _,plr in pairs(game[5]) do
+			plr = GetPlayerByGUID(plr)
+			if plr then
+				plr:PlaySoundToPlayer(3439)
+			end
+		end
+	end
+	game[6] = state
 end
 
 function handleInactiveGame(game, k)
@@ -164,17 +196,18 @@ end
 function handleStartGame(game)
 	game[3] = true -- active game now
 	local locations = {
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0},
-		{-4303.87, 3279.05, 0.435464, 0.0}
+		{-4308.87, 3279.05, 0.435464, 0.0},
+		{-4306.87, 3279.05, 13.735464, 0.0},
+		{-4304.87, 3279.05, 13.735464, 0.0},
+		{-4302.87, 3279.05, 13.735464, 0.0},
+		{-4300.87, 3279.05, 13.735464, 0.0},
+		{-4303.87, 3277.05, 13.735464, 0.0},
+		{-4303.87, 3275.05, 13.735464, 0.0},
+		{-4303.87, 3281.05, 13.735464, 0.0},
+		{-4303.87, 3283.05, 13.735464, 0.0},
+		{-4305.87, 3279.05, 13.735464, 0.0}
 	}
+	game[6] = 1 -- state
 	locations = shuffled(locations)
 	local count = 1
 	for _,plr in pairs(game[5]) do
@@ -189,9 +222,11 @@ function handleStartGame(game)
 			p:WriteULong(120000) -- time
 			p:WriteFloat(1.20000024) -- speed
 			p:WriteULong(0)
+			count = count + 1
 			rPlr:SendPacket(p)
 		end
 	end
+	game[7] = locations
 end
 
 function shuffled(tab)
