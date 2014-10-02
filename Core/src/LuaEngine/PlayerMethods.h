@@ -2205,7 +2205,7 @@ namespace LuaPlayer
 			return 0;
 
 		WorldPacket data(SMSG_PLAY_MUSIC, 4);
-		data << uint32(soundEntry);
+		data << uint32(soundId);
 		player->SendDirectMessage(&data);
 		return 0;
 	}

@@ -4,8 +4,9 @@ print("Loaded hooks")
 print("---------------")
 
 local function PLAYER_EVENT_ON_ENTER_COMBAT(event, player, enemy)
-	if enemy and enemy:IsPlayer() then
+	if enemy then
 		-- play battle music
+		player:PlayMusicToPlayer(20002)
 		player:SetData("combatMusic", true)
 	end
 end
@@ -14,14 +15,17 @@ RegisterPlayerEvent(33, PLAYER_EVENT_ON_ENTER_COMBAT)
 
 local function PLAYER_EVENT_ON_LEAVE_COMBAT(event, player)
 	if player:GetData("combatMusic") then
-		player:SetData("combatMusic", nil)
 		-- play normal music
+		player:PlayMusicToPlayer(20001)
+		player:SetData("combatMusic", nil)
 	end
 end
 
 RegisterPlayerEvent(34, PLAYER_EVENT_ON_LEAVE_COMBAT)
 
-local function PLAYER_EVENT_ON_LOGIN(event, player)
+--[[local function PLAYER_EVENT_ON_LOGIN(event, player)
+	player:SendBroadcastMessage("You have logged in!")
+	print("Player has logged in!")
 	local map = player:GetMap()
 	if map and map:GetMapId() ~= 13 then
 		player:ResurrectPlayer()
@@ -29,9 +33,10 @@ local function PLAYER_EVENT_ON_LOGIN(event, player)
 	end
 end
 
-RegisterPlayerEvent(3, PLAYER_EVENT_ON_LOGIN)
+RegisterPlayerEvent(3, PLAYER_EVENT_ON_LOGIN)]]
 
 local function PLAYER_EVENT_ON_REPOP(event, player)
+	player:SendBroadcastMessage("Repop")
 	player:ResurrectPlayer()
 	player:Teleport(13, 0.0, 0.0, 0.0, 0.0, 0.0)
 	player:SetData("GAME", nil)
