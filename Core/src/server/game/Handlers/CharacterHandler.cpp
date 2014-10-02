@@ -914,10 +914,15 @@ void WorldSession::HandlePlayerLogin(LoginQueryHolder* holder)
     data << uint32(0);
     SendPacket(&data);
 
-    pCurrChar->SendInitialPacketsBeforeAddToMap();
-
-    //if (!pCurrChar->GetMap()->AddPlayerToMap(pCurrChar) || !pCurrChar->CheckInstanceLoginValid())
-		pCurrChar->TeleportTo(13, 0, 0, 0, 0);
+	pCurrChar->SendInitialPacketsBeforeAddToMap();
+	if (!pCurrChar->GetMap()->AddPlayerToMap(pCurrChar) || !pCurrChar->CheckInstanceLoginValid())
+	{
+		AreaTrigger const* at = sObjectMgr->GetGoBackTrigger(pCurrChar->GetMapId());
+		if (at)
+			pCurrChar->TeleportTo(at->target_mapId, at->target_X, at->target_Y, at->target_Z, pCurrChar->GetOrientation());
+		else
+			pCurrChar->TeleportTo(pCurrChar->m_homebindMapId, pCurrChar->m_homebindX, pCurrChar->m_homebindY, pCurrChar->m_homebindZ, pCurrChar->GetOrientation());
+	}
  
     sObjectAccessor->AddObject(pCurrChar);
     //TC_LOG_DEBUG("Player %s added to Map.", pCurrChar->GetName().c_str());
