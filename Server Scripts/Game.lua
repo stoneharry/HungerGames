@@ -181,6 +181,7 @@ function handleStartGame(game)
 		local rPlr = GetPlayerByGUID(plr)
 		if rPlr then
 			rPlr:SendBroadcastMessage("The game will start in 30 seconds!")
+			rPlr:SetPhaseMask(game[1]) -- currently phase = game ID
 			rPlr:Teleport(800, locations[count][1], locations[count][2], locations[count][3], locations[count][4])
 			sendAddonMessage(rPlr, "STARTINGGAME", 3) -- interface
 			-- Set time to 7am
@@ -189,7 +190,6 @@ function handleStartGame(game)
 			p:WriteFloat(1.20000024) -- speed
 			p:WriteULong(0)
 			rPlr:SendPacket(p)
-			-- need some sort of phasing system
 		end
 	end
 end
