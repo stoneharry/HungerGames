@@ -122,7 +122,7 @@ local function updateAllGames()
 	end
 end
 
-CreateLuaEvent(updateAllGames, 5000, 0)
+CreateLuaEvent(updateAllGames, 1000, 0)
 
 function handleActiveGame(game)
 	local state = game[6]
@@ -144,10 +144,10 @@ function handleActiveGame(game)
 		end
 		game[7] = temp
 		state = state + 1
-	elseif state < 7 then -- spawning
+	elseif state < 30 then -- spawning
 		state = state + 1
-	elseif state == 7 then
-		state = 8
+	elseif state == 30 then
+		state = 31
 		for _,obj in pairs(game[7]) do
 			if obj then
 				obj:Despawn(0)
