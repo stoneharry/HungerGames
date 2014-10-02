@@ -237,11 +237,33 @@ function shuffled(tab)
 	return res
 end
 
+local function PLAYER_EVENT_ON_KILL_PLAYER(event, killer, killed)
+	if killer and killed then
+		print(killer:GetName() .. " killed  " .. killed:GetName())
+	end
+end
 
+RegisterPlayerEvent(6, PLAYER_EVENT_ON_KILL_PLAYER)
+RegisterPlayerEvent(8, PLAYER_EVENT_ON_KILL_PLAYER) -- death by creature
 
+local function PLAYER_EVENT_ON_LOGOUT(event, player)
+	if not player then
+		return
+	end
+	local data = player:GetData("GAME")
+	if not data then
+		return
+	end
+	player:SetData("GAME", nil)
+	for k,v in pairs(games) do
+		if v[2] == data then
+			table.remove(v[5], player:GetGUID())
+			return
+		end
+	end
+end
 
-
-
+RegisterPlayerEvent(4, PLAYER_EVENT_ON_LOGOUT)
 
 
 
