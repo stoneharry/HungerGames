@@ -9,6 +9,20 @@
 
 namespace LuaGlobalFunctions
 {
+	int GetHungerGamesInitialTime(lua_State* L)
+	{
+		time_t arg = time(NULL);
+		tm temp;
+
+		localtime_r(&arg, &temp);
+		temp.tm_sec = 0;
+		temp.tm_min = 0;
+		temp.tm_hour = 7;
+
+		Eluna::Push(L, (temp.tm_year - 100) << 24 | temp.tm_mon << 20 | (temp.tm_mday - 1) << 14 | temp.tm_wday << 11 | temp.tm_hour << 6 | temp.tm_min);
+		return 1;
+	}
+
     /**
      * Returns lua engine name. Currently `ElunaEngine`
      *

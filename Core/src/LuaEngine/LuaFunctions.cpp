@@ -85,6 +85,7 @@ void RegisterGlobals(lua_State* L)
     lua_register(L, "bit_and", &LuaGlobalFunctions::bit_and);
     lua_register(L, "GetItemLink", &LuaGlobalFunctions::GetItemLink);
     lua_register(L, "GetMapById", &LuaGlobalFunctions::GetMapById);
+	lua_register(L, "GetHungerGamesInitialTime", &LuaGlobalFunctions::GetHungerGamesInitialTime);
 
     // Other
     lua_register(L, "ReloadEluna", &LuaGlobalFunctions::ReloadEluna);
