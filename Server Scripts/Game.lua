@@ -219,7 +219,7 @@ function handleStartGame(game)
 			sendAddonMessage(rPlr, "STARTINGGAME", 3) -- interface
 			-- Set time to 7am
 			local p = CreatePacket(66, 12)
-			p:WriteULong(120000) -- time
+			p:WriteULong(GetHungerGamesInitialTime()) -- time
 			p:WriteFloat(1.20000024) -- speed
 			p:WriteULong(0)
 			count = count + 1
@@ -229,6 +229,7 @@ function handleStartGame(game)
 	game[7] = locations
 end
 
+-- Return array in random order
 function shuffled(tab)
 	local n, order, res = #tab, {}, {}
 	for i=1,n do order[i] = { rnd = math.random(), idx = i } end

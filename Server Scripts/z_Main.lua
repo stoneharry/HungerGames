@@ -42,8 +42,13 @@ function SelectTalents(plr, msg)
 end
 
 local function test(plr, msg)
-	plr:SendBroadcastMessage("Testing...")
 	-- this function is for testing things
+	plr:SendBroadcastMessage("Testing...")
+	local p = CreatePacket(66, 12)
+	p:WriteULong(GetHungerGamesInitialTime()) -- time
+	p:WriteFloat(1.20000024) -- speed
+	p:WriteULong(0)
+	plr:SendPacket(p)
 end
 
 -- function lookup
