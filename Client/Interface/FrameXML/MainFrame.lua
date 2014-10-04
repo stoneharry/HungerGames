@@ -443,6 +443,7 @@ function eventHandlerMainFrame(self, event, message, _, Type, Sender)
 			IN_GAME = false
 		elseif fullMessage == "RESET" then
 			ReloadUI();
+			toggleInterface(true)
 		-- Handle game list
 		elseif string.starts(fullMessage, "GAMES-") then
 			
@@ -625,4 +626,5 @@ function mainFrameUpdate(self, elapsed)
 		ChatFrame1:SetWidth(700)
 	end
 	ChatFrame1:SetHeight(300)
+	toggleInterface(true)
 end
